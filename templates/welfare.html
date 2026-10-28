@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>복지 서비스 찾기 | 내가 받을 수 있는 정부지원금 조회</title>
+  <link rel="canonical" href="https://welfarego.co.kr/" />
+  <meta name="robots" content="index,follow,max-snippet:-1">
+
+  <meta name="description" content="나이·지역·소득만 입력하면 전국·시도·시군구 복지서비스를 한 번에 조회합니다. 청년복지, 노인복지, 여성복지, 부모급여·아동수당까지 로그인 없이 확인하세요.">
+  <meta name="author" content="웰페어고">
+  <meta name="naver-site-verification" content="6e4047347d48a395d227b3e4d1df65656a69551e" />
+  <meta property="og:title" content="복지 서비스 찾기 | 내가 받을 수 있는 정부지원금 조회">
+  <meta property="og:description" content="나이·지역·소득만 입력하면 전국·시도·시군구 복지서비스를 한 번에 조회합니다. 로그인도 공동인증서도 필요 없습니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://welfarego.co.kr/">
+  <meta property="og:image" content="https://welfarego.co.kr/static/og/welfare.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+<script type="application/ld+json" id="ld">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","name":"복지 서비스 찾기","url":"https://welfarego.co.kr/",
+ "applicationCategory":"FinanceApplication","operatingSystem":"All","inLanguage":"ko-KR",
+ "description":"나이·지역·소득만 입력하면 전국·시도·시군구 복지서비스를 한 번에 조회합니다.",
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},
+ "featureList":["복지서비스 조회","정부지원금 검색","기준 중위소득 계산","지역별 복지 혜택 확인","부모급여·아동수당 자격 확인"]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"내가 받을 수 있는 복지서비스는 어떻게 확인하나요?","acceptedAnswer":{"@type":"Answer","text":"나이, 가구원 수, 거주 시·군·구, 가구 월소득을 입력하면 조건에 맞는 복지서비스 목록이 바로 나옵니다. 회원가입이나 공동인증서 없이 조회할 수 있으며, 입력한 정보는 브라우저에서만 계산되고 서버로 전송되지 않습니다."}},
+{"@type":"Question","name":"복지서비스는 왜 전국·시도·시군구 3단계로 나뉘나요?","acceptedAnswer":{"@type":"Answer","text":"복지서비스를 만드는 주체가 세 곳으로 나뉘기 때문입니다. 중앙부처와 공공기관은 전국민 대상 서비스를, 광역지자체인 시·도는 해당 시도민 대상 서비스를, 기초지자체인 시·군·구는 해당 지역 주민 대상 서비스를 각각 별도로 운영합니다. 시·도까지만 확인하면 우리 동네 전용 혜택을 놓치고, 시·군·구만 확인하면 기초연금이나 아동수당 같은 전국 단위 혜택을 놓칩니다."}},
+{"@type":"Question","name":"기준 중위소득은 무엇이고 왜 중요한가요?","acceptedAnswer":{"@type":"Answer","text":"기준 중위소득은 전체 가구를 소득 순으로 세웠을 때 정중앙에 오는 금액으로, 보건복지부 장관이 매년 고시합니다. 대부분의 복지사업이 기준 중위소득 몇 퍼센트 이하로 대상자를 정하기 때문에 본인 가구가 몇 퍼센트에 해당하는지가 자격 판단의 핵심입니다. 2026년 기준 중위소득 100%는 1인 가구 2,564,238원, 2인 가구 4,199,292원, 3인 가구 5,359,036원, 4인 가구 6,494,738원입니다."}},
+{"@type":"Question","name":"자녀 생년월일은 왜 입력하나요?","acceptedAnswer":{"@type":"Answer","text":"부모급여는 24개월, 아동수당은 96개월, 첫만남이용권은 12개월 미만이 기준이라 개월수 경계 하루 차이로 자격이 갈립니다. 개월수를 직접 세면 틀리기 쉬워서 생년월일을 받아 정확히 계산합니다."}},
+{"@type":"Question","name":"복지서비스 정보의 출처는 어디인가요?","acceptedAnswer":{"@type":"Answer","text":"행정안전부가 공공데이터포털에 개방한 대한민국 공공서비스(혜택) 정보를 사용합니다. 중앙부처, 지방자치단체, 공공기관, 교육청이 제공하는 수혜 서비스가 모두 포함됩니다. 최종 신청 자격과 예산 상황은 소관기관에서 반드시 확인해야 합니다."}}]},
+{"@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"복지 서비스 찾기","item":"https://welfarego.co.kr/"}]}]}
+</script>
+
+<style>
+:root{
+  --navy:#0B427F; --navy-dk:#072B54; --blue:#0066CC; --lblue:#E8F1FB;
+  --bg:#F3F4F6; --card:#FFF; --bd:#D1D5DB; --bd-dk:#9CA3AF;
+  --tx:#1F2937; --tx-mu:#4B5563;
+  --national:#0B427F; --regional:#059669; --local:#7C3AED;
+  --f:'Noto Sans KR',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --fn:'Roboto','Noto Sans KR',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html,body{max-width:100%;overflow-x:hidden}
+body{font-family:var(--f);background:var(--bg);color:var(--tx);line-height:1.6;word-break:keep-all}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+a{color:var(--blue)}
+
+.hero{padding:26px 0 22px}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;
+  font-size:.75rem;font-weight:600;padding:5px 11px;border-radius:3px}
+h1{font-size:clamp(1.5rem,4.4vw,2.05rem);font-weight:800;line-height:1.34;letter-spacing:-.035em;margin:13px 0 0}
+h1 .hl{color:var(--navy)}
+.hero p{margin-top:11px;color:var(--tx-mu);font-size:.94rem;max-width:70ch}
+.data-notice{margin-top:12px;font-size:.82rem;color:var(--tx-mu);display:flex;align-items:center;gap:7px}
+.badge{font-size:.75rem;padding:5px 10px;border-radius:3px;background:#fff;
+  border:1px solid var(--bd);color:var(--tx-mu)}
+
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{flex:1;padding:13px 10px;font-family:var(--f);font-size:.95rem;font-weight:700;
+  color:var(--tx-mu);background:#fff;border:1px solid var(--bd);border-radius:4px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.tab:hover{border-color:var(--blue);color:var(--blue)}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.kw-note{margin-top:8px;font-size:.78rem;color:var(--tx-mu)}
+.kw-meta{font-size:.85rem;color:var(--tx-mu);margin:14px 0 10px}
+.reg-chip{font-size:.72rem;padding:3px 8px;border-radius:2px;background:#EEF2FF;
+  color:#4338CA;border:1px solid #C7D2FE;font-weight:600}
+.biz-chip{font-size:.72rem;padding:3px 8px;border-radius:2px;background:#FFF7ED;
+  color:#9A3412;border:1px solid #FED7AA;font-weight:600}
+.exp{display:flex;gap:6px}
+.exp button{font-family:var(--f);font-size:.78rem;font-weight:600;padding:7px 12px;
+  border:1px solid rgba(255,255,255,.45);border-radius:3px;background:rgba(255,255,255,.12);
+  color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.exp button:hover{background:rgba(255,255,255,.24)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:4px;margin-bottom:22px}
+.panel-hd{background:#FAFBFC;border-bottom:1px solid var(--bd);padding:13px 18px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-hd h2{font-size:1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px}
+.req{font-size:.78rem;color:var(--tx-mu)}
+.star{color:#D97706;font-weight:700}
+.panel-bd{padding:18px}
+.grid{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+.full{grid-column:1/-1}
+label{display:block;font-size:.875rem;font-weight:600;margin-bottom:6px}
+label .hint{font-weight:400;color:var(--tx-mu);font-size:.78rem}
+input,select{width:100%;font-family:var(--f);font-size:1rem;padding:11px 12px;
+  border:1px solid var(--bd-dk);border-radius:3px;background:#fff;color:var(--tx)}
+input:focus,select:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.combo{position:relative}
+.ac{position:absolute;z-index:30;top:calc(100% + 2px);left:0;right:0;background:#fff;
+  border:1px solid var(--bd-dk);border-radius:3px;max-height:238px;overflow:auto;display:none;
+  box-shadow:0 6px 16px rgba(0,0,0,.13)}
+.ac.on{display:block}
+.ac button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;
+  border-bottom:1px solid #EEF0F2;background:none;font:inherit;font-size:.9rem;color:var(--tx);cursor:pointer}
+.ac button:hover,.ac button[aria-selected=true]{background:var(--lblue)}
+.ac mark{background:none;color:var(--blue);font-weight:700}
+.ac .ac-note{margin-left:7px;font-size:.76rem;color:var(--tx-mu);font-weight:400}
+.err{margin-top:7px;font-size:.82rem;color:#B91C1C;background:#FEF2F2;border:1px solid #FECACA;
+  border-radius:3px;padding:8px 11px}
+.err[hidden]{display:none}
+input[aria-invalid=true]{border-color:#DC2626;outline-color:#DC2626}
+
+.won-read{margin-top:6px;font-size:.82rem;color:var(--navy);font-weight:600;min-height:1.2em}
+.scale{margin-top:12px;background:#FAFBFC;border:1px solid #E5E7EB;border-radius:3px;padding:13px 14px;display:none}
+.scale.on{display:block}
+.scale-t{font-size:.82rem;color:var(--tx-mu);margin-bottom:5px}
+.scale-v{font-family:var(--fn);font-size:1.4rem;font-weight:700;color:var(--navy)}
+.scale-v small{font-size:.85rem;font-weight:500;color:var(--tx-mu)}
+.bar{position:relative;height:58px;margin-top:8px}
+.bar-bg{position:absolute;top:10px;left:0;right:0;height:8px;border-radius:2px;background:#E5E7EB;overflow:hidden}
+.bar-fl{height:100%;background:linear-gradient(90deg,var(--navy),var(--blue));width:0;transition:width .22s}
+.tick{position:absolute;top:6px;width:1px;height:16px;background:var(--bd-dk)}
+.tick span{position:absolute;top:19px;left:50%;transform:translateX(-50%);font-family:var(--fn);
+  font-size:.62rem;color:var(--tx-mu);white-space:nowrap}
+/* 32%와 50%는 간격이 좁아 겹치므로 아래 줄로 엇갈려 배치한다 */
+.tick.low span{top:38px}
+.tick.low{height:35px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--f);font-size:.85rem;padding:7px 13px;border:1px solid var(--bd-dk);
+  border-radius:3px;background:#fff;color:var(--tx-mu);cursor:pointer}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+.chip[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.chip.sp{border-style:dashed}
+.chip.sp[aria-pressed=true]{background:#7C3AED;border-color:#7C3AED;border-style:solid}
+
+/* 자녀 생년월일 */
+.kid{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.kid-in{position:relative;flex:0 0 auto}
+.kid-in input{width:172px;padding-right:38px;font-family:var(--fn);letter-spacing:.02em}
+.kid-cal{position:absolute;right:1px;top:1px;bottom:1px;width:34px;border:0;background:none;
+  color:var(--tx-mu);cursor:pointer;font-size:.9rem}
+.kid-cal:hover{color:var(--blue)}
+.kid-read{flex:1;font-size:.85rem;color:var(--tx-mu);min-width:120px}
+.kid-read.good{color:var(--navy)}
+.kid-read.good b{font-size:.95rem}
+.kid-read.good .mo{color:var(--tx-mu);font-size:.8rem;font-family:var(--fn)}
+.kid-read.bad{color:#B91C1C;font-weight:600}
+.kid .del{flex:none;width:36px;height:38px;border:1px solid var(--bd-dk);border-radius:3px;
+  background:#fff;color:#B91C1C;cursor:pointer}
+.kid .del:hover{background:#FEF2F2;border-color:#FCA5A5}
+.addkid{margin-top:6px;font-family:var(--f);font-size:.85rem;padding:8px 14px;
+  border:1px dashed var(--bd-dk);border-radius:3px;background:#fff;color:var(--navy);
+  cursor:pointer;font-weight:600}
+.addkid:hover{border-color:var(--blue);background:var(--lblue)}
+[hidden]{display:none!important}
+form[hidden],section[hidden]{display:none!important}
+
+.submit{padding:16px 18px;border-top:1px solid var(--bd);background:#FAFBFC}
+.btn{width:100%;padding:15px;font-family:var(--f);font-size:1.05rem;font-weight:700;color:#fff;
+  background:var(--navy);border:0;border-radius:3px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:var(--navy-dk)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+#out{display:none;margin-bottom:22px}
+#out.on{display:block}
+.res-hd{background:var(--navy);color:#fff;padding:14px 18px;border-radius:4px 4px 0 0;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.res-hd .cond{font-size:.85rem;opacity:.93}
+.res-hd .cnt{font-family:var(--fn);font-size:1.25rem;font-weight:700}
+.res-bd{background:#fff;border:1px solid var(--bd);border-top:0;border-radius:0 0 4px 4px;padding:18px}
+.notice{background:#FFFBEB;border:1px solid #FDE68A;border-radius:3px;padding:11px 13px;
+  font-size:.82rem;color:#92400E;margin-bottom:16px;line-height:1.7}
+.notice.big{font-size:.86rem;padding:14px 16px}
+.notice-act{display:block;margin-top:10px}
+.notice-act button{font-family:var(--f);font-size:.82rem;font-weight:700;padding:8px 16px;
+  border:1px solid #B45309;border-radius:3px;background:#B45309;color:#fff;cursor:pointer}
+.notice-act button:hover{background:#92400E}
+#chips.flash{outline:2px solid var(--blue);outline-offset:6px;border-radius:3px}
+.notice.bad{background:#FEF2F2;border-color:#FECACA;color:#991B1B}
+/* 고른 특별한 상황이 이 지역엔 없을 때 보여주는 안내 */
+.sp-none{padding:16px 14px;background:#FAF5FF;border-top:1px solid #E9D5FF}
+.sp-none p{margin:0 0 8px;font-size:14px;line-height:1.65;color:#4C1D95}
+.sp-none b{color:#6D28D9}
+.sp-regions{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.sp-rg{display:inline-block;padding:5px 11px;border-radius:999px;font-size:13px;
+  font-weight:700;background:#fff;border:1px solid #DDD6FE;color:#6D28D9;text-decoration:none}
+a.sp-rg:hover{background:#F5F3FF;border-color:#A78BFA}
+/* 12px 작은 글씨라 대비를 4.5:1 넘게 잡는다 (#7C6BA8 은 4.3:1 로 모자람) */
+.sp-note{font-size:12px;color:#6B5F8F;line-height:1.6;margin-top:8px}
+.zero{padding:22px;text-align:center;border:1px solid #FDE68A;background:#FFFBEB;
+  border-radius:3px;margin-bottom:16px}
+.zero b{font-size:.95rem;color:#92400E}
+.zero p{font-size:.85rem;color:var(--tx-mu);margin-top:6px}
+.tier{margin-bottom:22px}
+.tier:last-child{margin-bottom:0}
+.tier-hd{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--lblue);
+  width:100%;text-align:left;font-family:var(--f);cursor:pointer;
+  border-left:4px solid var(--tc);border-radius:2px;margin-bottom:11px;flex-wrap:wrap}
+.tier-no{font-family:var(--fn);font-size:.68rem;font-weight:700;color:#fff;background:var(--tc);
+  padding:2px 7px;border-radius:2px}
+.tier-nm{font-size:.98rem;font-weight:700;color:var(--tc)}
+.tier-sub{font-size:.78rem;color:var(--tx-mu)}
+.tier-ct{margin-left:auto;font-family:var(--fn);font-size:.82rem;font-weight:700;color:var(--tc)}
+.tier-arrow{font-size:.7rem;color:var(--tc);transition:transform .18s}
+.tier.folded .tier-arrow{transform:rotate(-90deg)}
+.tier.folded>*:not(.tier-hd){display:none}
+.tier-hd:hover{filter:brightness(.97)}
+.sp-tier .tier-hd{background:#F5F3FF;border-left-color:#7C3AED}
+.sp-tier .tier-no{background:#7C3AED}
+.sp-tier .tier-nm,.sp-tier .tier-ct{color:#6D28D9}
+.share-hint{margin-top:14px;font-size:.84rem;color:var(--tx-mu);text-align:center}
+.fold-bar{display:flex;align-items:stretch;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.fold-bar button{font-family:var(--f);font-size:.8rem;padding:6px 12px;border:1px solid var(--bd);
+  border-radius:3px;background:#fff;color:var(--tx-mu);cursor:pointer}
+.fold-bar button:hover{border-color:var(--blue);color:var(--blue)}
+.fold-bar button.on{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.fold-bar button.on:hover{color:#fff}
+.fold-sep{align-self:stretch;width:1px;background:var(--bd);margin:2px 0}
+
+/* 표로 보기 모드 */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svc-tbl{width:100%;border-collapse:collapse;font-size:.88rem;background:#fff}
+.svc-tbl thead th{background:#FAFBFC;border-bottom:2px solid var(--bd);padding:9px 12px;
+  text-align:left;font-size:.76rem;color:var(--tx-mu);font-weight:700}
+.svc-tbl tbody tr.svc-row{cursor:pointer;border-bottom:1px solid #EEF0F2}
+.svc-tbl tbody tr.svc-row:hover{background:var(--lblue)}
+.svc-tbl tbody tr.svc-row.open{background:var(--lblue)}
+.svc-tbl tbody tr.svc-row td{padding:10px 12px;vertical-align:top}
+.svc-tbl td.svc-name{font-weight:600;color:var(--tx);border-left:3px solid var(--tc)}
+.svc-tbl td.svc-name::before{content:"▸";display:inline-block;width:14px;color:var(--tc);font-size:.68rem}
+.svc-row.open td.svc-name::before{content:"▾"}
+.svc-tbl td.svc-org{color:var(--tx-mu);font-size:.84rem;white-space:nowrap}
+.svc-detail td{padding:0 0 10px;background:#FAFBFC}
+.svc-detail .item{margin:0;border-radius:0 0 3px 3px;border-top:0}
+@media(max-width:640px){
+  .svc-tbl td.svc-org,.svc-tbl th.col-org{display:none}
+}
+.item{border:1px solid var(--bd);border-left:3px solid var(--tc);border-radius:2px;
+  padding:14px 16px;margin-bottom:8px}
+.item-hd{display:flex;align-items:flex-start;gap:10px}
+.item-hd h3{flex:1;min-width:0}
+.item h3{font-size:1rem;font-weight:700;line-height:1.45}
+.share{flex:none;width:34px;height:34px;border:1px solid var(--bd);border-radius:3px;
+  background:#fff;color:var(--tx-mu);cursor:pointer;font-size:.85rem;
+  display:inline-flex;align-items:center;justify-content:center}
+.share:hover{border-color:var(--blue);color:var(--blue);background:var(--lblue)}
+.share.ok{width:auto;padding:0 10px;border-color:var(--navy);color:var(--navy);background:var(--lblue)}
+.share-msg{font-size:.74rem;font-weight:600;white-space:nowrap}
+.item p{font-size:.87rem;color:var(--tx-mu);margin-top:5px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tg{font-size:.72rem;padding:3px 8px;border-radius:2px;background:#F3F4F6;
+  color:var(--tx-mu);border:1px solid #E5E7EB}
+.tg.org{background:var(--lblue);color:var(--navy);border-color:#BFD9F2;font-weight:600}
+.tg.sx{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+details{margin-top:10px;border-top:1px solid #EEF0F2;padding-top:9px}
+summary{font-size:.8rem;color:var(--blue);cursor:pointer;list-style:none;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary::after{content:" \f078";font-family:"Font Awesome 6 Free";font-weight:900;font-size:.62rem}
+details[open] summary::after{content:" \f077"}
+.dl{margin-top:9px;font-size:.85rem;display:grid;grid-template-columns:76px 1fr;gap:5px 12px}
+.dl dt{color:var(--tx-mu);font-size:.8rem;font-weight:600}
+.apply{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.84rem;
+  font-weight:600;text-decoration:none;color:#fff;background:var(--blue);padding:8px 14px;border-radius:3px}
+.apply:hover{background:var(--navy)}
+.more{display:block;width:100%;margin-top:4px;padding:12px;font-family:var(--f);font-size:.9rem;
+  font-weight:600;color:var(--navy);background:var(--lblue);border:1px solid #BFD9F2;
+  border-radius:3px;cursor:pointer}
+.more:hover{background:#DBEAFE}
+.rank-info{font-size:.78rem;color:var(--tx-mu);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+/* 고른 상황별 소제목 (학생 / 노년 처럼 나눠 보여줄 때) */
+.tagsec{margin-bottom:14px}
+.tagsec:last-child{margin-bottom:0}
+.tagsec-hd{display:flex;align-items:center;gap:8px;padding:7px 11px;margin-bottom:7px;
+  background:#F8FAFC;border-left:3px solid var(--tc);border-radius:2px}
+.tagsec-nm{font-size:.88rem;font-weight:700;color:var(--tx)}
+.tagsec-ct{margin-left:auto;font-family:var(--fn);font-size:.78rem;font-weight:700;color:var(--tx-mu)}
+.kwgrp{margin-bottom:24px}
+.kwgrp:last-child{margin-bottom:0}
+.kwgrp-hd{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:2px;
+  margin-bottom:11px;flex-wrap:wrap;background:var(--lblue);border-left:4px solid var(--navy)}
+.kwgrp.biz .kwgrp-hd{background:#FFF7ED;border-left-color:#EA580C}
+.kwgrp-nm{font-size:.98rem;font-weight:700;color:var(--navy)}
+.kwgrp.biz .kwgrp-nm{color:#9A3412}
+.kwgrp-sub{font-size:.78rem;color:var(--tx-mu)}
+.kwgrp-ct{margin-left:auto;font-family:var(--fn);font-size:.82rem;font-weight:700;color:var(--navy)}
+.kwgrp.biz .kwgrp-ct{color:#9A3412}
+.kw-wrap{position:relative;margin-bottom:16px}
+.kw-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--bd-dk);font-size:.85rem}
+.kw-wrap input{padding-left:36px}
+details.past{margin-top:18px;border:1px solid var(--bd);border-radius:3px;
+  background:#FAFBFC;padding:12px 14px}
+details.past>summary{font-size:.88rem;font-weight:700;color:var(--tx-mu)}
+.past-note{font-size:.8rem;color:var(--tx-mu);margin:9px 0 12px;line-height:1.7}
+.past-chip{font-size:.72rem;padding:3px 8px;border-radius:2px;background:#F3F4F6;
+  color:#6B7280;border:1px solid #E5E7EB;font-weight:600}
+.item.dim{opacity:.72}
+.none{padding:18px;text-align:center;color:var(--tx-mu);font-size:.85rem;
+  border:1px dashed var(--bd);border-radius:2px}
+
+.sec{background:#fff;border:1px solid var(--bd);border-radius:4px;padding:20px;margin-bottom:20px}
+.sec h2{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:13px;
+  padding-bottom:10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.sec>p{font-size:.88rem;color:var(--tx-mu);line-height:1.75}
+.sec>p b{color:var(--tx)}
+.faq{border-bottom:1px solid #EEF0F2;padding:13px 0}
+.faq:last-child{border-bottom:0;padding-bottom:0}
+.faq h3{font-size:.95rem;font-weight:700;margin-bottom:6px}
+.faq h3::before{content:"Q. ";color:var(--blue);font-family:var(--fn)}
+.faq p{font-size:.88rem;color:var(--tx-mu)}
+.mi{font-size:.85rem;color:var(--tx-mu);margin-bottom:12px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px}
+.mtbl{width:100%;border-collapse:collapse;font-size:.85rem;min-width:420px}
+.mtbl th,.mtbl td{border:1px solid var(--bd);padding:8px 10px;text-align:left}
+.mtbl th{background:#FAFBFC;font-weight:600;color:var(--tx-mu)}
+.mtbl td{font-family:var(--fn);font-weight:500}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.links a{font-size:.84rem;padding:6px 11px;border:1px solid var(--bd);border-radius:3px;
+  background:#FAFBFC;text-decoration:none;color:var(--tx-mu)}
+.links a:hover{border-color:var(--blue);color:var(--blue);background:var(--lblue)}
+
+footer{padding:20px 0 40px;font-size:.8rem;color:var(--tx-mu);line-height:1.75;
+  border-top:1px solid var(--bd);margin-top:6px}
+footer b{color:var(--tx)}
+.kogl{display:inline-block;margin-top:10px;font-size:.75rem;border:1px solid var(--bd);
+  border-radius:2px;padding:4px 9px;color:var(--tx-mu);background:#FAFBFC}
+.disc{margin-top:10px;padding:11px 13px;background:#FEF2F2;border:1px solid #FECACA;
+  border-radius:3px;font-size:.8rem;color:#991B1B}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .panel-bd,.sec{padding:15px}
+  .res-bd{padding:14px}
+  .kid-in{flex:1 1 auto}
+  .kid-in input{width:100%}
+  .kid-read{flex:1 1 100%;order:3}
+}
+@media print{
+  body.printing .topbar,body.printing header,
+  body.printing .hero .data-notice,body.printing .tabs,
+  body.printing form#f,body.printing .sec,body.printing footer,
+  body.printing .more,body.printing .kw-wrap,body.printing .exp,
+  body.printing .rank-info,body.printing #kwPane>.panel{display:none!important}
+  body.printing #out,body.printing #kwOut{display:block!important}
+  body.printing .hero{padding:0 0 10px}
+  body.printing h1{font-size:1.3rem}
+  .item{break-inside:avoid;page-break-inside:avoid}
+  .res-hd{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  summary{display:none}
+  details{border-top:1px solid #EEF0F2}
+  a.apply{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+
+</head>
+<body>
+
+<!-- 다른 계산기로 가는 모달 내비게이션은 원래도 여는 버튼이 없어 죽어 있던
+     코드였다(상단 네비 자체가 이미 빠져 있었음). welfarego.co.kr로 도메인을
+     분리하면서 그 안의 링크(/calculator 등)도 다 깨지는 참에 정리했다. -->
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow" id="eyebrow"><i class="fa-solid fa-magnifying-glass"></i> 복지 서비스 찾기</span>
+    <h1 id="h1">내가 받을 수 있는 <span class="hl">복지 서비스 찾기</span></h1>
+    <p id="intro"><b id="svcN">수천개</b>의 복지 서비스 중 나이·거주지·소득만 입력하면 청년복지, 노인복지, 여성복지, 한부모·다자녀 지원 등 나에게 해당하는 복지 혜택과 정부지원금을 한 번에 확인할 수 있습니다.</p>
+    <p class="data-notice"><i class="fa-solid fa-lock"></i> <b>입력하신 정보는 저장되지 않으며, 화면을 나가면 사라집니다.</b></p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab on" id="tabCond" role="tab" aria-selected="true"
+            aria-controls="condPane">
+      <i class="fa-solid fa-sliders"></i> 내 조건으로 찾기</button>
+    <button type="button" class="tab" id="tabKw" role="tab" aria-selected="false"
+            aria-controls="kwPane">
+      <i class="fa-solid fa-magnifying-glass"></i> 검색으로 찾기</button>
+  </div>
+
+  <section id="kwPane" role="tabpanel" aria-labelledby="tabKw" hidden>
+    <div class="panel">
+      <div class="panel-hd"><h2><i class="fa-solid fa-magnifying-glass"></i> 키워드로 복지서비스 찾기</h2></div>
+      <div class="panel-bd">
+        <div class="grid">
+          <div class="full">
+            <label for="kwq">검색어 <span class="hint">— 서비스명·지원대상·내용에서 찾습니다. 예: 낚시, 옵서버, 귀화허가, 월세</span></label>
+            <input type="text" id="kwq" placeholder="예: 낚시" autocomplete="off">
+          </div>
+          <div class="full combo">
+            <label for="kwreg">지역 <span class="hint">— 비워두면 전국에서 찾습니다</span></label>
+            <input type="text" id="kwreg" placeholder="예: 강남구 · 서울시 (선택)" role="combobox"
+                   aria-expanded="false" aria-controls="kwac" autocomplete="off">
+            <div class="ac" id="kwac" role="listbox"></div>
+          </div>
+        </div>
+        <p class="kw-note">기업·단체 대상 사업까지 전체 데이터에서 검색합니다.
+          지역을 고르면 전국 사업과 그 지역 사업만 남습니다.
+          <b>서울시·경기도</b>처럼 시·도만 고르면 정부와 광역지자체 사업까지만 보여드립니다.</p>
+      </div>
+    </div>
+    <section id="kwOut" aria-live="polite"></section>
+  </section>
+
+  <div id="condPane" role="tabpanel" aria-labelledby="tabCond">
+  <form class="panel" id="f" autocomplete="off">
+    <div class="panel-hd">
+      <h2><i class="fa-solid fa-list-check"></i> 내 조건 입력</h2>
+      <span class="req"><span class="star">*</span> 표시는 필수 입력 항목입니다</span>
+    </div>
+    <div class="panel-bd"><div class="grid">
+
+      <div>
+        <label for="age">나이 (만 나이) <span class="star">*</span></label>
+        <input type="number" id="age" min="0" max="120" inputmode="numeric" placeholder="예: 34" required>
+      </div>
+      <div>
+        <label for="hh">가구원 수 <span class="star">*</span></label>
+        <select id="hh">
+          <option value="1">1인 가구</option><option value="2">2인 가구</option>
+          <option value="3">3인 가구</option><option value="4" selected>4인 가구</option>
+          <option value="5">5인 가구</option><option value="6">6인 가구</option>
+          <option value="7">7인 가구</option><option value="8">8인 이상 가구</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>성별 <span class="hint">— 미선택 시 모든 서비스가 표시됩니다</span></label>
+        <div class="chips" id="sex">
+          <button type="button" class="chip" data-v="" aria-pressed="true">선택 안 함</button>
+          <button type="button" class="chip" data-v="여성" aria-pressed="false">여성</button>
+          <button type="button" class="chip" data-v="남성" aria-pressed="false">남성</button>
+        </div>
+      </div>
+
+      <div class="full combo">
+        <label for="reg">거주지 (시·군·구) <span class="star">*</span>
+          <span class="hint">— 우리 동네 전용 혜택까지 함께 찾습니다</span></label>
+        <input type="text" id="reg" placeholder="예: 강남구" role="combobox"
+               aria-expanded="false" aria-controls="ac" required>
+        <div class="ac" id="ac" role="listbox"></div>
+        <div class="err" id="regErr" role="alert" hidden>
+          목록에서 지역을 선택해 주세요. '강남구' 입력 후 나오는 항목을 클릭하시면 됩니다.</div>
+      </div>
+
+      <div class="full">
+        <label>혼인 상태 <span class="hint">— 신혼부부·한부모 전용 혜택 판별</span></label>
+        <div class="chips" id="marital">
+          <button type="button" class="chip" data-v="" aria-pressed="true">선택 안 함</button>
+          <button type="button" class="chip" data-v="single">미혼</button>
+          <button type="button" class="chip" data-v="married">기혼</button>
+          <button type="button" class="chip" data-v="single_parent">한부모</button>
+        </div>
+      </div>
+
+      <div class="full" id="pregWrap">
+        <label>임신 여부 <span class="hint">(해당 시)</span></label>
+        <div class="chips" id="preg">
+          <button type="button" class="chip" data-v="" aria-pressed="true">해당 없음</button>
+          <button type="button" class="chip" data-v="1">임신 중</button>
+        </div>
+      </div>
+
+      <div class="full" id="kidsWrap">
+        <label>자녀 생년월일
+          <span class="hint">— 20200415 처럼 숫자만 입력해도 됩니다. 개월수를 자동 계산해 부모급여·아동수당을 찾습니다</span></label>
+        <div id="kidList"></div>
+        <button type="button" class="addkid" id="addKid"><i class="fa-solid fa-plus"></i> 자녀 추가</button>
+      </div>
+
+      <div class="full">
+        <label for="inc">가구 월 소득액 <span class="hint">(세전 합산 · 모르면 비워두세요)</span></label>
+        <input type="text" id="inc" inputmode="numeric" maxlength="15" placeholder="예: 3,200,000">
+        <div class="won-read" id="wonRead" aria-live="polite"></div>
+        <div class="scale" id="scale">
+          <div class="scale-t">가구 기준중위소득 산정 비율</div>
+          <div class="scale-v">기준 중위소득의 <span id="pct">—</span><small>%</small></div>
+          <div class="bar">
+            <div class="bar-bg"><div class="bar-fl" id="fill"></div></div>
+            <div class="tick" style="left:16%"><span>32% 생계</span></div>
+            <div class="tick low" style="left:25%"><span>50% 차상위</span></div>
+            <div class="tick" style="left:50%"><span>100%</span></div>
+            <div class="tick" style="left:75%"><span>150%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="full">
+        <label>취업 상태 <span class="hint">— 주 5일 근무 조건인 일자리 제공 사업을 걸러내는 데 씁니다</span></label>
+        <div class="chips" id="work">
+          <button type="button" class="chip" data-v="" aria-pressed="true">선택 안 함</button>
+          <button type="button" class="chip" data-v="employed" aria-pressed="false">재직 중</button>
+          <button type="button" class="chip" data-v="jobless" aria-pressed="false">구직 중·무직</button>
+          <button type="button" class="chip" data-v="selfemp" aria-pressed="false">자영업</button>
+          <button type="button" class="chip" data-v="student" aria-pressed="false">학생</button>
+          <button type="button" class="chip" data-v="retired" aria-pressed="false">은퇴</button>
+        </div>
+        <p class="kw-note" id="workNote" hidden></p>
+      </div>
+
+      <div class="full">
+        <label>해당되는 상황 <span class="hint">— 선택하면 그 상황의 혜택만 추려서 보여드립니다 (복수 선택 가능)</span></label>
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="full">
+        <label>특별한 상황 <span class="hint">— 해당하실 때만 선택하세요. 고르지 않으면 결과에 나오지 않습니다</span></label>
+        <div class="chips" id="spchips"></div>
+      </div>
+
+    </div></div>
+    <div class="submit">
+      <button class="btn" type="submit" id="goBtn">
+        <i class="fa-solid fa-magnifying-glass"></i> 내 복지 혜택 찾기</button>
+    </div>
+  </form>
+
+  <section id="out" aria-live="polite"></section>
+  </div>
+
+  <section class="sec">
+    <h2><i class="fa-solid fa-layer-group"></i> 왜 3단계로 나눠서 보여주나요?</h2>
+    <p>복지서비스는 만드는 주체가 셋으로 나뉩니다. <b>중앙부처</b>는 전국민 대상,
+      <b>시·도</b>는 그 지역 도민 대상, <b>시·군·구</b>는 그 동네 주민 대상으로 각각 따로 운영합니다.
+      그래서 시·도까지만 확인하면 우리 동네 전용 혜택을 놓치고, 시·군·구만 확인하면
+      기초연금·아동수당 같은 전국 단위 혜택을 놓칩니다.
+      세 단계를 모두 쌓아서 보여드리는 이유입니다.</p>
+  </section>
+
+  <section class="sec">
+    <h2><i class="fa-solid fa-circle-question"></i> 자주 묻는 질문</h2>
+    <div class="faq"><h3>내가 받을 수 있는 복지서비스는 어떻게 확인하나요?</h3>
+      <p>나이, 가구원 수, 거주 시·군·구, 가구 월소득을 입력하면 조건에 맞는 복지서비스 목록이 바로 나옵니다.
+        회원가입이나 공동인증서 없이 조회할 수 있으며, 입력한 정보는 브라우저에서만 계산되고 서버로 전송되지 않습니다.</p></div>
+    <div class="faq"><h3>기준 중위소득은 무엇이고 왜 중요한가요?</h3>
+      <p>기준 중위소득은 전체 가구를 소득 순으로 세웠을 때 정중앙에 오는 금액으로, 보건복지부 장관이 매년 고시합니다.
+        대부분의 복지사업이 '기준 중위소득 몇 % 이하'로 대상자를 정하기 때문에 본인 가구가 몇 %에 해당하는지가 자격 판단의 핵심입니다.</p>
+      <div class="tbl-wrap">
+        <table class="mtbl">
+          <caption class="mi" style="text-align:left">2026년 기준 중위소득 100% · 보건복지부 고시 제2025-135호</caption>
+          <tr><th>1인 가구</th><th>2인 가구</th><th>3인 가구</th><th>4인 가구</th></tr>
+          <tr><td>2,564,238원</td><td>4,199,292원</td><td>5,359,036원</td><td>6,494,738원</td></tr>
+          <tr><th>5인 가구</th><th>6인 가구</th><th>7인 가구</th><th>8인 가구</th></tr>
+          <tr><td>7,556,719원</td><td>8,555,952원</td><td>9,515,150원</td><td>10,474,348원</td></tr>
+        </table>
+      </div></div>
+    <div class="faq"><h3>자녀 생년월일은 왜 입력하나요?</h3>
+      <p>부모급여(24개월)·아동수당(96개월)·첫만남이용권(12개월)은 개월수 경계 하루 차이로 자격이 갈립니다.
+        개월수를 직접 세면 틀리기 쉬워서, 생년월일을 받아 정확히 계산합니다.</p></div>
+    <div class="faq"><h3>정보 출처는 어디인가요?</h3>
+      <p>행정안전부가 공공데이터포털에 개방한 «대한민국 공공서비스(혜택) 정보»를 사용합니다.
+        중앙부처, 지방자치단체, 공공기관, 교육청이 제공하는 수혜 서비스가 포함됩니다.
+        최종 신청 자격과 예산 상황은 소관기관에서 반드시 확인해야 합니다.</p></div>
+  </section>
+
+  <section class="sec" id="sidoSec">
+    <h2><i class="fa-solid fa-location-dot"></i> 지역별 복지서비스</h2>
+    <p class="mi">거주 지역을 고르면 해당 시·도와 시·군·구 전용 혜택까지 함께 확인할 수 있습니다.</p>
+    <div class="links" id="sidoLinks"></div>
+  </section>
+
+  <section class="sec" id="nearbySec" hidden>
+    <h2><i class="fa-solid fa-map"></i> <span id="nearbyTitle"></span></h2>
+    <div class="links" id="nearbyLinks"></div>
+  </section>
+
+  <footer>
+    <b>공공데이터 출처:</b> 행정안전부 «대한민국 공공서비스(혜택) 정보» (공공데이터포털)<br>
+    데이터 기준일: <span id="asof">—</span>
+    <div class="kogl">공공누리 제1유형 · 출처표시</div>
+    <div class="disc">본 페이지는 공공데이터를 안내하는 <b>민간 서비스</b>이며 정부 기관이 아닙니다.
+      최종 신청 자격·기간·예산은 소관 행정기관(주민센터 등)에서 반드시 확인하시기 바랍니다.</div>
+  </footer>
+
+</div>
+
+<script>
+/* 지역 프리셋: Flask가 지역 페이지를 낼 때 이 값을 주입한다.
+   파일을 그냥 열면 null이라 메인 화면으로 정상 동작한다. */
+window.__PRESET__ = null;
+</script>
+<script>
+const REGIONS = [{"sido":"서울특별시","sigungu":"종로구","label":"서울특별시 종로구"},{"sido":"서울특별시","sigungu":"중구","label":"서울특별시 중구"},{"sido":"서울특별시","sigungu":"용산구","label":"서울특별시 용산구"},{"sido":"서울특별시","sigungu":"성동구","label":"서울특별시 성동구"},{"sido":"서울특별시","sigungu":"광진구","label":"서울특별시 광진구"},{"sido":"서울특별시","sigungu":"동대문구","label":"서울특별시 동대문구"},{"sido":"서울특별시","sigungu":"중랑구","label":"서울특별시 중랑구"},{"sido":"서울특별시","sigungu":"성북구","label":"서울특별시 성북구"},{"sido":"서울특별시","sigungu":"강북구","label":"서울특별시 강북구"},{"sido":"서울특별시","sigungu":"도봉구","label":"서울특별시 도봉구"},{"sido":"서울특별시","sigungu":"노원구","label":"서울특별시 노원구"},{"sido":"서울특별시","sigungu":"은평구","label":"서울특별시 은평구"},{"sido":"서울특별시","sigungu":"서대문구","label":"서울특별시 서대문구"},{"sido":"서울특별시","sigungu":"마포구","label":"서울특별시 마포구"},{"sido":"서울특별시","sigungu":"양천구","label":"서울특별시 양천구"},{"sido":"서울특별시","sigungu":"강서구","label":"서울특별시 강서구"},{"sido":"서울특별시","sigungu":"구로구","label":"서울특별시 구로구"},{"sido":"서울특별시","sigungu":"금천구","label":"서울특별시 금천구"},{"sido":"서울특별시","sigungu":"영등포구","label":"서울특별시 영등포구"},{"sido":"서울특별시","sigungu":"동작구","label":"서울특별시 동작구"},{"sido":"서울특별시","sigungu":"관악구","label":"서울특별시 관악구"},{"sido":"서울특별시","sigungu":"서초구","label":"서울특별시 서초구"},{"sido":"서울특별시","sigungu":"강남구","label":"서울특별시 강남구"},{"sido":"서울특별시","sigungu":"송파구","label":"서울특별시 송파구"},{"sido":"서울특별시","sigungu":"강동구","label":"서울특별시 강동구"},{"sido":"부산광역시","sigungu":"중구","label":"부산광역시 중구"},{"sido":"부산광역시","sigungu":"서구","label":"부산광역시 서구"},{"sido":"부산광역시","sigungu":"동구","label":"부산광역시 동구"},{"sido":"부산광역시","sigungu":"영도구","label":"부산광역시 영도구"},{"sido":"부산광역시","sigungu":"부산진구","label":"부산광역시 부산진구"},{"sido":"부산광역시","sigungu":"동래구","label":"부산광역시 동래구"},{"sido":"부산광역시","sigungu":"남구","label":"부산광역시 남구"},{"sido":"부산광역시","sigungu":"북구","label":"부산광역시 북구"},{"sido":"부산광역시","sigungu":"해운대구","label":"부산광역시 해운대구"},{"sido":"부산광역시","sigungu":"사하구","label":"부산광역시 사하구"},{"sido":"부산광역시","sigungu":"금정구","label":"부산광역시 금정구"},{"sido":"부산광역시","sigungu":"강서구","label":"부산광역시 강서구"},{"sido":"부산광역시","sigungu":"연제구","label":"부산광역시 연제구"},{"sido":"부산광역시","sigungu":"수영구","label":"부산광역시 수영구"},{"sido":"부산광역시","sigungu":"사상구","label":"부산광역시 사상구"},{"sido":"부산광역시","sigungu":"기장군","label":"부산광역시 기장군"},{"sido":"대구광역시","sigungu":"중구","label":"대구광역시 중구"},{"sido":"대구광역시","sigungu":"동구","label":"대구광역시 동구"},{"sido":"대구광역시","sigungu":"서구","label":"대구광역시 서구"},{"sido":"대구광역시","sigungu":"남구","label":"대구광역시 남구"},{"sido":"대구광역시","sigungu":"북구","label":"대구광역시 북구"},{"sido":"대구광역시","sigungu":"수성구","label":"대구광역시 수성구"},{"sido":"대구광역시","sigungu":"달서구","label":"대구광역시 달서구"},{"sido":"대구광역시","sigungu":"달성군","label":"대구광역시 달성군"},{"sido":"대구광역시","sigungu":"군위군","label":"대구광역시 군위군"},{"sido":"인천광역시","sigungu":"미추홀구","label":"인천광역시 미추홀구"},{"sido":"인천광역시","sigungu":"연수구","label":"인천광역시 연수구"},{"sido":"인천광역시","sigungu":"남동구","label":"인천광역시 남동구"},{"sido":"인천광역시","sigungu":"부평구","label":"인천광역시 부평구"},{"sido":"인천광역시","sigungu":"계양구","label":"인천광역시 계양구"},{"sido":"인천광역시","sigungu":"서해구","label":"인천광역시 서해구"},{"sido":"인천광역시","sigungu":"검단구","label":"인천광역시 검단구"},{"sido":"인천광역시","sigungu":"제물포구","label":"인천광역시 제물포구"},{"sido":"인천광역시","sigungu":"영종구","label":"인천광역시 영종구"},{"sido":"인천광역시","sigungu":"강화군","label":"인천광역시 강화군"},{"sido":"인천광역시","sigungu":"옹진군","label":"인천광역시 옹진군"},{"sido":"대전광역시","sigungu":"동구","label":"대전광역시 동구"},{"sido":"대전광역시","sigungu":"중구","label":"대전광역시 중구"},{"sido":"대전광역시","sigungu":"서구","label":"대전광역시 서구"},{"sido":"대전광역시","sigungu":"유성구","label":"대전광역시 유성구"},{"sido":"대전광역시","sigungu":"대덕구","label":"대전광역시 대덕구"},{"sido":"울산광역시","sigungu":"중구","label":"울산광역시 중구"},{"sido":"울산광역시","sigungu":"남구","label":"울산광역시 남구"},{"sido":"울산광역시","sigungu":"동구","label":"울산광역시 동구"},{"sido":"울산광역시","sigungu":"북구","label":"울산광역시 북구"},{"sido":"울산광역시","sigungu":"울주군","label":"울산광역시 울주군"},{"sido":"세종특별자치시","sigungu":"","label":"세종특별자치시"},{"sido":"경기도","sigungu":"수원시","label":"경기도 수원시"},{"sido":"경기도","sigungu":"성남시","label":"경기도 성남시"},{"sido":"경기도","sigungu":"의정부시","label":"경기도 의정부시"},{"sido":"경기도","sigungu":"안양시","label":"경기도 안양시"},{"sido":"경기도","sigungu":"부천시","label":"경기도 부천시"},{"sido":"경기도","sigungu":"광명시","label":"경기도 광명시"},{"sido":"경기도","sigungu":"평택시","label":"경기도 평택시"},{"sido":"경기도","sigungu":"동두천시","label":"경기도 동두천시"},{"sido":"경기도","sigungu":"안산시","label":"경기도 안산시"},{"sido":"경기도","sigungu":"고양시","label":"경기도 고양시"},{"sido":"경기도","sigungu":"과천시","label":"경기도 과천시"},{"sido":"경기도","sigungu":"구리시","label":"경기도 구리시"},{"sido":"경기도","sigungu":"남양주시","label":"경기도 남양주시"},{"sido":"경기도","sigungu":"오산시","label":"경기도 오산시"},{"sido":"경기도","sigungu":"시흥시","label":"경기도 시흥시"},{"sido":"경기도","sigungu":"군포시","label":"경기도 군포시"},{"sido":"경기도","sigungu":"의왕시","label":"경기도 의왕시"},{"sido":"경기도","sigungu":"하남시","label":"경기도 하남시"},{"sido":"경기도","sigungu":"용인시","label":"경기도 용인시"},{"sido":"경기도","sigungu":"파주시","label":"경기도 파주시"},{"sido":"경기도","sigungu":"이천시","label":"경기도 이천시"},{"sido":"경기도","sigungu":"안성시","label":"경기도 안성시"},{"sido":"경기도","sigungu":"김포시","label":"경기도 김포시"},{"sido":"경기도","sigungu":"화성시","label":"경기도 화성시"},{"sido":"경기도","sigungu":"광주시","label":"경기도 광주시"},{"sido":"경기도","sigungu":"양주시","label":"경기도 양주시"},{"sido":"경기도","sigungu":"포천시","label":"경기도 포천시"},{"sido":"경기도","sigungu":"여주시","label":"경기도 여주시"},{"sido":"경기도","sigungu":"연천군","label":"경기도 연천군"},{"sido":"경기도","sigungu":"가평군","label":"경기도 가평군"},{"sido":"경기도","sigungu":"양평군","label":"경기도 양평군"},{"sido":"강원특별자치도","sigungu":"춘천시","label":"강원특별자치도 춘천시"},{"sido":"강원특별자치도","sigungu":"원주시","label":"강원특별자치도 원주시"},{"sido":"강원특별자치도","sigungu":"강릉시","label":"강원특별자치도 강릉시"},{"sido":"강원특별자치도","sigungu":"동해시","label":"강원특별자치도 동해시"},{"sido":"강원특별자치도","sigungu":"태백시","label":"강원특별자치도 태백시"},{"sido":"강원특별자치도","sigungu":"속초시","label":"강원특별자치도 속초시"},{"sido":"강원특별자치도","sigungu":"삼척시","label":"강원특별자치도 삼척시"},{"sido":"강원특별자치도","sigungu":"홍천군","label":"강원특별자치도 홍천군"},{"sido":"강원특별자치도","sigungu":"횡성군","label":"강원특별자치도 횡성군"},{"sido":"강원특별자치도","sigungu":"영월군","label":"강원특별자치도 영월군"},{"sido":"강원특별자치도","sigungu":"평창군","label":"강원특별자치도 평창군"},{"sido":"강원특별자치도","sigungu":"정선군","label":"강원특별자치도 정선군"},{"sido":"강원특별자치도","sigungu":"철원군","label":"강원특별자치도 철원군"},{"sido":"강원특별자치도","sigungu":"화천군","label":"강원특별자치도 화천군"},{"sido":"강원특별자치도","sigungu":"양구군","label":"강원특별자치도 양구군"},{"sido":"강원특별자치도","sigungu":"인제군","label":"강원특별자치도 인제군"},{"sido":"강원특별자치도","sigungu":"고성군","label":"강원특별자치도 고성군"},{"sido":"강원특별자치도","sigungu":"양양군","label":"강원특별자치도 양양군"},{"sido":"충청북도","sigungu":"청주시","label":"충청북도 청주시"},{"sido":"충청북도","sigungu":"충주시","label":"충청북도 충주시"},{"sido":"충청북도","sigungu":"제천시","label":"충청북도 제천시"},{"sido":"충청북도","sigungu":"보은군","label":"충청북도 보은군"},{"sido":"충청북도","sigungu":"옥천군","label":"충청북도 옥천군"},{"sido":"충청북도","sigungu":"영동군","label":"충청북도 영동군"},{"sido":"충청북도","sigungu":"증평군","label":"충청북도 증평군"},{"sido":"충청북도","sigungu":"진천군","label":"충청북도 진천군"},{"sido":"충청북도","sigungu":"괴산군","label":"충청북도 괴산군"},{"sido":"충청북도","sigungu":"음성군","label":"충청북도 음성군"},{"sido":"충청북도","sigungu":"단양군","label":"충청북도 단양군"},{"sido":"충청남도","sigungu":"천안시","label":"충청남도 천안시"},{"sido":"충청남도","sigungu":"공주시","label":"충청남도 공주시"},{"sido":"충청남도","sigungu":"보령시","label":"충청남도 보령시"},{"sido":"충청남도","sigungu":"아산시","label":"충청남도 아산시"},{"sido":"충청남도","sigungu":"서산시","label":"충청남도 서산시"},{"sido":"충청남도","sigungu":"논산시","label":"충청남도 논산시"},{"sido":"충청남도","sigungu":"계룡시","label":"충청남도 계룡시"},{"sido":"충청남도","sigungu":"당진시","label":"충청남도 당진시"},{"sido":"충청남도","sigungu":"금산군","label":"충청남도 금산군"},{"sido":"충청남도","sigungu":"부여군","label":"충청남도 부여군"},{"sido":"충청남도","sigungu":"서천군","label":"충청남도 서천군"},{"sido":"충청남도","sigungu":"청양군","label":"충청남도 청양군"},{"sido":"충청남도","sigungu":"홍성군","label":"충청남도 홍성군"},{"sido":"충청남도","sigungu":"예산군","label":"충청남도 예산군"},{"sido":"충청남도","sigungu":"태안군","label":"충청남도 태안군"},{"sido":"전북특별자치도","sigungu":"전주시","label":"전북특별자치도 전주시"},{"sido":"전북특별자치도","sigungu":"군산시","label":"전북특별자치도 군산시"},{"sido":"전북특별자치도","sigungu":"익산시","label":"전북특별자치도 익산시"},{"sido":"전북특별자치도","sigungu":"정읍시","label":"전북특별자치도 정읍시"},{"sido":"전북특별자치도","sigungu":"남원시","label":"전북특별자치도 남원시"},{"sido":"전북특별자치도","sigungu":"김제시","label":"전북특별자치도 김제시"},{"sido":"전북특별자치도","sigungu":"완주군","label":"전북특별자치도 완주군"},{"sido":"전북특별자치도","sigungu":"진안군","label":"전북특별자치도 진안군"},{"sido":"전북특별자치도","sigungu":"무주군","label":"전북특별자치도 무주군"},{"sido":"전북특별자치도","sigungu":"장수군","label":"전북특별자치도 장수군"},{"sido":"전북특별자치도","sigungu":"임실군","label":"전북특별자치도 임실군"},{"sido":"전북특별자치도","sigungu":"순창군","label":"전북특별자치도 순창군"},{"sido":"전북특별자치도","sigungu":"고창군","label":"전북특별자치도 고창군"},{"sido":"전북특별자치도","sigungu":"부안군","label":"전북특별자치도 부안군"},{"sido":"전남광주통합특별시","sigungu":"목포시","label":"전남광주통합특별시 목포시"},{"sido":"전남광주통합특별시","sigungu":"여수시","label":"전남광주통합특별시 여수시"},{"sido":"전남광주통합특별시","sigungu":"순천시","label":"전남광주통합특별시 순천시"},{"sido":"전남광주통합특별시","sigungu":"나주시","label":"전남광주통합특별시 나주시"},{"sido":"전남광주통합특별시","sigungu":"광양시","label":"전남광주통합특별시 광양시"},{"sido":"전남광주통합특별시","sigungu":"담양군","label":"전남광주통합특별시 담양군"},{"sido":"전남광주통합특별시","sigungu":"곡성군","label":"전남광주통합특별시 곡성군"},{"sido":"전남광주통합특별시","sigungu":"구례군","label":"전남광주통합특별시 구례군"},{"sido":"전남광주통합특별시","sigungu":"고흥군","label":"전남광주통합특별시 고흥군"},{"sido":"전남광주통합특별시","sigungu":"보성군","label":"전남광주통합특별시 보성군"},{"sido":"전남광주통합특별시","sigungu":"화순군","label":"전남광주통합특별시 화순군"},{"sido":"전남광주통합특별시","sigungu":"장흥군","label":"전남광주통합특별시 장흥군"},{"sido":"전남광주통합특별시","sigungu":"강진군","label":"전남광주통합특별시 강진군"},{"sido":"전남광주통합특별시","sigungu":"해남군","label":"전남광주통합특별시 해남군"},{"sido":"전남광주통합특별시","sigungu":"영암군","label":"전남광주통합특별시 영암군"},{"sido":"전남광주통합특별시","sigungu":"무안군","label":"전남광주통합특별시 무안군"},{"sido":"전남광주통합특별시","sigungu":"함평군","label":"전남광주통합특별시 함평군"},{"sido":"전남광주통합특별시","sigungu":"영광군","label":"전남광주통합특별시 영광군"},{"sido":"전남광주통합특별시","sigungu":"장성군","label":"전남광주통합특별시 장성군"},{"sido":"전남광주통합특별시","sigungu":"완도군","label":"전남광주통합특별시 완도군"},{"sido":"전남광주통합특별시","sigungu":"진도군","label":"전남광주통합특별시 진도군"},{"sido":"전남광주통합특별시","sigungu":"신안군","label":"전남광주통합특별시 신안군"},{"sido":"전남광주통합특별시","sigungu":"동구","label":"전남광주통합특별시 동구"},{"sido":"전남광주통합특별시","sigungu":"서구","label":"전남광주통합특별시 서구"},{"sido":"전남광주통합특별시","sigungu":"남구","label":"전남광주통합특별시 남구"},{"sido":"전남광주통합특별시","sigungu":"북구","label":"전남광주통합특별시 북구"},{"sido":"전남광주통합특별시","sigungu":"광산구","label":"전남광주통합특별시 광산구"},{"sido":"경상북도","sigungu":"포항시","label":"경상북도 포항시"},{"sido":"경상북도","sigungu":"경주시","label":"경상북도 경주시"},{"sido":"경상북도","sigungu":"김천시","label":"경상북도 김천시"},{"sido":"경상북도","sigungu":"안동시","label":"경상북도 안동시"},{"sido":"경상북도","sigungu":"구미시","label":"경상북도 구미시"},{"sido":"경상북도","sigungu":"영주시","label":"경상북도 영주시"},{"sido":"경상북도","sigungu":"영천시","label":"경상북도 영천시"},{"sido":"경상북도","sigungu":"상주시","label":"경상북도 상주시"},{"sido":"경상북도","sigungu":"문경시","label":"경상북도 문경시"},{"sido":"경상북도","sigungu":"경산시","label":"경상북도 경산시"},{"sido":"경상북도","sigungu":"의성군","label":"경상북도 의성군"},{"sido":"경상북도","sigungu":"청송군","label":"경상북도 청송군"},{"sido":"경상북도","sigungu":"영양군","label":"경상북도 영양군"},{"sido":"경상북도","sigungu":"영덕군","label":"경상북도 영덕군"},{"sido":"경상북도","sigungu":"청도군","label":"경상북도 청도군"},{"sido":"경상북도","sigungu":"고령군","label":"경상북도 고령군"},{"sido":"경상북도","sigungu":"성주군","label":"경상북도 성주군"},{"sido":"경상북도","sigungu":"칠곡군","label":"경상북도 칠곡군"},{"sido":"경상북도","sigungu":"예천군","label":"경상북도 예천군"},{"sido":"경상북도","sigungu":"봉화군","label":"경상북도 봉화군"},{"sido":"경상북도","sigungu":"울진군","label":"경상북도 울진군"},{"sido":"경상북도","sigungu":"울릉군","label":"경상북도 울릉군"},{"sido":"경상남도","sigungu":"창원시","label":"경상남도 창원시"},{"sido":"경상남도","sigungu":"진주시","label":"경상남도 진주시"},{"sido":"경상남도","sigungu":"통영시","label":"경상남도 통영시"},{"sido":"경상남도","sigungu":"사천시","label":"경상남도 사천시"},{"sido":"경상남도","sigungu":"김해시","label":"경상남도 김해시"},{"sido":"경상남도","sigungu":"밀양시","label":"경상남도 밀양시"},{"sido":"경상남도","sigungu":"거제시","label":"경상남도 거제시"},{"sido":"경상남도","sigungu":"양산시","label":"경상남도 양산시"},{"sido":"경상남도","sigungu":"의령군","label":"경상남도 의령군"},{"sido":"경상남도","sigungu":"함안군","label":"경상남도 함안군"},{"sido":"경상남도","sigungu":"창녕군","label":"경상남도 창녕군"},{"sido":"경상남도","sigungu":"고성군","label":"경상남도 고성군"},{"sido":"경상남도","sigungu":"남해군","label":"경상남도 남해군"},{"sido":"경상남도","sigungu":"하동군","label":"경상남도 하동군"},{"sido":"경상남도","sigungu":"산청군","label":"경상남도 산청군"},{"sido":"경상남도","sigungu":"함양군","label":"경상남도 함양군"},{"sido":"경상남도","sigungu":"거창군","label":"경상남도 거창군"},{"sido":"경상남도","sigungu":"합천군","label":"경상남도 합천군"},{"sido":"제주특별자치도","sigungu":"제주시","label":"제주특별자치도 제주시"},{"sido":"제주특별자치도","sigungu":"서귀포시","label":"제주특별자치도 서귀포시"}];
+const MEDIAN={1:2564238,2:4199292,3:5359036,4:6494738,5:7556719,6:8555952,7:9515150,8:10474348};
+// 생애주기 → 필요한 도움 → 자격 순으로 배치한다.
+// 사람들이 자기 단계를 먼저 찾고, 그다음 무엇이 급한지 고른다.
+const TAGS=["임신·출산","영유아","학생(초·중·고)","대학생","청년","노년",
+            "의료비","주거","금융·채무","저소득",
+            "장애인","국가보훈","1인가구","다자녀","한부모",
+            "근로자","구직자","자영업자","농어민","다문화"];
+// 자격요건이 곧 상황인 태그. 고르지 않으면 그 사업은 나오지 않는다.
+const EXCLUSIVE=new Set(["장애인","국가보훈","한부모","다자녀","다문화"]);
+// '저소득'의 경계선. 차상위계층 기준(기준 중위소득 50%)을 쓴다.
+// 소득 그래프에 표시된 '50% 차상위' 선과 같은 값이다.
+const LOW_INCOME_PCT=50;
+
+/* 어른 대부분이 어느 하나에는 해당하는 넓은 신분·필요 태그.
+   '청년미래적금'에는 청년 말고 근로자·자영업자 태그도 붙어 있는데, 이건
+   '일하는 청년이면 누구나'라는 뜻이지 조건이 하나 더 붙는다는 뜻이 아니다.
+   이런 태그까지 '안 고른 조건'으로 세어 감점하면 정작 많은 청년이 받는
+   사업이 아래로 밀린다. 실제로 청년미래적금이 19위였다. */
+const BROAD_TAGS=new Set(['근로자','구직자','자영업자','저소득',
+                          '의료비','주거','금융·채무']);
+// 서비스명이 그 집단을 가리키면 '전용 사업'이 분명하다는 신호.
+// 지원대상에 여러 자격이 나열된 경우와 구분하는 데 쓴다(exclusiveGate 참고).
+const EXCLUSIVE_NAME_HINTS={
+  "장애인":["장애인","장애아","장애우","발달장애","지체장애","시각장애",
+          "청각장애","지적장애","중증장애","뇌병변","자폐","장애정도"],
+  "국가보훈":["보훈","유공자","상이군경","전몰군경","공상군경","참전",
+           "무공수훈","보국수훈","애국지사","고엽제","5·18"],
+  "한부모":["한부모","미혼모","미혼부","조손","모자가정","부자가정"],
+  "다자녀":["다자녀","다둥이","둘째","셋째","다태아","쌍둥이","2자녀","3자녀"],
+  "다문화":["다문화","결혼이민","북한이탈","탈북","중도입국","이주배경","귀화"]
+};
+
+/* 상황 태그가 특정 연령대를 뜻하는 경우.
+
+   부모가 자녀 혜택을, 조부모가 손주 혜택을 대신 찾는 일이 흔하다.
+   40대가 '노년'을 고르면 부모님 것을 알아보는 것이고,
+   70대가 '영유아'를 고르면 손주 것을 알아보는 것이다.
+   그래서 그 상황을 직접 고르면 본인 나이 조건은 건너뛴다.
+   (고르지 않으면 평소대로 본인 나이에 맞는 것만 나온다) */
+// 화면에 보이는 이름 → 데이터에 저장된 태그 이름
+const TAG_ALIAS={"학생(초·중·고)":"학생"};
+const tagKey=t=>TAG_ALIAS[t]||t;
+// 데이터에 저장된 태그 이름 → 화면에 보이는 이름 (상황별 소제목에 쓴다)
+const TAG_LABEL=Object.fromEntries(TAGS.map(t=>[tagKey(t),t]));
+const TAG_AGE={
+  "영유아":[0,7], "학생":[7,19], "대학생":[18,29],
+  "청년":[19,39], "노년":[60,120], "임신·출산":[19,49]
+};
+const TIERS=[{k:"national",n:"1단계",c:"var(--national)",s:"중앙부처 · 전국민 대상"},
+             {k:"regional",n:"2단계",c:"var(--regional)",s:"광역지자체 · 시·도민 대상"},
+             {k:"local",   n:"3단계",c:"var(--local)",   s:"기초지자체 · 우리 동네"}];
+
+// 단계 머리글을 눌러 접었다 펼친다. '내 조건으로 찾기'·'검색으로 찾기' 두 탭이
+// 공용으로 쓰므로 특정 탭의 지역 함수가 아니라 전역에 둔다.
+function bindFold(sec){
+  const hd=sec.querySelector('.tier-hd');
+  hd.onclick=()=>{
+    const open=hd.getAttribute('aria-expanded')==='true';
+    hd.setAttribute('aria-expanded', !open);
+    sec.classList.toggle('folded', open);
+  };
+}
+
+const $=s=>document.querySelector(s);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* 같은 사업이 GOV24·KOSSI 두 소스에 부서명만 다르게 등록돼 카드가
+   두 번 뜨는 경우가 있다(예: "경기도" vs "경기도 보건건강국 건강증진과").
+   이름+지역이 같으면 하나로 합치고, KOSSI 쪽(id가 'K-'로 시작)을 없앤다.
+   서버의 dedupe_cross_source와 같은 기준이며, 다음 자동 갱신 전까지
+   화면에서 바로 걸러내기 위해 클라이언트에서도 한 번 더 돌린다. */
+function dedupeItems(items){
+  const norm=v=>String(v||'').replace(/[\s·‧∙•\-_/]+/g,'');
+  const map=new Map(), out=[];
+  for(const s of items){
+    const k=norm(s.name)+'|'+s.tier+'|'+(s.sido||'')+'|'+(s.sigungu||'');
+    const isKossi=String(s.id||'').startsWith('K-');
+    const existing=map.get(k);
+    if(!existing){ map.set(k,s); out.push(s); continue; }
+    const existingIsKossi=String(existing.id||'').startsWith('K-');
+    const keep = (existingIsKossi && !isKossi) ? s : existing;
+    const drop = keep===s ? existing : s;
+    for(const fk in drop){ if(drop[fk] && !keep[fk]) keep[fk]=drop[fk]; }
+    if(keep!==existing){
+      const idx=out.indexOf(existing);
+      if(idx>=0) out[idx]=keep;
+      map.set(k,keep);
+    }
+  }
+  return dropStubDuplicates(out);
+}
+
+/* 지원대상·지원내용이 통째로 빈 항목 걸러내기.
+
+   지자체복지서비스(KOSSI) 쪽 3,924건은 전부 상세가 비어 있다. 수집기가
+   목록 API만 부르고 상세 API는 안 부르기 때문이다. 그래서 이름만 덩그러니
+   나오는 카드가 생기는데, 같은 지역에 내용이 제대로 있는 같은 사업이
+   따로 있으면 그건 그냥 중복이다.
+
+   이름이 조금씩 달라서 위의 정확히-일치 비교로는 안 걸린다.
+     "경기도 어린이·청소년 교통비 지원 사업"  vs "경기도 어린이청소년 교통비 지원"
+     "경기도 중고등학교 신입생 교복지원"       vs "중·고등학교 신입생 교복 지원"
+     "대학생 학자금 대출이자 지원(경기도)"      vs "대학(원) 학자금 대출이자 지원"
+   그래서 지역 이름과 '사업' 같은 꼬리말을 떼고, 글자 두 개씩 겹치는 비율로
+   비슷한지 본다. 버리는 쪽은 어차피 내용이 없는 항목이라 잘못 지워도
+   잃는 정보가 이름뿐이다 — 중복을 남겨 두는 쪽이 더 손해다. */
+function hasDetail(s){
+  return !!((s.target||'').trim() || (s.content||'').trim());
+}
+function nameKey(s){
+  let t=String(s.name||'');
+  SIDO_LIST.forEach(sd=>{                       // 지역 이름은 비교에서 뺀다
+    t=t.split(sd).join('');
+    const short=sd.replace(/(특별자치시|특별자치도|통합특별시|광역시|특별시|도)$/,'');
+    if(short.length>=2) t=t.split(short).join('');
+  });
+  return t.replace(/[\s·‧∙•\-_/(),]+/g,'').replace(/(지원사업|사업|지원)$/,'');
+}
+function similarName(a,b){
+  if(!a||!b) return false;
+  if(a===b) return true;
+  const gram=t=>{const s=new Set();for(let i=0;i<t.length-1;i++)s.add(t.slice(i,i+2));return s;};
+  const A=gram(a), B=gram(b);
+  if(!A.size||!B.size) return false;
+  let inter=0; A.forEach(x=>{ if(B.has(x)) inter++; });
+  return inter/(A.size+B.size-inter) >= 0.6;
+}
+function dropStubDuplicates(items){
+  const byRegion=new Map();
+  items.forEach(s=>{
+    if(!hasDetail(s)) return;
+    const k=(s.sido||'')+'|'+(s.sigungu||'');
+    if(!byRegion.has(k)) byRegion.set(k,[]);
+    byRegion.get(k).push(nameKey(s));
+  });
+  return items.filter(s=>{
+    if(hasDetail(s)) return true;
+    const me=nameKey(s);
+    // 같은 시군구, 그리고 그 시도 전체(시도 사업이 시군구 사업과 겹치기도 한다)
+    const pools=[byRegion.get((s.sido||'')+'|'+(s.sigungu||'')),
+                 byRegion.get((s.sido||'')+'|')];
+    return !pools.some(p=>p && p.some(n=>similarName(me,n)));
+  });
+}
+
+
+let DB=null, picked=null, sex='', marital='', preg='', kids=[], tags=new Set(), specials=new Set(), kidSeq=0;
+/* 취업 상태. '일자리 제공' 사업을 거르는 데만 쓴다(결과를 좁히지 않는다).
+   산불진화대·산림재난대응단처럼 주 5일 근무를 해야 받는 사업이 있는데,
+   이미 직장이 있거나 학교에 다니면 애초에 지원할 수 없다. */
+let work='';
+/* 결과 보기 방식. 'table' = 사업명 위주 표, 'card' = 기존 카드형.
+   여러 결과 목록(내 조건 찾기·검색)이 함께 따르는 전역 상태다. */
+let viewMode='table';
+
+/* ---------- 지역 프리셋 적용 (지역 페이지에서만) ---------- */
+const P = window.__PRESET__;
+if(P && P.region){
+  picked = P.region;
+  $('#reg').value = P.region.label;
+  const nm = P.region.sigungu || P.region.sido;
+  // 서버가 HTML에 직접 넣어줬으면(네이버 대응) 그대로 두고, 아니면 JS가 채운다
+  if(!document.documentElement.hasAttribute('data-ssr')){
+  $('#eyebrow').innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> ' + esc(nm) + ' 복지';
+  $('#h1').innerHTML = esc(nm) + ' <span class="hl">복지 서비스 찾기</span>';
+  $('#intro').textContent =
+    `${P.region.label} 주민이 신청할 수 있는 복지서비스와 정부지원금을 전국·${P.region.sido}`
+    + (P.region.sigungu ? '·'+P.region.sigungu : '')
+    + ` 세 단계로 정리했습니다. 나이와 소득만 추가로 입력하면 ${nm}에서 실제로 신청 가능한 혜택만 남습니다.`;
+  }
+}
+
+/* 공유 링크로 들어온 경우: 그 서비스 하나를 바로 펼쳐서 보여준다 */
+if(P && P.service){
+  load().then(d=>{
+    DB=d;
+    const svc=(d.items||[]).find(x=>String(x.id)===String(P.service));
+    if(!svc) return;
+    const out=$('#out'); out.innerHTML='';
+    const hd=document.createElement('div'); hd.className='res-hd';
+    hd.innerHTML='<span class="cond">공유받은 복지 서비스</span>';
+    out.appendChild(hd);
+    const bd=document.createElement('div'); bd.className='res-bd';
+    const c=card(svc, svc.tier==='local'?'var(--local)':svc.tier==='regional'?'var(--regional)':'var(--national)');
+    const det=c.querySelector('details'); if(det) det.open=true;
+    bd.appendChild(c);
+    bd.insertAdjacentHTML('beforeend',
+      '<p class="share-hint">아래에서 내 조건을 입력하면 받을 수 있는 다른 복지 서비스도 찾을 수 있습니다.</p>');
+    out.appendChild(bd);
+    out.classList.add('on');
+    /* 공유 링크를 받고 들어온 사람은 그 사업 하나를 보러 온 것이다.
+       결과칸은 원래 입력폼 아래에 있어서, 링크를 열면 긴 입력폼부터
+       마주치고 정작 공유받은 내용은 스크롤해야 나왔다. 맨 위로 올린다. */
+    const pane=document.getElementById('condPane');
+    if(pane && out.parentNode===pane) pane.insertBefore(out, pane.firstChild);
+  });
+}
+
+/* ---------- 지역 링크 (JS 생성 — 템플릿 문법 불필요) ---------- */
+(function(){
+  // 서버가 이미 HTML로 렌더했으면 건드리지 않는다(검색엔진이 읽는 원본을 보존).
+  if(!$('#sidoLinks').children.length){
+    const sidos=[...new Set(REGIONS.map(r=>r.sido))];
+    $('#sidoLinks').innerHTML = sidos.map(s=>
+      `<a href="/${encodeURIComponent(s)}">${esc(s)} 복지</a>`).join(' ');
+  }
+  if(P && P.region && P.region.sido && !$('#nearbyLinks').children.length){
+    const gs=REGIONS.filter(r=>r.sido===P.region.sido && r.sigungu);
+    if(gs.length){
+      $('#nearbyTitle').textContent = P.region.sido + ' 시·군·구별 복지';
+      $('#nearbyLinks').innerHTML = gs.map(g=>
+        `<a href="/${encodeURIComponent(g.sido+'-'+g.sigungu)}">${esc(g.sigungu)}</a>`).join(' ');
+      $('#nearbySec').hidden=false;
+    }
+  }
+})();
+
+/* ---------- 데이터 ----------
+   전체 데이터는 압축해도 2.4MB다. 페이지가 열릴 때마다 이걸 통째로 받아
+   브라우저에서 걸러 왔는데, /welfare 방문 한 번이 /btc 35번과 맞먹어
+   서버 대역폭이 이것 때문에 터졌다.
+
+   그런데 지역을 고르면 어차피 '전국 + 그 지역'만 쓴다(아래 pool 계산 참고).
+   그래서 처음엔 그만큼만 받고, 다른 지역이 필요해지면 그때 더 받는다.
+   지역 없이 전국을 훑는 검색을 하면 그 시점에 전체를 받는다.
+
+     지역 페이지  전국+서울 727KB   (전체 2,470KB 대비 71% 절감)
+     첫 화면      전국만  467KB     (81% 절감)
+*/
+const SHARDS = {loaded:new Set(), tags:new Set(), all:false};
+
+/* 대상별 페이지(/welfare/청년복지 등)에서 쓰는 태그. 서버에 조각이 있다. */
+const TAG_SHARDS = new Set(['청년','노년','임신·출산','한부모','다자녀','저소득']);
+
+async function fetchJSON(url){
+  try{
+    const r = await fetch(url);
+    if(r.ok) return await r.json();
+  }catch(e){}
+  return null;
+}
+
+/* 받아온 조각을 DB에 합친다. id 기준으로 중복은 걸러진다. */
+function mergeShard(d){
+  if(!d || !d.items) return false;
+  const seen = new Set(DB.items.map(s=>s.id));
+  for(const it of d.items) if(!seen.has(it.id)) DB.items.push(it);
+  DB.items = dedupeItems(DB.items);
+  if(d.updated && !DB.updated) DB.updated = d.updated;
+  return true;
+}
+
+/* 특정 시도가 아직 없으면 받아온다. */
+async function ensureSido(sido){
+  if(!sido || SHARDS.all || SHARDS.loaded.has(sido)) return;
+  const d = await fetchJSON('/data/welfare/sido/'+encodeURIComponent(sido)+'.json');
+  if(mergeShard(d)) SHARDS.loaded.add(sido);
+  else await ensureAll();          // 조각을 못 받으면 전체로 되돌아간다
+}
+
+/* 지역을 안 고르고 검색하는 등 전국이 필요할 때.
+
+   전체 파일(/data/welfare_services.json)을 받으면 이미 갖고 있는 전국분을
+   또 받게 되어 오히려 손해다(456KB + 2,413KB = 2,869KB > 기존 2,412KB).
+   그래서 아직 없는 시도 조각만 골라서 받는다. */
+/* 상황 태그만 고른 경우 그 태그가 붙은 것만 받는다.
+
+   안전한 이유: 필터(ok)를 보면 태그를 하나라도 고르면
+     if(tags.size && !bySpecial) → 고른 태그가 없는 항목은 전부 탈락
+   이라, 결과는 반드시 '고른 태그가 붙은 항목'의 부분집합이다.
+
+   단 '특별한 상황'(specials)을 고르면 bySpecial 로 태그 없이도 통과하므로
+   그때는 이 최적화를 쓸 수 없다. 조각이 없는 태그도 마찬가지다. */
+async function ensureTags(list){
+  if(SHARDS.all) return;
+  if(!list.length || specials.size) return ensureAll();
+  if(!list.every(t => TAG_SHARDS.has(t))) return ensureAll();
+
+  for(const t of list){
+    if(SHARDS.tags.has(t)) continue;
+    const d = await fetchJSON('/data/welfare/tag/'+encodeURIComponent(t)+'.json');
+    if(!mergeShard(d)) return ensureAll();   // 하나라도 실패하면 전체로
+    SHARDS.tags.add(t);
+  }
+}
+
+async function ensureAll(){
+  if(SHARDS.all) return;
+  // 이미 받은 전국분은 빼고 나머지만 받는다.
+  // 시도별로 쪼개 받으면 조각마다 따로 압축돼 오히려 커지므로 한 덩어리로 받는다.
+  let d = await fetchJSON('/data/welfare/rest.json');
+  if(!d) d = await fetchJSON('/data/welfare_services.json');   // 폴백
+  if(d){ mergeShard(d); SHARDS.all = true; }
+}
+
+async function load(){
+  const pre = (window.__PRESET__ && window.__PRESET__.region) || null;
+  // 전국 사업은 어느 화면에서든 필요하다.
+  let base = await fetchJSON('/data/welfare/national.json');
+  if(!base){
+    // 조각 라우트가 없는 환경(구버전 배포 등)에서는 예전처럼 전체를 받는다.
+    base = await fetchJSON('/data/welfare_services.json');
+    if(base){ base.items = dedupeItems(base.items||[]); SHARDS.all = true; return base; }
+    return {items:[],sample:true,failed:true};
+  }
+  base.items = dedupeItems(base.items||[]);
+  return base;
+}
+
+load().then(async d=>{
+  DB = d;
+  $('#asof').textContent = d.failed?'—':(d.sample?'샘플 데이터':(d.updated||'—'));
+  const pre = (window.__PRESET__ && window.__PRESET__.region) || null;
+  if(pre && pre.sido) await ensureSido(pre.sido);
+});
+
+/* ---------- 상황 태그 ---------- */
+TAGS.forEach(t=>{
+  const b=document.createElement('button');
+  b.type='button'; b.className='chip'; b.textContent=t; b.setAttribute('aria-pressed','false');
+  const key=tagKey(t);                       // 화면 이름과 데이터 태그가 다를 수 있다
+  b.onclick=()=>{const on=b.getAttribute('aria-pressed')==='true';
+    b.setAttribute('aria-pressed',!on); on?tags.delete(key):tags.add(key);};
+  $('#chips').appendChild(b);
+});
+if(P && P.tag){[...$('#chips').children].forEach(c=>{
+  if(tagKey(c.textContent)===P.tag){c.setAttribute('aria-pressed','true');tags.add(P.tag);}});}
+
+/* 특별한 상황. 해당하는 사람이 직접 골라야만 결과에 나온다.
+   조건이 안 적힌 사업이 많아 그냥 두면 모두에게 노출되기 때문이다. */
+const SPECIALS=["희귀질환","농어업인","군인·병역","외국인","북한이탈","실종·보호",
+                "학대·폭력","중독·정신","전세사기","재난피해","교정·범죄",
+                "노숙인","일제피해","수사·소송"];
+const SPECIAL_LABEL={"희귀질환":"희귀·중증난치질환","농어업인":"농업·어업 종사","군인·병역":"군인·병역","외국인":"외국인·이민",
+  "북한이탈":"북한이탈주민","실종·보호":"보호아동·자립준비","학대·폭력":"학대·폭력 피해",
+  "중독·정신":"중독·정신질환","전세사기":"전세사기 피해","재난피해":"재난 피해",
+  "교정·범죄":"출소·범죄피해","노숙인":"노숙인","일제피해":"일제 피해자",
+  "수사·소송":"수사·소송 관련"};
+SPECIALS.forEach(t=>{
+  const b=document.createElement('button');
+  b.type='button'; b.className='chip sp'; b.textContent=SPECIAL_LABEL[t]||t;
+  b.dataset.v=t; b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{const on=b.getAttribute('aria-pressed')==='true';
+    b.setAttribute('aria-pressed',!on); on?specials.delete(t):specials.add(t);};
+  $('#spchips').appendChild(b);
+});
+
+/* ---------- 취업 상태 ---------- */
+// 고른 상태에 따라 '일자리 제공' 사업을 감춘다는 것을 그 자리에서 알려준다.
+// 결과가 왜 줄었는지 모르면 사람들은 사이트가 고장 났다고 생각한다.
+const WORK_NOTE={
+  employed:'재직 중이면 주 5일 근무 조건인 일자리 제공 사업은 감춥니다.',
+  selfemp:'자영업 중이면 주 5일 근무 조건인 일자리 제공 사업은 감춥니다.',
+  student:'학교에 다니는 동안 지원하기 어려운 일자리 제공 사업은 감춥니다.',
+  retired:'주 5일 근무 조건인 일자리 제공 사업은 감춥니다.',
+  jobless:'일자리 제공 사업을 함께 보여드립니다.'
+};
+$('#work').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b)return;
+  [...$('#work').children].forEach(c=>c.setAttribute('aria-pressed',c===b));
+  work=b.dataset.v;
+  const note=$('#workNote');
+  note.textContent=WORK_NOTE[work]||'';
+  note.hidden=!WORK_NOTE[work];
+});
+
+/* ---------- 성별 / 혼인 / 임신 ---------- */
+$('#sex').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b)return;
+  [...$('#sex').children].forEach(c=>c.setAttribute('aria-pressed',c===b)); sex=b.dataset.v;
+});
+$('#marital').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b)return;
+  [...$('#marital').children].forEach(c=>c.setAttribute('aria-pressed',c===b));
+  marital=b.dataset.v;
+  const single = marital==='single';
+  $('#kidsWrap').hidden=single; $('#pregWrap').hidden=single;
+  if(single){kids=[];$('#kidList').innerHTML='';preg='';
+    [...$('#preg').children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.v===''));}
+  if(marital==='single_parent' && !kids.length) addKid();
+});
+$('#preg').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b)return;
+  [...$('#preg').children].forEach(c=>c.setAttribute('aria-pressed',c===b)); preg=b.dataset.v;
+});
+
+/* ---------- 자녀 생년월일: 숫자 입력(20200415) + 달력 둘 다 ---------- */
+function parseDob(v){
+  const d=String(v||'').replace(/\D/g,'');
+  if(d.length!==8) return null;
+  const y=+d.slice(0,4), m=+d.slice(4,6), day=+d.slice(6,8);
+  if(y<1930||y>2100||m<1||m>12||day<1||day>31) return null;
+  const dt=new Date(y,m-1,day);
+  if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==day) return null;  // 2월 30일 등
+  return dt;
+}
+function monthsSince(dt){
+  if(!dt) return null;
+  const now=new Date();
+  if(dt>now) return null;
+  let m=(now.getFullYear()-dt.getFullYear())*12+(now.getMonth()-dt.getMonth());
+  if(now.getDate()<dt.getDate()) m--;
+  return Math.max(0,m);
+}
+function fmtAge(m){
+  if(m==null) return '';
+  const y=Math.floor(m/12), mo=m%12;
+  if(m<24) return m+'개월';
+  return mo? `만 ${y}세 ${mo}개월` : `만 ${y}세`;
+}
+function autoHyphen(raw){
+  const d=raw.replace(/\D/g,'').slice(0,8);
+  if(d.length>6) return d.slice(0,4)+'-'+d.slice(4,6)+'-'+d.slice(6);
+  if(d.length>4) return d.slice(0,4)+'-'+d.slice(4);
+  return d;
+}
+
+function addKid(){
+  const id='k'+(kidSeq++);
+  kids.push({id,months:null});
+  const row=document.createElement('div'); row.className='kid';
+
+  const box=document.createElement('div'); box.className='kid-in';
+  const inp=document.createElement('input');
+  inp.type='text'; inp.inputMode='numeric'; inp.maxLength=10;
+  inp.placeholder='20200415 또는 2020-04-15';
+  inp.setAttribute('aria-label','자녀 생년월일');
+
+  // 달력으로도 고를 수 있게 (숨긴 date 입력을 열어준다)
+  const hidden=document.createElement('input');
+  hidden.type='date'; hidden.max=new Date().toISOString().slice(0,10);
+  hidden.min='1930-01-01';
+  hidden.style.cssText='position:absolute;opacity:0;width:1px;height:1px;pointer-events:none';
+  const cal=document.createElement('button');
+  cal.type='button'; cal.className='kid-cal'; cal.title='달력에서 선택';
+  cal.setAttribute('aria-label','달력에서 선택');
+  cal.innerHTML='<i class="fa-solid fa-calendar-days"></i>';
+  cal.onclick=()=>{ if(hidden.showPicker){ try{hidden.showPicker();}catch(e){ inp.focus(); } }
+                    else { hidden.focus(); hidden.click(); } };
+  hidden.onchange=()=>{ if(hidden.value){ inp.value=hidden.value; sync(); } };
+
+  const read=document.createElement('span');
+  read.className='kid-read'; read.textContent='생년월일 입력';
+
+  function sync(){
+    const k=kids.find(k=>k.id===id); if(!k) return;
+    const raw=inp.value.replace(/\D/g,'');
+    if(!raw){ k.months=null; read.textContent='생년월일 입력'; read.className='kid-read'; return; }
+    if(raw.length<8){ k.months=null;
+      read.textContent=`${raw.length}/8자리`; read.className='kid-read'; return; }
+    const dt=parseDob(inp.value);
+    if(!dt){ k.months=null; read.textContent='올바르지 않은 날짜입니다';
+             read.className='kid-read bad'; return; }
+    const m=monthsSince(dt);
+    if(m==null){ k.months=null; read.textContent='오늘 이후 날짜입니다';
+                 read.className='kid-read bad'; return; }
+    k.months=m;
+    read.innerHTML=`<b>${fmtAge(m)}</b>`+(m<24?'':` <span class="mo">(${m}개월)</span>`);
+    read.className='kid-read good';
+  }
+  inp.addEventListener('input',()=>{
+    const pos=inp.selectionStart, before=inp.value;
+    inp.value=autoHyphen(inp.value);
+    if(inp.value!==before && pos===before.length) inp.setSelectionRange(inp.value.length,inp.value.length);
+    sync();
+  });
+
+  const del=document.createElement('button');
+  del.type='button'; del.className='del'; del.setAttribute('aria-label','자녀 삭제');
+  del.innerHTML='<i class="fa-solid fa-xmark"></i>';
+  del.onclick=()=>{kids=kids.filter(k=>k.id!==id); row.remove();};
+
+  box.append(inp,hidden,cal);
+  row.append(box,read,del);
+  $('#kidList').appendChild(row);
+  inp.focus();
+}
+$('#addKid').addEventListener('click',addKid);
+
+/* ---------- 지역 자동완성 ---------- */
+const reg=$('#reg'), ac=$('#ac');
+let acIdx=-1;
+function clearErr(){$('#regErr').hidden=true;reg.removeAttribute('aria-invalid');}
+reg.addEventListener('input',()=>{
+  const q=reg.value.trim(); picked=null; acIdx=-1;
+  if(!q){ac.classList.remove('on');reg.setAttribute('aria-expanded','false');return;}
+  const hits=REGIONS.filter(r=>r.label.replace(/\s/g,'').includes(q.replace(/\s/g,''))).slice(0,40);
+  ac.innerHTML='';
+  if(!hits.length){ac.classList.remove('on');reg.setAttribute('aria-expanded','false');return;}
+  hits.forEach((h,i)=>{
+    const b=document.createElement('button');
+    b.type='button'; b.role='option'; b.id='acopt'+i;
+    const el=esc(h.label), eq=esc(q);
+    b.innerHTML = el.includes(eq) ? el.split(eq).join(`<mark>${eq}</mark>`) : el;
+    b.onclick=()=>{picked=h;reg.value=h.label;ac.classList.remove('on');
+      reg.setAttribute('aria-expanded','false');clearErr();};
+    ac.appendChild(b);
+  });
+  ac.classList.add('on'); reg.setAttribute('aria-expanded','true');
+});
+function acMove(d){
+  const o=[...ac.querySelectorAll('button')]; if(!o.length)return;
+  acIdx=(acIdx+d+o.length)%o.length;
+  o.forEach((x,i)=>{x.setAttribute('aria-selected',i===acIdx);
+    if(i===acIdx){x.scrollIntoView({block:'nearest'});reg.setAttribute('aria-activedescendant',x.id);}});
+}
+reg.addEventListener('keydown',e=>{
+  if(!ac.classList.contains('on'))return;
+  if(e.key==='ArrowDown'){e.preventDefault();acMove(1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();acMove(-1);}
+  else if(e.key==='Enter'){const s=ac.querySelector('button[aria-selected=true]')||ac.querySelector('button');
+    if(s){e.preventDefault();s.click();}}
+  else if(e.key==='Escape'){ac.classList.remove('on');reg.setAttribute('aria-expanded','false');}
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.combo')){ac.classList.remove('on');reg.setAttribute('aria-expanded','false');}
+});
+
+/* ---------- 소득 ---------- */
+function incVal(){ return +String($('#inc').value).replace(/[^0-9]/g,'') || 0; }
+function korWon(n){
+  if(!n) return '';
+  const uk  = Math.floor(n/100000000);
+  const man = Math.floor((n%100000000)/10000);
+  const rest= n%10000;                       // 만원 미만 나머지(천원 단위 등)
+  const p=[];
+  if(uk)  p.push(uk+'억');
+  if(man) p.push(man+'만');
+  if(rest) p.push(rest.toLocaleString('ko-KR'));
+  return p.join(' ')+'원';
+}
+function updateScale(){
+  const inc=incVal(), hh=+$('#hh').value;
+  $('#wonRead').textContent = inc? '월 '+korWon(inc):'';
+  if(!inc){$('#scale').classList.remove('on');return;}
+  const pct=Math.round(inc/MEDIAN[hh]*100);
+  $('#pct').textContent=pct;
+  $('#fill').style.width=Math.min(pct/200*100,100)+'%';
+  $('#scale').classList.add('on');
+}
+$('#inc').addEventListener('input',e=>{
+  const el=e.target, before=el.value, caret=el.selectionStart;
+  const digitsBefore=before.slice(0,caret).replace(/[^0-9]/g,'').length;
+  const raw=before.replace(/[^0-9]/g,'').slice(0,12);
+  el.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
+  // 콤마가 늘어난 만큼 커서를 밀어준다
+  let seen=0, pos=el.value.length;
+  for(let i=0;i<el.value.length;i++){
+    if(/[0-9]/.test(el.value[i])) seen++;
+    if(seen===digitsBefore){ pos=i+1; break; }
+  }
+  if(digitsBefore===0) pos=0;
+  el.setSelectionRange(pos,pos);
+  updateScale();
+});
+$('#hh').addEventListener('change',updateScale);
+
+/* ---------- 지역 안전망 ----------
+   수집 단계에서 시도를 특정하지 못한 항목이 tier=national 로 새어나오면
+   남양주 사용자에게 곡성군 사업이 뜬다. 소관기관명에 지역이 적혀 있으면
+   그것을 근거로 한 번 더 거른다. (이미 수집된 데이터에도 즉시 적용) */
+const SIDO_LIST=[...new Set(REGIONS.map(r=>r.sido))];
+const GUN_BY_SIDO=(()=>{const m={};REGIONS.forEach(r=>{if(r.sigungu){(m[r.sido]=m[r.sido]||[]).push(r.sigungu);}});return m;})();
+
+function orgRegion(s){
+  if(s.__r!==undefined) return s.__r;
+  return s.__r=_orgRegion(s);
+}
+function _orgRegion(s){
+  // 서비스에 이미 지역이 붙어 있으면 그대로 사용
+  if(s.sido) return {sido:s.sido, sigungu:s.sigungu||''};
+  const org=(s.org||'').trim();
+  if(!org) return null;
+  for(const sd of SIDO_LIST){
+    if(org.startsWith(sd)){
+      const rest=org.slice(sd.length).trim();
+      const g=(GUN_BY_SIDO[sd]||[]).find(x=>rest.startsWith(x));
+      return {sido:sd, sigungu:g||''};
+    }
+  }
+  // 목록에 없는 지자체명(행정구역 개편 등) — 앞 토큰이 시/도로 끝나면 지역 사업으로 본다
+  const head=org.split(/\s+/)[0]||'';
+  if(/(특별시|광역시|특별자치시|특별자치도|통합특별시)$/.test(head)||(/도$/.test(head)&&head.length>=3)){
+    const parts=org.split(/\s+/);
+    return {sido:head, sigungu:(parts[1]&&/[시군구]$/.test(parts[1]))?parts[1]:''};
+  }
+  return null;
+}
+/* 소관기관은 전국 기관인데 지원대상에는 특정 시도 주민만 적힌 사업이 있다.
+     "청년 일자리 매칭 및 인건비 지원" — (재)녹색에너지연구원
+       지원대상: "전라남도에 거주 중인 만 18세 ~ 39세 청년"
+   기관 이름만 보면 전국 사업이라 전국 사용자에게 떴다. 지원대상 문구에
+   거주 요건이 딱 한 시도로 적혀 있으면 그 시도 사람에게만 보여준다.
+   두 곳 이상이 언급되면 판단하지 않는다 — 예시로 든 것일 수 있다. */
+// 줄임말과 옛 명칭을 함께 넣는다. 행정구역이 바뀌어도 공공데이터의 문구는
+// 한동안 옛 이름 그대로다 — '전라남도에 거주'를 못 알아보면 전남 전용
+// 사업이 전국에 그대로 노출된다.
+const SIDO_SHORT={"서울":"서울특별시","부산":"부산광역시","대구":"대구광역시",
+  "인천":"인천광역시","대전":"대전광역시","울산":"울산광역시","세종":"세종특별자치시",
+  "경기":"경기도","강원":"강원특별자치도","충북":"충청북도","충남":"충청남도",
+  "전북":"전북특별자치도","경북":"경상북도","경남":"경상남도","제주":"제주특별자치도",
+  "전남":"전남광주통합특별시","광주":"전남광주통합특별시",
+  "강원도":"강원특별자치도","전라북도":"전북특별자치도","제주도":"제주특별자치도",
+  "전라남도":"전남광주통합특별시","광주광역시":"전남광주통합특별시"};
+const RESIDENCY_RE=/([가-힣]{2,7}(?:특별자치시|특별자치도|통합특별시|광역시|특별시|도))\s*(?:내|에|의)?\s*(?:거주|주민|주소|소재|등록)/g;
+function targetResidency(s){
+  if(s.__res!==undefined) return s.__res;
+  let found=null, many=false;
+  const t=s.target||'';
+  RESIDENCY_RE.lastIndex=0;
+  let m;
+  while((m=RESIDENCY_RE.exec(t))){
+    const sd=SIDO_LIST.includes(m[1]) ? m[1] : (SIDO_SHORT[m[1]]||null);
+    if(!sd) continue;
+    if(found && found!==sd) many=true;
+    found=found||sd;
+  }
+  return s.__res = (many?null:found);
+}
+function regionOK(s,c){
+  const r=orgRegion(s);
+  if(!r){
+    const res=targetResidency(s);          // 전국 기관인데 거주지 요건이 있는 경우
+    return !res || res===c.sido;
+  }
+  if(r.sido && r.sido!==c.sido) return false;
+  if(r.sigungu && r.sigungu!==c.sigungu) return false;
+  return true;
+}
+
+/* ---------- 신청기한 ----------
+   '2025.8.18. ~ 2025.9.19.' 처럼 날짜가 적힌 것만 판단한다.
+   '상시', '예산 소진 시' 같은 문구는 손대지 않는다.
+   해마다 반복되는 사업이 작년 날짜로 남아 있는 경우가 많아
+   지우지 않고 접어서 따로 보여준다. */
+const TODAY_D=new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate());
+const ALWAYS_RE=/(상시|수시|연중|소진|접수중|별도\s*공고|공고\s*시|해당\s*없음|자세한|참고|참조|미정|추후)/;
+// '사고일로부터 3년 이내', '2012.7.1. 이후 발생한 건' 처럼 날짜가 마감일이 아니라
+// 기준 시점으로 쓰인 경우가 있다. 이런 건 마감 판정을 하지 않는다.
+const ONGOING_RE=/(이내|이후|부터\s*\d|경과|한하여|해당하는\s*자|발생한\s*날)/;
+// 여러 차수로 나뉜 사업은 마지막 회차를 알 수 없어 판단하지 않는다
+const MULTI_RE=/(\d\s*차|학기|회차|기수|분기|차수)/;
+
+/* 신청기한 문자열에서 '끝나는 날'을 뽑는다.
+
+   공공데이터의 기한 표기는 제각각이라 조심스럽게 다룬다.
+     "2026. 2. 2.~11. 30."      뒤쪽 연도가 생략됨 -> 2026-11-30
+     "2025.3.1. ~ 2025.5.31."   -> 2025-05-31
+     "(1차) 5월~6월 (2차) 8~9월"  차수가 여러 개 -> 판단 보류
+   시작일만 보고 지났다고 판정하면 아직 열려 있는 사업이 숨는다. */
+function deadlineEnd(txt){
+  if(!txt) return null;
+  const t=String(txt);
+  if(ALWAYS_RE.test(t) || ONGOING_RE.test(t)) return null;
+
+  const years=[...t.matchAll(/20\d{2}/g)].map(m=>+m[0]);
+  if(!years.length) return null;
+  const maxY=Math.max(...years), nowY=TODAY_D.getFullYear();
+
+  if(maxY<nowY) return new Date(maxY,11,31);   // 작년 이전 -> 확실히 지남
+  if(maxY>nowY) return null;                   // 내년 이후 -> 아직 남음
+  if(MULTI_RE.test(t)) return null;            // 차수가 여러 개면 보류
+
+  // 올해인 경우: 문자열에 나오는 마지막 (월,일) 을 끝나는 날로 본다.
+  // 연도가 생략된 뒷날짜도 같은 해로 취급한다.
+  const re=/(?:(20\d{2})\s*[.\-\/년]\s*)?(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*[.\-\/일]?/g;
+  let m, last=null;
+  while((m=re.exec(t))!==null){
+    const mo=+m[2], dy=+m[3];
+    if(mo<1||mo>12||dy<1||dy>31) continue;
+    last={y:m[1]?+m[1]:maxY, m:mo, d:dy};
+  }
+  if(!last) return null;
+  const end=new Date(last.y,last.m-1,last.d);
+  return isNaN(end)?null:end;
+}
+function isExpired(s){
+  const e=deadlineEnd(s.deadline);
+  return e ? e<TODAY_D : false;
+}
+
+/* ---------- 매칭 ---------- */
+/* 고른 '해당되는 상황'이 이 사업에도 붙어 있는가.
+   해당하면 이 사업에 한해 성별·혼인·임신·자녀·나이 같은 '내 조건'을
+   따지지 않고 보여준다. 부모가 자녀 것을, 조부모가 손주 것을, 아내
+   대신 남편이, 손주가 조부모 것을 찾아보는 경우가 흔하기 때문이다.
+     예) 30세 남성이 '임신·출산'을 고르면 '여성 전용' 산모 사업도 나옴
+         55세가 '대학생'을 고르면 나이 조건이 있는 학자금 사업도 나옴
+         30세가 '국가보훈'을 고르면(할아버지 대신 알아보는 경우) 나옴
+   지역·소득은 가구 단위라 따로 안 바꾼다 — 상황이 달라도 사는 곳과
+   가구 소득은 그대로이기 때문이다. */
+/* 무엇을 건너뛸지는 '어떤 상황을 골랐는지'에 따라 달라야 한다.
+
+   예전에는 고른 상황이 하나만 걸리면 나이·성별·자녀·임신 조건을 전부
+   건너뛰었다. 그래서 '근로자'만 고른 사람에게 아이돌봄 서비스(자녀
+   144개월 이하 필요)와 배우자 출산휴가 급여가 떴다 — 자녀도 임신도
+   입력하지 않았는데도. '근로자'라는 사실은 아이가 있다는 뜻이 아니다.
+
+   그래서 조건별로 '그 조건을 면제해 줄 만한 상황'을 따로 정한다.
+   영유아를 고른 사람은 아이 것을 찾는 것이니 자녀 조건을 면제하고,
+   임신·출산을 고른 남편은 아내 것을 찾는 것이니 성별 조건을 면제한다. */
+const OV_CHILD=new Set(['영유아','학생','대학생','다자녀','한부모','임신·출산']);
+const OV_PREG =new Set(['임신·출산','영유아']);
+const OV_SEX  =new Set(['임신·출산','영유아','다자녀','한부모']);
+
+function matchedTags(s){
+  if(!tags.size || !s.tags) return [];
+  return s.tags.filter(t=>tags.has(t));
+}
+/* 나이 조건을 면제해도 되는 상황.
+   남을 대신해 알아보는 일이 흔한 생애단계 태그만 넣는다 — 40대가 '노년'을
+   고르면 부모님 것을, 70대가 '영유아'를 고르면 손주 것을 찾는 것이다.
+   예전에는 어떤 태그든 하나만 맞으면 나이를 면제했다. 그래서 '근로자'를
+   고른 39세에게 청년미래적금(19~34세)이 떴다 — 근로자라는 사실이
+   나이를 바꿔주지는 않는다. */
+const OV_AGE=new Set(['영유아','학생','대학생','청년','노년',
+                      '임신·출산','다자녀','한부모']);
+function ovAge(s){ return ovIn(s,OV_AGE); }
+function ovIn(s,allowed){ return matchedTags(s).some(t=>allowed.has(t)); }
+/* 주 5일 근무처럼 실제로 일을 해야 받는 '일자리 제공' 사업.
+   이미 직장이 있거나 학교에 다니면 지원 자체가 안 되므로 감춘다.
+   취업 상태를 고르지 않았으면 판단할 수 없으니 그대로 보여준다. */
+const WORK_HIDES_JOB=new Set(['employed','selfemp','student','retired']);
+
+function ok(s,c){
+  if(s.biz)return false;   // 기업·단체 전용은 조건 검색에서 제외 (키워드 탭에서는 검색됨)
+  if(s.job && WORK_HIDES_JOB.has(work))return false;
+  // 노숙인·희귀질환처럼 특정 상황의 사람만 받는 사업은
+  // 사용자가 그 상황을 직접 고를 때만 보여준다.
+  if(s.special && !specials.has(s.special))return false;
+  if(s.tier==='regional'&&s.sido!==c.sido)return false;
+  if(s.tier==='local'&&!(s.sido===c.sido&&s.sigungu===c.sigungu))return false;
+  if(!regionOK(s,c))return false;   // 분류 실패로 전국에 섞인 타지역 사업 차단
+  if(c.sex&&s.gender&&s.gender!==c.sex&&!ovIn(s,OV_SEX)&&!isOneStop(s))return false;
+  // null 을 그대로 비교하면 0으로 강제변환돼 엉뚱하게 걸러진다.
+  // 상한만 있는 서비스(예: 18세 이하)도 제대로 적용되도록 각각 따로 본다.
+  // 나이 조건.
+  //  · 본인 나이가 맞으면 통과
+  //  · 자녀 나이가 맞아도 통과 (부모가 아이 혜택을 찾는 경우)
+  //  · 고른 상황의 연령대와 겹쳐도 통과
+  //    (40대가 '노년'을 고르면 부모님 것, 70대가 '영유아'를 고르면 손주 것)
+  //  · 이 사업 자체가 고른 상황 태그를 갖고 있어도 통과 (ovAge)
+  if(c.age!=null && (s.age_min!=null || s.age_max!=null) && !ovAge(s)){
+    const lo=s.age_min, hi=s.age_max;
+    const inRange=(v)=> (lo==null||v>=lo) && (hi==null||v<=hi);
+    let pass = inRange(c.age);
+    if(!pass && hi!=null && hi<=18 && c.kidYears && c.kidYears.length)
+      pass = c.kidYears.some(inRange);
+    if(!pass && tags.size){
+      // 고른 상황의 연령대가 이 사업의 나이 범위와 겹치는가
+      for(const t of tags){
+        const r=TAG_AGE[t];
+        if(!r) continue;
+        const a=Math.max(r[0], lo==null?0:lo);
+        const b=Math.min(r[1], hi==null?120:hi);
+        if(a<=b){ pass=true; break; }
+      }
+    }
+    if(!pass) return false;
+  }
+  // 소득·지역은 가구 단위라 상황 선택으로도 바꾸지 않는다.
+  if(c.pct!=null&&s.income_max_pct!=null&&c.pct>s.income_max_pct)return false;
+  /* 저소득층만 받는 사업인데 소득 상한이 공공데이터에 안 적힌 경우가
+     1,212건이다. 숫자가 없으니 위의 소득 비교를 그냥 통과해서, 중위소득
+     120% 가구에도 '차상위 이하' 사업이 그대로 떴다.
+     소득을 입력해 저소득이 아닌 것이 확인됐고, 본인이 '저소득'을 직접
+     고르지도 않았다면 이런 사업은 감춘다. (소득란을 비워 두면 판단할 수
+     없으니 그대로 보여준다) */
+  if(c.pct!=null && c.pct>LOW_INCOME_PCT && !tags.has('저소득')
+     && s.income_max_pct==null && (s.tags||[]).includes('저소득')
+     && lowIncomeOnly(s)) return false;
+  // '중위소득 150% 초과' 처럼 상한이 아니라 하한인 사업(주로 산모·신생아
+  // 건강관리 지원 '추가형'). 이 값을 넘는 사람만 대상이라, 이하인 사람은 뺀다.
+  if(c.pct!=null&&s.income_min_pct!=null&&c.pct<=s.income_min_pct)return false;
+  if(s.marital&&!ovIn(s,OV_CHILD)){
+    if(s.marital==='single_parent'&&c.marital!=='single_parent')return false;
+    if(s.marital==='married'&&!(c.marital==='married'||c.marital==='single_parent'))return false;
+  }
+  // '임산부 및 영유아 영양플러스'처럼 임산부와 아이를 함께 대상으로 하는 사업이 많다.
+  // 임신 여부만 보고 자르면 아이를 키우는 사람이 받을 수 있는 혜택이 사라진다.
+  if(s.preg && !c.preg && !(s.needs_child && c.hasKid) && !ovIn(s,OV_PREG)) return false;
+  // '결혼이민자 및 다문화가족 자녀'처럼 어른과 아이를 함께 대상으로 하는 사업이 많아
+  // 자녀 유무로 무조건 자르지는 않는다.
+  // 다만 이름에 출산·양육·육아가 들어간 사업은 아이가 있어야 받는 것이 분명하다.
+  //   예) 출산양육지원금, 장애인가정 출산지원금 → 자녀 없는 사람에게 뜨면 안 된다
+  if(s.needs_child && !c.hasKid && !c.preg && !ovIn(s,OV_CHILD)){
+    if(s.child_age_max_months!=null || s.child_age_max_years!=null) return false;
+    if(/출산|양육|육아|출생|첫만남|산후|산모|돌봄/.test(s.name||'')) return false;
+  }
+  if(s.child_age_max_months!=null && !ovIn(s,OV_CHILD)){
+    if(!c.hasKid||c.youngest==null||c.youngest>=s.child_age_max_months)return false;
+  }
+  /* 특별한 상황을 직접 고른 사업은 그것만으로 충분하다.
+     '외국인·이민'과 '대학생'을 함께 고르면 예전에는 둘 다 해당하는 것만
+     남아서, 정작 찾으려던 외국인·이민 사업이 대부분 사라졌다. 특별한
+     상황은 해당하는 사람이 적고 직접 골라야만 나오는 것이라, 골랐다면
+     그 상황의 사업은 전부 보여주는 것이 맞다. */
+  const bySpecial = s.special && specials.has(s.special);
+
+  /* 상황 태그 없이 '특별한 상황'만 골랐으면 그 상황의 사업만 보여준다.
+
+     예전에는 아래 게이트가 tags.size 가 있을 때만 걸려서, 특별한 상황만
+     고르면 게이트를 통째로 건너뛰었다. 그 결과 '북한이탈'만 골라도
+     438건 중 419건이 무관한 일반 사업이었고, 정작 찾던 19건이 묻혔다.
+     특별한 상황은 일부러 찾아서 고르는 것이므로 그것만 보여주는 게 맞다. */
+  if(!tags.size && specials.size && !bySpecial) return false;
+
+  // 상황 태그를 선택했으면 그 상황에 해당하는 서비스만 보여준다.
+  // (느슨하게 두면 태그 없는 수백 건이 전부 통과해 결과가 쓸 수 없어진다)
+  if(tags.size && !bySpecial){
+    if(!(s.tags&&s.tags.length&&s.tags.some(t=>tags.has(t))))return false;
+  }
+  // 장애인·국가보훈·한부모·다자녀·다문화 전용 사업은 그 자격이 있어야 받는다.
+  // 고르지 않았으면 보여주지 않는다(안 그러면 장애인 전용 사업이 비장애인에게 뜬다).
+  //
+  // 단, 특별한 상황을 직접 골라서 통과한 사업이면 그것으로 자격이 이미
+  // 확인된 것이다. '북한이탈주민'을 고른 사람에게 '다문화'까지 고르라고
+  // 요구하면 북한이탈주민 정착금 133건이 통째로 안 보인다.
+  const gate=exclusiveGate(s);
+  if(gate && !gate.some(t=>tags.has(t)) && !bySpecial) return false;
+  // 이름이 임신·출산·영유아를 가리키는 사업은 그 상황을 골랐거나
+  // 임신·자녀 정보로 확인됐을 때만 보여준다.
+  if(!bySpecial && !nameGate(s,c)) return false;
+  // 이름이 전혀 다른 상황군을 가리키는 사업은 뺀다.
+  if(!bySpecial && familyConflict(s)) return false;
+  return true;
+}
+
+/* 이 사업이 '그 자격이 있어야만' 받는 것인지, 아니면 여러 자격 중 하나로
+   그 집단이 언급된 것뿐인지 가른다.
+
+   공공데이터의 지원대상은 자격을 '또는'으로 죽 나열하는 경우가 많다.
+     "국민기초생활 수급자(교육급여), 한부모가족 보호 대상자, 차상위계층"
+   여기서 '한부모'는 여러 갈래 중 하나일 뿐인데, 이걸 필수 조건으로 읽으면
+   한부모가 아닌 기초생활수급자에게 초·중·고 교육비 지원이 통째로 사라진다.
+   실데이터에서 유아학비(누리과정)·초중고 교육비·군무원 응시료 면제가
+   모두 그렇게 숨고 있었다.
+
+   그래서 두 경우에만 '전용 사업'으로 보고 가린다.
+     1) 서비스명이 그 집단을 가리킬 때 — 장애인연금, 한부모가족 아동양육비
+     2) 다른 자격 경로가 하나도 없을 때 — 붙은 태그가 전부 자격요건일 때
+   놓쳐서 못 받는 손해가, 안 맞는 사업이 하나 더 보이는 불편보다 크다. */
+function exclusiveGate(s){
+  const ex=(s.tags||[]).filter(t=>EXCLUSIVE.has(t));
+  if(!ex.length) return null;
+  const name=s.name||'';
+  const named=ex.filter(t=>(EXCLUSIVE_NAME_HINTS[t]||[]).some(w=>name.includes(w)));
+  if(named.length) return named;
+  const hasOtherRoute=(s.tags||[]).some(t=>!EXCLUSIVE.has(t));
+  return hasOtherRoute ? null : ex;
+}
+
+/* 서비스명이 곧 대상을 말해주는 경우.
+
+   '난임치료휴가 급여'는 근로자 사업이 맞지만 난임 치료를 받는 사람만
+   받는다. 그래서 '근로자'만 고른 사람에게는 해당되지 않는데도 계속
+   목록에 올라왔다. '아동양육지원'도 근로자 대상이라고 적혀 있지만
+   실제로는 아이를 키우는 사람의 혜택이다.
+
+   그래서 이름이 임신·출산이나 영유아를 가리키면 그 상황을 골랐거나,
+   임신 여부·자녀 생년월일로 이미 확인된 경우에만 보여준다.
+   나이로 알 수 있는 노년·청년은 여기서 다루지 않는다 — 나이 조건이
+   이미 걸러주고, 이름으로 또 막으면 70세가 노년을 고르지 않았다는
+   이유로 노인장기요양보험이 사라진다. */
+const NAME_GATE_HINTS={
+  "임신·출산":["난임","임신","임산부","산모","출산","산후","유산","사산",
+            "분만","모유","수유","태아","출생아"],
+  "영유아":["영유아","보육료","어린이집","유치원","양육","아이돌봄",
+          "아동돌봄","신생아","누리과정","아동수당"]
+};
+
+/* 서비스명이 어느 '상황군'을 가리키는가.
+
+   공공데이터는 사업이 다루는 내용을 지원대상 곳곳에 흘려 적는다.
+   '도산 대지급금'의 설명에는 "임금·휴업수당·출산전후 휴가기간 중 급여…"가
+   있어서 임신·출산 태그가 붙었다. 회사가 도산했을 때 못 받은 돈을 대신
+   주는 사업인데, 임신·출산을 고른 사람 목록의 맨 위에 올라왔다.
+
+   반대로 이름은 거짓말을 하지 않는다. '도산 대지급금'은 일하는 사람의
+   일이고, '첫만남이용권'은 아이를 낳은 사람의 일이다. 그래서 이름이
+   가리키는 군과 고른 상황의 군이 다르면 아예 빼고, 같으면 위로 올린다.
+
+   군으로 묶는 이유는 인접한 상황을 갈라놓지 않기 위해서다. 임신·출산을
+   고른 사람에게 아이돌봄·영유아보육료는 당연히 보여야 하는데, 태그 단위로
+   비교하면 이름이 '영유아'를 가리킨다는 이유로 사라진다. */
+const NAME_FAMILY={
+  육아:{tags:['임신·출산','영유아','학생','대학생','다자녀','한부모'],
+       words:['임신','임산부','산모','출산','산후','난임','유산','사산','태아',
+              '영유아','보육','어린이집','유치원','양육','아이돌봄','아동돌봄',
+              '신생아','누리과정','아동수당','첫만남','육아','한부모','다자녀',
+              '초등학생','중학생','고등학생','교복','학용품','장학','학자금',
+              '등록금','대학생','유아학비','산후조리','모유','분만',
+              // 학생 사업은 이름이 제각각이다. '고교 무상교육', '어린이
+              // 청소년 교통비'처럼 흔한 표현을 빼놓으면 정작 거의 모든
+              // 학생이 받는 사업이 부수 혜택으로 밀린다.
+              '학생','어린이','청소년','고교','무상교육','급식','통학',
+              '체험학습','방과후','교육비','입학','신입생','돌봄교실',
+              '아동','유아','학습','교육활동','수학여행']},
+  고용:{tags:['근로자','구직자','자영업자'],
+       words:['대지급금','체불','임금','퇴직','실업','구직','취업','일자리',
+              '고용','근로','직업훈련','내일배움','폴리텍','소상공인','자영업',
+              '창업','휴양콘도','사회보험','노동자','재직','공제회','상인']},
+  노년:{tags:['노년'],
+       words:['노인','어르신','경로','치매','장기요양','기초연금','고령','실버',
+              '요양','노후']},
+  청년:{tags:['청년','대학생'],
+       words:['청년','청춘','사회초년','신혼']},
+  의료:{tags:['의료비'],
+       words:['의료비','병원비','진료비','치료비','수술','검진','검사비','약제',
+              '환자','질환','질병','재활','간병','접종','본인부담','산정특례',
+              '치과','틀니','임플란트','보청기','안경','건강관리','건강보험',
+              // 이름에 '의료'가 안 들어가는 보건 사업이 많다. 빼놓으면
+              // 일상돌봄·등록관리·의료분쟁이 부수 혜택으로 밀린다.
+              '돌봄','등록관리','상한액','만성질환','정신건강','심리','상담',
+              '의료분쟁','보건','의약','재난적','희귀','난치','장기요양',
+              '요양비','건강증진','금연','영양','치매','자살예방','응급']},
+  저소득:{tags:['저소득'],
+        words:['저소득','기초생활','차상위','수급','긴급복지','생계','자활',
+               '취약계층','생활안정','서민','자산형성','희망저축','내일저축',
+               '위기가구','결식','급식지원','에너지바우처','연료비']},
+  주거:{tags:['주거'],
+       words:['주거','주택','월세','전세','임대','임차','집수리','주택개량',
+              '보증금','이사비','쪽방','고시원']},
+  금융:{tags:['금융·채무'],
+       words:['채무','신용회복','개인회생','파산','햇살론','대환','사금융',
+              '금융복지','새출발기금','소액금융','서민금융']},
+  장애:{tags:['장애인'],
+       words:['장애인','장애아','발달장애','지체장애','시각장애','청각장애',
+              '중증장애','뇌병변','자폐','보조기기','활동지원']},
+  보훈:{tags:['국가보훈'],
+       words:['보훈','유공자','참전','군경','수훈','애국지사','고엽제','의상자',
+              '의사자','전몰','상이']},
+  다문화:{tags:['다문화'],
+       words:['다문화','결혼이민','북한이탈','탈북','중도입국','이주배경','귀화',
+              '이중언어','외국인주민']},
+  농어업:{tags:['농어민'],
+        words:['농업인','어업인','농어민','귀농','귀어','영농','어가','축산',
+               '임업','수산','어촌','농촌','화훼','낙농','경작']},
+  '1인가구':{tags:['1인가구'],
+        words:['1인가구','독거','고독사','고립','은둔','혼자']}
+};
+function nameFamilies(s){
+  const n=s.name||'', out=[];
+  for(const f in NAME_FAMILY)
+    if(NAME_FAMILY[f].words.some(w=>n.includes(w))) out.push(f);
+  return out;
+}
+// 이름이 가리키는 군 중 하나라도 고른 상황에 속하면 '지금 찾는 것'이다.
+function nameOnTarget(s){
+  return nameFamilies(s).some(f=>NAME_FAMILY[f].tags.some(t=>tags.has(t)));
+}
+/* 그 태그가 고른 상황과 같은 상황군에 속하는가.
+   '첫만남이용권'에는 임신·출산 말고 영유아·다자녀 태그도 붙어 있다.
+   임신·출산만 고른 사람에게 그 두 개를 '고르지 않은 조건'으로 세어 감점하면
+   정작 출산하면 누구나 받는 대표 사업이 중간으로 밀린다. 같은 군이면
+   서로 이어지는 이야기이므로 감점하지 않는다. */
+function tagFamilyShared(tg){
+  for(const f in NAME_FAMILY){
+    const fam=NAME_FAMILY[f].tags;
+    if(fam.includes(tg) && fam.some(t=>tags.has(t))) return true;
+  }
+  return false;
+}
+/* 고른 상황과 이름이 가리키는 군이 전부 다르면 그 사업은 지금 찾는 것이
+   아니다. '도산 대지급금'은 임신·출산을 골랐다고 나올 사업이 아니다. */
+function familyConflict(s){
+  if(!tags.size) return false;
+  // 지역사회서비스는 지자체가 이름을 자유롭게 지어("아동 예술멘토링 지원
+  // 서비스") 엉뚱한 군으로 읽힌다. 해당되는 사람이 워낙 많은 사업이라
+  // 이름만 보고 빼면 손해가 크므로 여기서는 건드리지 않는다.
+  if(isCommunityService(s)) return false;
+  const fs=nameFamilies(s);
+  if(!fs.length) return false;            // 이름이 아무 군도 안 가리킴 -> 판단 보류
+  return !nameOnTarget(s);
+}
+function nameGate(s,c){
+  const name=s.name||'';
+  for(const tg in NAME_GATE_HINTS){
+    if(tags.has(tg)) continue;                       // 그 상황을 직접 골랐다
+    if(!NAME_GATE_HINTS[tg].some(w=>name.includes(w))) continue;
+    // 입력만으로 확인되는 경우도 통과시킨다
+    if(tg==='임신·출산' && (c.preg||c.hasKid)) continue;
+    if(tg==='영유아' && (c.preg||(c.kidYears||[]).some(y=>y<=7))) continue;
+    return false;
+  }
+  return true;
+}
+/* 관련도 점수 — 조건 없이 그냥 통과한 것보다, 내 나이·소득·자녀를
+   실제로 확인하고 통과한 서비스가 위로 오게 한다. */
+/* 나이·소득·자녀 등 어떤 조건도 안 걸린 사업.
+   '전 국민 금연클리닉' 처럼 정말 누구나 받는 것도 있고,
+   조건 문구를 우리가 못 읽어낸 것도 섞여 있다.
+   어느 쪽이든 "내 조건에 맞아서" 나온 게 아니므로 뒤로 미룬다. */
+function isGeneric(s){
+  return s.age_min==null && s.age_max==null
+      && s.income_max_pct==null && s.income_min_pct==null
+      && !s.needs_child && !s.preg && !s.marital && !s.gender
+      && !(s.tags && s.tags.length);
+}
+/* 국민 대다수가 이름을 아는 대표 복지사업.
+   검색 결과 맨 위에 오는 것이 자연스럽다. */
+const HEADLINE_WORDS=["기초연금","국민연금","생계급여","의료급여","주거급여",
+  "교육급여","기초생활","긴급복지","근로장려","자녀장려","아동수당","부모급여",
+  "첫만남","영유아보육료","가정양육수당","청년월세","청년도약","국민취업지원",
+  "실업급여","내일배움","국가장학금","장애인연금","장애수당","아동양육비",
+  "노인장기요양","치매 치료관리비","산모","난임"];
+function isHeadline(n){ n=n||''; return HEADLINE_WORDS.some(w=>n.includes(w)); }
+
+/* 해당되는 사람이 많아 먼저 보여야 하는 사업들.
+
+   "이 사업으로 몇 명이 혜택을 받는가"는 공공데이터에 없다. 그래서 점수만
+   가지고는 '고혈압·당뇨병 등록관리'와 '성실납세자 의료비 감면' 중 어느
+   쪽이 더 많은 사람에게 해당하는지 알 방법이 없다. 운영하면서 확인된
+   것을 여기에 적어 둔다 — 규칙으로 뽑아낼 수 없는 판단이라 목록이 맞다.
+
+   tags 를 적으면 그 상황을 골랐을 때만 올린다(천원의 아침밥은 대학교
+   재학생 대상이라 '대학생'을 골랐을 때만 의미가 있다). */
+const CORE_PROGRAMS=[
+  // 의료
+  {w:'일상돌봄'}, {w:'의사상자'}, {w:'고혈압'}, {w:'등록관리서비스'},
+  {w:'의료분쟁'}, {w:'본인부담상한액'}, {w:'미숙아'}, {w:'선천성이상아'},
+  // 저소득
+  {w:'긴급복지'}, {w:'생활안정자금'}, {w:'서민자립지원'},
+  // 장애
+  {w:'장애인 일자리'}, {w:'장애인 건강보험료'}, {w:'직업능력개발'},
+  // 청년
+  {w:'청년미래적금'}, {w:'청년주택드림'},
+  {w:'천원의 아침밥', tags:['대학생']}
+];
+function isCoreProgram(s){
+  const n=s.name||'';
+  return CORE_PROGRAMS.some(p=>n.includes(p.w)
+    && (!p.tags || p.tags.some(t=>tags.has(t))));
+}
+
+/* 상황별로 '이 순서로 보였으면 한다'고 정해 둔 사업.
+   앞에 있을수록 큰 가산점을 준다.
+
+   부모급여는 전국 사업이 공공데이터에 아직 없다(충북 보은군 것 하나뿐).
+   그래도 목록 맨 앞에 적어 둔다 — 나중에 등록되면 그때부터 자동으로
+   맨 위에 온다. 그 자리를 지금은 행복출산이 대신한다. */
+const PRIORITY_ORDER={
+  '임신·출산':['부모급여','첫만남이용권','영유아보육료','엽산제','아이돌봄',
+            '배우자 출산휴가','육아휴직','행복출산']
+};
+function priorityBonus(s){
+  const n=s.name||'';
+  let best=0;
+  for(const tg in PRIORITY_ORDER){
+    if(!tags.has(tg)) continue;
+    PRIORITY_ORDER[tg].forEach((w,i)=>{
+      if(n.includes(w)) best=Math.max(best, 24-i);
+    });
+  }
+  return best;
+}
+
+/* 출산 관련 여러 신청을 한 번에 처리해 주는 행정 서비스.
+   공공데이터에는 산모 기준으로 '여성'이라 적혀 있지만, 실제로는 아버지가
+   대신 신청하는 일이 흔하다. 성별로 잠그면 남편에게서 사라진다. */
+const ONESTOP_RE=/통합처리|원스톱|통합\s*신청|일괄\s*신청/;
+function isOneStop(s){ return ONESTOP_RE.test(s.name||''); }
+
+/* 정말 저소득층만 받는 사업인가.
+
+   '출산 관련 서비스 통합처리 신청(행복출산)'은 출생신고와 함께 여러 사업을
+   한 번에 신청해 주는 안내다. 그 목록에 기저귀·조제분유 지원 같은 저소득
+   사업이 들어 있어서 저소득 태그가 붙었는데, 신청 자체는 소득과 무관하다.
+   그런데도 소득이 넘는다는 이유로 감춰져서, 임신·출산을 고른 사람에게
+   보이지 않았다.
+
+   그래서 이름이 저소득을 가리키거나, 저소득 말고는 대상 표시가 없을 때만
+   '저소득 전용'으로 본다. */
+function lowIncomeOnly(s){
+  if(nameFamilies(s).includes('저소득')) return true;
+  return (s.tags||[]).filter(t=>t!=='저소득' && !BROAD_TAGS.has(t)).length===0;
+}
+/* 지역사회서비스투자사업.
+   중위소득 140%까지 받을 수 있어 해당되는 사람이 아주 많은데도,
+   지자체마다 이름을 자유롭게 지어("노는 은평, 크는 아이") 검색으로는
+   좀처럼 안 찾아진다. 결과에 있으면 맨 위로 올린다. */
+function isCommunityService(s){
+  return /지역사회서비스|사회서비스 이용권|사회서비스투자/.test(
+    (s.name||'')+' '+(s.summary||'')+' '+(s.content||''));
+}
+/* 점수만으로는 첫 화면(7개) 안에 든다고 장담할 수 없다. 정렬이 끝난 뒤
+   지역사회서비스를 맨 앞으로 끌어올려, 있으면 반드시 눈에 띄게 한다. */
+function hoistCommunity(rows){
+  const head=rows.filter(isCommunityService);
+  return head.length ? head.concat(rows.filter(s=>!isCommunityService(s))) : rows;
+}
+
+/* 특정한 일이 생겨야 받는 사업.
+   임금이 체불되거나 난임 치료를 받는 사람만 해당하므로, 같은 근로자라도
+   대부분에게는 해당되지 않는다. 조건 없이 누구나 쓰는 혜택보다 뒤에 둔다. */
+const EVENT_WORDS=["체불","대지급금","도산","폐업","해고","실직","무급",
+  "산재","재해","재난","사고","사망","부상","유산","사산","난임","피해",
+  // '긴급'은 뺐다. 긴급복지는 위기 상황에 쓰는 대표적인 안전망 사업이라
+  // 저소득을 고른 사람에게 가장 먼저 보여야 하는데, 이름의 '긴급' 때문에
+  // 특수한 사건 취급을 받아 뒤로 밀렸다.
+  "이혼","파산","회생","압류","경매","화재","침수","붕괴",
+  // 소송은 분쟁이 생겨야 쓰는 것이라, 장학금처럼 누구나 신청하는
+  // 혜택보다 뒤에 둔다.
+  "소송","법률구조","국선","분쟁조정"];
+function isEventBased(n){ n=n||''; return EVENT_WORDS.some(w=>n.includes(w)); }
+
+/* 특정 직종·신분만 해당하는 사업.
+   사립학교 교직원 퇴직급여는 근로자 사업이 맞지만, 근로자 대부분에게는
+   해당되지 않는다. 모든 근로자가 쓸 수 있는 혜택보다 뒤에 둔다. */
+// 농업인·어업인은 넣지 않는다 — '농어민'은 사용자가 직접 고를 수 있는
+// 상황이라, 고른 사람에게는 그 사업이 오히려 가장 관련이 깊다.
+const NARROW_GROUP_WORDS=["교직원","사립학교","교원","공무원","군인","경찰",
+  "소방","플랫폼종사자","특수형태","건설근로자","건설노동자","일용","예술인",
+  "선원","우체국","공제회","원양","연구원","의료인","운수종사자",
+  "산림보호","진화대","예방단","대응단","특성화고","체육인","광업",
+  // 학생 중에서도 처지가 특수한 소수. 부모와 살지 않거나 학교를 그만둔
+  // 청소년은 많지 않은데, 이런 사업이 교복비·무상교육처럼 거의 모든
+  // 학생이 받는 것보다 위에 오면 안 된다.
+  // '자립지원'만 넣으면 서민자립지원보험까지 걸린다. 보호가 끝난 청소년을
+  // 가리키는 형태만 남긴다.
+  "학교 밖","학교밖","가정 밖","가정밖","자립지원수당","자립두배","자립정착",
+  "자립준비청년","보호종료","시설퇴소","퇴소청소년","대안교육","특수교육",
+  "위기청소년","화물차","운전자"];
+function isNarrowGroup(n){ n=n||''; return NARROW_GROUP_WORDS.some(w=>n.includes(w)); }
+
+/* 고르지 않았어도 입력한 정보로 이미 해당됨이 확인되는 상황.
+   28세가 '구직자'만 골랐어도 '청년 일경험 지원'의 청년 조건은 이미
+   충족한다. 이걸 '고르지 않은 조건'으로 세어 감점하면, 정작 그 나이대에
+   딱 맞는 사업이 아래로 밀린다. */
+function userMeetsTag(tg,c){
+  switch(tg){
+    case '청년':   return c.age!=null && c.age>=19 && c.age<=39;
+    case '노년':   return c.age!=null && c.age>=60;
+    case '대학생': return c.age!=null && c.age>=18 && c.age<=29;
+    case '1인가구':return c.hh===1;
+    case '저소득': return c.pct!=null && c.pct<=LOW_INCOME_PCT;
+    case '영유아': return (c.kidYears||[]).some(y=>y<=7);
+    case '학생':   return (c.kidYears||[]).some(y=>y>=7&&y<=19);
+    case '임신·출산': return !!c.preg;
+    case '다자녀': return (c.kidYears||[]).length>=2;
+    default: return false;
+  }
+}
+
+/* 이름에 든 생애단계 말로 나이 적합도를 본다.
+   나이 칸이 비어 있는 사업이 많다 — '중장년내일센터'도 나이가 안 적혀
+   있어서, 52세에게 특별히 관련 있다는 것을 숫자로는 알 수 없다. */
+const NAME_AGE_BANDS=[
+  [/청년/, 19, 39], [/중장년|신중년/, 40, 64],
+  [/어르신|노인|고령|경로|실버/, 60, 120], [/청소년/, 9, 24]
+];
+function nameAgeFit(s,c){
+  if(c.age==null) return 0;
+  for(const [re,lo,hi] of NAME_AGE_BANDS){
+    if(re.test(s.name||'')) return (c.age>=lo && c.age<=hi) ? 3 : -3;
+  }
+  return 0;
+}
+
+/* 혼인 상태 제한이 실제로 의미가 있는지.
+   수집 단계 버그로 사업 9,877건(66%)에 '미혼'이 찍혀 있었다. 그 값은
+   걸러내는 데는 쓰이지 않지만, 순위 계산에서 '조건이 붙은 사업'으로
+   취급돼 조건 없는 보편 혜택(근로자 휴양콘도 등)이 아래로 밀렸다.
+   수집 로직은 고쳤고, 고쳐진 데이터가 들어오기 전까지 여기서도 무시한다. */
+function maritalLimit(s){ return s.marital==='single' ? null : s.marital; }
+
+function score(s,c){
+  let sc=0;
+  if(s.tier==='local')sc+=3; else if(s.tier==='regional')sc+=2;   // 우리 동네 우선
+  if(tags.size&&s.tags&&s.tags.some(t=>tags.has(t)))sc+=3;
+  if(s.child_age_max_months!=null)sc+=3;      // 자녀 개월수까지 맞음 = 가장 구체적
+  if(s.preg)sc+=3;
+  /* 내 나이가 그 사업의 대상 연령대에 실제로 들어가면 확실히 관련이 있다.
+     28세에게는 청년 사업이, 55세에게는 중장년내일센터가 위로 와야 한다.
+     예전에는 '나이 조건이 적혀 있다'는 사실만으로 점수를 줬는데, 그러면
+     조건이 많은(=대상이 좁은) 사업이 올라갔다. */
+  if(c.age!=null && (s.age_min!=null||s.age_max!=null)
+     && (s.age_min==null||c.age>=s.age_min)
+     && (s.age_max==null||c.age<=s.age_max)){
+    // '18~120세'는 사실상 제한이 아니다. 좁은 연령대에 들어맞을 때만 크게 준다.
+    const lo=s.age_min==null?0:s.age_min, hi=s.age_max==null?120:s.age_max;
+    sc += (hi-lo)<=40 ? 3 : 1;
+  }
+  sc += nameAgeFit(s,c);
+  if(c.pct!=null&&(s.income_max_pct!=null||s.income_min_pct!=null))sc+=1;
+  if(maritalLimit(s))sc+=1;
+  if(s.needs_child&&c.hasKid)sc+=1;
+
+  /* 고르지 않은 상황까지 조건으로 달린 사업은 그만큼 대상이 좁다.
+     '근로자'를 고른 사람 목록에서 '난임치료휴가 급여'(근로자 + 난임치료
+     중인 사람)가 '근로자 휴양콘도 지원'(모든 근로자)보다 위에 있으면 안 된다. */
+  const off = (tags.size && s.tags)
+    ? s.tags.filter(t=>!tags.has(t) && !BROAD_TAGS.has(t)
+                       && !userMeetsTag(t,c) && !tagFamilyShared(t)).length
+    : 0;
+  sc -= Math.min(off, 4) * 2;
+
+  /* 고른 상황 말고는 아무 조건이 없는 사업 — 그 상황인 사람이면 누구나
+     받는다는 뜻이라 가장 많은 사람에게 해당한다. 사용자가 먼저 보고
+     싶어 하는 것이 바로 이것이다. */
+  // 중위소득 150%를 넘는 상한은 사실상 제한이 아니다. 청년미래적금의
+  // 상한은 200%인데, 이걸 '조건이 붙었다'고 보면 거의 모든 청년이 드는
+  // 적금이 조건 없는 사업 취급을 못 받아 22위까지 밀렸다.
+  const capped = s.income_max_pct!=null && s.income_max_pct<150;
+  if(off===0 && !s.needs_child && !s.preg && !maritalLimit(s) && !s.gender
+     && !capped && !s.special) sc+=5;
+  if(isEventBased(s.name)) sc-=4;
+  if(isNarrowGroup(s.name)) sc-=3;
+
+  /* 이름이 고른 상황을 직접 가리키면 그 상황의 핵심 사업이다.
+     반대로 이름이 다른 얘기를 하고 있으면, 고른 상황은 지원대상 목록에
+     한 줄 끼어 있을 뿐인 부수 혜택이다.
+       예) 임신·출산을 골랐을 때
+           첫만남이용권·산모신생아 건강관리    -> 핵심 (올림)
+           4대궁 무료관람, 보건의료인국가시험   -> 임산부가 감면·편의 대상
+                                              목록에 한 줄 (내림)
+     예전에는 이 구분이 없어서 궁궐 관람권이 육아휴직 급여보다 위에 왔다. */
+  if(tags.size) sc += nameOnTarget(s) ? 8 : -5;
+
+  /* 대표 사업은 위로 올린다. 단 이름이 고른 상황을 가리킬 때만이다.
+     '난임치료휴가 급여'는 이름에 '난임'이 있어 대표 사업으로 읽히는데,
+     근로자를 고른 사람에게는 해당 없는 사업이다.
+     반대로 '첫만남이용권'은 임신·출산을 고른 사람에게 가장 먼저 보여야
+     하는데, 예전 조건(붙은 태그가 하나도 안 남아야 함)에 걸려 14위였다. */
+  if(isHeadline(s.name) && (!tags.size || nameOnTarget(s))) sc+=8;
+  if(isCoreProgram(s)) sc+=10;          // 해당자가 많다고 확인된 사업
+  sc += priorityBonus(s);               // 상황별로 정해 둔 노출 순서
+  if(isCommunityService(s)) sc+=12;     // 해당자가 많은 지역사회서비스
+  if(isGeneric(s))sc-=6;                // 조건 없이 통과한 것은 맨 뒤로
+  return sc;
+}
+function safeUrl(u){
+  if(!u)return false;
+  try{const p=new URL(u,location.origin).protocol;return p==='http:'||p==='https:';}catch(e){return false;}
+}
+function card(s,color){
+  const d=document.createElement('div'); d.className='item'; d.style.setProperty('--tc',color);
+  const rows=[["지원대상",s.target],["지원내용",s.content],["신청방법",s.how],
+              ["신청기한",s.deadline],["문의처",s.tel]].filter(r=>r[1]);
+  d.innerHTML=`<div class="item-hd"><h3>${esc(s.name)}</h3>
+     <button type="button" class="share" aria-label="이 서비스 공유하기" title="공유하기">
+       <i class="fa-solid fa-share-nodes"></i></button></div>
+   ${s.summary?`<p>${esc(s.summary)}</p>`:''}
+   <div class="tags"><span class="tg org">${esc(s.org||'—')}</span>
+    ${s.gender?`<span class="tg sx">${esc(s.gender)} 전용</span>`:''}
+    ${s.field?`<span class="tg">${esc(s.field)}</span>`:''}
+    ${s.sprt_type?`<span class="tg">${esc(s.sprt_type)}</span>`:''}</div>
+   ${rows.length?`<details><summary>상세 정보 보기</summary><dl class="dl">
+    ${rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>
+    ${safeUrl(s.url)?`<a class="apply" href="${esc(s.url)}" target="_blank" rel="nofollow noopener">
+      신청 페이지 바로가기 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>`:''}
+   </details>`:''}`;
+  const sh=d.querySelector('.share');
+  if(sh) sh.onclick=(e)=>{e.stopPropagation(); shareService(s, sh);};
+  return d;
+}
+
+/* 서비스 하나를 공유한다.
+
+   폰에서는 카카오톡·문자 등 기기의 기본 공유창을 띄우고,
+   그게 없는 PC 브라우저에서는 링크를 클립보드에 복사한다.
+   공유 링크는 그 서비스가 바로 보이는 주소(/s/서비스ID)라
+   받은 사람이 열면 해당 사업 하나만 펼쳐진 화면이 나온다. */
+function shareLink(s){
+  return location.origin + '/s/' + encodeURIComponent(s.id || '');
+}
+async function shareService(s, btn){
+  const url = shareLink(s);
+  const text = `${s.name}${s.org ? ' · ' + s.org : ''}`;
+  if(navigator.share){
+    try{ await navigator.share({title:s.name, text, url}); return; }
+    catch(err){ if(err && err.name === 'AbortError') return; }   // 사용자가 취소
+  }
+  const done = () => {
+    const old = btn.innerHTML;
+    btn.classList.add('ok');
+    btn.innerHTML = '<span class="share-msg">링크 복사됨</span>';
+    setTimeout(()=>{ btn.innerHTML = old; btn.classList.remove('ok'); }, 1600);
+  };
+  try{
+    await navigator.clipboard.writeText(`${text}\n${url}`);
+    done();
+  }catch(err){
+    // 클립보드가 막힌 환경(비보안 연결 등) 대비
+    const ta=document.createElement('textarea');
+    ta.value=`${text}\n${url}`;
+    ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }
+    catch(e2){ prompt('아래 주소를 복사하세요', url); }
+    ta.remove();
+  }
+}
+
+/* 결과 목록 하나를 그린다. viewMode에 따라 카드를 쭉 쌓거나(card),
+   사업명만 있는 표를 만들어 행을 누르면 그 밑에 상세 카드를 펼친다(table).
+   cardFn을 넘기면 그 함수로 카드를 만든다(검색 탭은 kwCard를 쓴다). */
+function mkList(color, cardFn){
+  cardFn = cardFn || (s=>card(s,color));
+  if(viewMode==='table'){
+    const wrap=document.createElement('div'); wrap.className='tbl-wrap';
+    const table=document.createElement('table'); table.className='svc-tbl';
+    table.style.setProperty('--tc',color);
+    table.innerHTML='<thead><tr><th>사업명</th><th class="col-org">기관</th></tr></thead>';
+    const tbody=document.createElement('tbody'); table.appendChild(tbody);
+    wrap.appendChild(table);
+    return {el:wrap, addRows(rows){
+      const frag=document.createDocumentFragment();
+      rows.forEach(s=>{
+        const tr=document.createElement('tr'); tr.className='svc-row';
+        tr.tabIndex=0; tr.setAttribute('role','button'); tr.setAttribute('aria-expanded','false');
+        tr.innerHTML=`<td class="svc-name">${esc(s.name)}</td><td class="svc-org">${esc(s.org||'—')}</td>`;
+        const dtr=document.createElement('tr'); dtr.className='svc-detail'; dtr.hidden=true;
+        const dtd=document.createElement('td'); dtd.colSpan=2;
+        const cd=cardFn(s);
+        const det=cd.querySelector('details'); if(det) det.open=true;   // 한 번에 자세히 보이게
+        dtd.appendChild(cd);
+        dtr.appendChild(dtd);
+        const toggle=()=>{
+          const opening=dtr.hidden;
+          dtr.hidden=!opening;
+          tr.classList.toggle('open',opening);
+          tr.setAttribute('aria-expanded',String(opening));
+        };
+        tr.addEventListener('click',toggle);
+        tr.addEventListener('keydown',ev=>{
+          if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle();}
+        });
+        frag.appendChild(tr); frag.appendChild(dtr);
+      });
+      tbody.appendChild(frag);
+    }};
+  }
+  const list=document.createElement('div');
+  return {el:list, addRows(rows){
+    const frag=document.createDocumentFragment();
+    rows.forEach(s=>frag.appendChild(cardFn(s)));
+    list.appendChild(frag);
+  }};
+}
+
+/* 목록을 몇 개씩 보여줄지. 처음에는 7개만 보여주고 나머지는 접어 둔다 —
+   한 화면에 너무 많이 깔리면 위쪽 몇 개가 눈에 안 들어온다. */
+const LIST_INITIAL=7, LIST_CHUNK=30;
+
+/* 목록 하나를 '더 보기' 버튼과 함께 붙인다.
+   끝까지 펼치면 버튼이 '접기'로 바뀐다 — 예전에는 버튼이 사라져서
+   한 번 펼치면 되돌릴 방법이 없었다. */
+function appendList(host, rows, color, chunkFirst, cardFn){
+  const first=chunkFirst||LIST_INITIAL;
+  let listEl=null, addRows=null, shown=0;
+  const more=document.createElement('button');
+  more.type='button'; more.className='more';
+
+  function build(){
+    const made=mkList(color, cardFn);
+    listEl=made.el; addRows=made.addRows; shown=0;
+    host.insertBefore(listEl, more);
+  }
+  function label(){
+    if(shown>=rows.length){
+      more.hidden = rows.length<=first;   // 처음부터 다 보이면 버튼이 필요없다
+      more.innerHTML='접기 <i class="fa-solid fa-chevron-up"></i>';
+    }else{
+      more.hidden=false;
+      more.innerHTML=`나머지 ${(rows.length-shown).toLocaleString('ko-KR')}건 더 보기 `
+        +'<i class="fa-solid fa-chevron-down"></i>';
+    }
+  }
+  function show(n){ addRows(rows.slice(shown,shown+n)); shown=Math.min(shown+n,rows.length); label(); }
+  function collapse(){
+    listEl.remove(); build(); show(first);
+    more.scrollIntoView({block:'nearest'});
+  }
+  more.onclick=()=>{ if(shown>=rows.length) collapse(); else show(LIST_CHUNK); };
+
+  host.appendChild(more);
+  build(); show(first);
+}
+
+$('#f').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!picked){
+    $('#regErr').hidden=false; reg.setAttribute('aria-invalid','true');
+    reg.focus(); reg.select(); reg.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  clearErr();
+  const btn=$('#goBtn'), html=btn.innerHTML;
+  if(!DB){
+    btn.disabled=true; btn.innerHTML='복지 데이터 불러오는 중…';
+    DB=await load(); btn.disabled=false; btn.innerHTML=html;
+  }
+  const age=$('#age').value===''?null:+$('#age').value;
+  const inc=incVal(), hh=+$('#hh').value;
+  const pct=inc?Math.round(inc/MEDIAN[hh]*100):null;
+  const hasKid=kids.length>0;
+  const valid=kids.map(k=>k.months).filter(m=>m!=null);
+  const youngest=valid.length?Math.min(...valid):null;
+  const kidYears=valid.map(m=>Math.floor(m/12));
+  // 필요한 데이터를 먼저 확보한다.
+  //   지역을 골랐으면 그 시도만
+  //   지역 없이 상황 태그만 골랐으면 그 태그만 (대상별 페이지)
+  //   둘 다 없으면 전국을 훑어야 하므로 전체
+  if(picked.sido) await ensureSido(picked.sido);
+  else if(tags.size) await ensureTags([...tags]);
+  else await ensureAll();
+
+  const c={sido:picked.sido,sigungu:picked.sigungu,age,pct,sex,marital,
+           preg:!!preg,hasKid,youngest,kidYears,hh};
+  const all=DB.items.filter(s=>ok(s,c));
+  const alive=all.filter(s=>!isExpired(s));
+  const past=all.filter(s=>isExpired(s));
+  // 내 조건에 실제로 맞은 것과, 조건이 안 적혀 통과한 것을 나눈다.
+  // 공공데이터의 84%에 나이·소득 조건이 없어서 이 구분이 없으면
+  // 결과가 수백 건이 되어 정작 받을 수 있는 혜택이 묻힌다.
+  // 특별한 상황으로 고른 사업은 따로 모아 별도 단계로 보여준다.
+  // 사용자가 직접 고른 것이므로 renderAll 에서 맨 위에 놓는다 —
+  // 아래에 두면 "희귀질환을 골랐는데 왜 아동수당만 잔뜩 나오냐"가 된다.
+  const specialHits=alive.filter(s=>s.special);
+  const rest=alive.filter(s=>!s.special);
+  const hits=rest.filter(s=>!isGeneric(s));
+  const genericAll=rest.filter(isGeneric);
+
+  const out=$('#out'); out.innerHTML='';
+  const mL={single:'미혼',married:'기혼',single_parent:'한부모'}[marital]||'';
+  const kidTxt=hasKid?` · 자녀 ${kids.length}명`
+    +(youngest!=null?`(막내 ${fmtAge(youngest)})`:'(생년월일 미입력)'):'';
+
+  const hd=document.createElement('div'); hd.className='res-hd';
+  hd.innerHTML=`<span class="cond">${esc(picked.label)} · ${age??'—'}세`
+    +(sex?` · ${esc(sex)}`:'')+(mL?` · ${mL}`:'')+kidTxt
+    +(preg?' · 임신중':'')+` · ${hh}인가구`+(pct!=null?` · 중위 ${pct}%`:'')
+    +`</span><div style="display:flex;align-items:center;gap:12px">
+      <div class="exp">
+        <button type="button" id="condXls"><i class="fa-solid fa-file-excel"></i> 엑셀</button>
+        <button type="button" id="condPdf"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+      </div>
+      <span class="cnt">${(hits.length+specialHits.length).toLocaleString('ko-KR')}건</span></div>`;
+  out.appendChild(hd);
+  hd.querySelector('#condXls').onclick=()=>exportExcel(
+    specialHits.concat(hits, genericAll),'복지서비스_'+(picked.sigungu||picked.sido));
+  hd.querySelector('#condPdf').onclick=()=>exportPdf(out,specialHits.concat(hits));
+
+  const bd=document.createElement('div'); bd.className='res-bd';
+  if(hits.length+genericAll.length>30){
+    const kw=document.createElement('div'); kw.className='kw-wrap';
+    kw.innerHTML='<i class="fa-solid fa-magnifying-glass"></i>'
+      +'<input type="text" id="kw" placeholder="결과 내 검색 — 예: 월세, 보육, 의료비">';
+    bd.appendChild(kw);
+    kw.querySelector('input').addEventListener('input',e=>{
+      const q=e.target.value.trim();
+      const inq=s=>(s.name+' '+(s.summary||'')+' '+(s.target||'')).includes(q);
+      renderTiers(q?hits.filter(inq):hits, q?genericAll.filter(inq):genericAll);
+    });
+  }
+  const foldBar=document.createElement('div'); foldBar.className='fold-bar';
+  foldBar.innerHTML='<button type="button" id="foldAll">모두 접기</button>'
+    +'<button type="button" id="openAll">모두 펼치기</button>'
+    +'<button type="button" id="onlyLocal">우리 동네만 보기</button>'
+    +'<span class="fold-sep" aria-hidden="true"></span>'
+    +'<button type="button" id="viewTable"><i class="fa-solid fa-table"></i> 표로 보기</button>'
+    +'<button type="button" id="viewCard"><i class="fa-solid fa-list"></i> 자세히 보기</button>';
+  bd.appendChild(foldBar);
+  function updateViewButtons(){
+    foldBar.querySelector('#viewTable').classList.toggle('on', viewMode==='table');
+    foldBar.querySelector('#viewCard').classList.toggle('on', viewMode==='card');
+  }
+  updateViewButtons();
+  foldBar.querySelector('#viewTable').onclick=()=>{viewMode='table'; updateViewButtons(); renderAll();};
+  foldBar.querySelector('#viewCard').onclick=()=>{viewMode='card'; updateViewButtons(); renderAll();};
+  const tierHost=document.createElement('div'); bd.appendChild(tierHost);
+  const pastHost=document.createElement('div'); bd.appendChild(pastHost);
+  const gt=bd.querySelector('#goTags');
+  if(gt) gt.onclick=()=>{
+    $('#chips').scrollIntoView({behavior:'smooth',block:'center'});
+    $('#chips').classList.add('flash');
+    setTimeout(()=>$('#chips').classList.remove('flash'),1600);
+  };
+  function setFold(fn){
+    tierHost.querySelectorAll('.tier').forEach((sec,i)=>{
+      const fold=fn(i, sec);
+      sec.classList.toggle('folded', fold);
+      sec.querySelector('.tier-hd').setAttribute('aria-expanded', !fold);
+    });
+  }
+  foldBar.querySelector('#foldAll').onclick =()=>setFold(()=>true);
+  foldBar.querySelector('#openAll').onclick =()=>setFold(()=>false);
+  // 3단계(우리 동네)만 남기고 접는다
+  // 순서로 찾으면 특별 단계가 맨 위에 끼어들 때 엉뚱한 걸 접는다.
+  // 단계마다 붙여 둔 표시(data-tier)로 찾는다.
+  foldBar.querySelector('#onlyLocal').onclick=()=>
+    setFold((i,sec)=>sec.dataset.tier!=='local');
+  if(DB.failed){
+    bd.insertAdjacentHTML('beforeend',
+      '<div class="notice bad"><i class="fa-solid fa-circle-exclamation"></i> 복지 데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>');
+  } else if(DB.sample){
+    bd.insertAdjacentHTML('beforeend',
+      '<div class="notice"><i class="fa-solid fa-triangle-exclamation"></i> 샘플 데이터로 표시 중입니다. GitHub Actions의 \u0027복지 데이터 갱신\u0027 을 실행하면 실제 데이터로 바뀝니다.</div>');
+  }
+  if(!hits.length && !genericAll.length){
+    bd.insertAdjacentHTML('beforeend',
+      '<div class="zero"><b>조건에 맞는 복지서비스를 찾지 못했습니다.</b>'
+      +'<p>조건을 넓혀보세요 — 소득란을 비우거나 선택한 상황 태그를 해제하면 결과가 늘어납니다.</p></div>');
+  } else if(!tags.size && hits.length>150){
+    // 상황을 하나도 안 고르면 조건이 거의 안 걸려 수백 건이 나온다.
+    // 공공데이터의 84%에 나이·소득 기준이 안 적혀 있기 때문이다.
+    bd.insertAdjacentHTML('beforeend',
+      `<div class="notice big"><b>결과가 ${hits.length.toLocaleString('ko-KR')}건으로 많습니다.</b><br>`
+      +`공공데이터에 나이·소득 기준이 적혀 있지 않은 사업이 많아, 조건만으로는 좁혀지지 않습니다.<br>`
+      +`위쪽 <b>‘해당되는 상황’</b>에서 본인에게 맞는 항목(청년·노년·장애인·1인가구 등)을 고르면 `
+      +`꼭 맞는 혜택만 볼 수 있습니다.`
+      +`<span class="notice-act"><button type="button" id="goTags">상황 고르러 가기</button></span></div>`);
+  } else if(genericAll.length){
+    bd.insertAdjacentHTML('beforeend',
+      `<div class="notice"><i class="fa-solid fa-circle-info"></i> 아래 <b>${hits.length.toLocaleString('ko-KR')}건</b>은 입력하신 조건에 맞는 혜택입니다. `
+      +`나이·소득 조건이 공공데이터에 적혀 있지 않은 사업 ${genericAll.length.toLocaleString('ko-KR')}건은 각 단계 아래에 따로 접어 두었습니다.</div>`);
+  }
+
+  const INITIAL=12, CHUNK=30;
+  // 머리글을 눌러 그 단계를 접거나 편다
+  /* 특별한 상황으로 고른 사업을 담는 별도 단계.
+     1~3단계(전국·시도·시군구) 아래에 4번째로 붙는다. */
+  function specialTier(rows){
+    const sec=document.createElement('div');
+    sec.className='tier sp-tier'; sec.style.setProperty('--tc','#7C3AED');
+    sec.dataset.tier='special';
+    const names=[...new Set(rows.map(s=>SPECIAL_LABEL[s.special]||s.special))];
+    sec.innerHTML=`<button type="button" class="tier-hd" aria-expanded="true">
+      <span class="tier-no">특별</span>
+      <span class="tier-nm">${esc(names.join(' · '))}</span>
+      <span class="tier-sub">선택하신 특별한 상황</span>
+      <span class="tier-ct">${rows.length.toLocaleString('ko-KR')}건</span>
+      <span class="tier-arrow" aria-hidden="true">▾</span></button>`;
+    const sorted=hoistCommunity(
+      rows.map(s=>[score(s,c),s]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]));
+    appendList(sec, sorted, '#7C3AED');
+    bindFold(sec);
+    return sec;
+  }
+
+  /* 고른 특별한 상황이 이 지역에는 없을 때.
+     그냥 0건만 보여주면 "이런 지원은 아예 없나 보다"로 읽힌다. 실제로는
+     다른 지자체에 있는 경우가 많아서(전세사기 30건이 전부 동대문·강서·
+     구로구 등 기초사업), 어디에 몇 건 있는지 알려주고 바로 가게 한다. */
+  function specialElsewhere(){
+    const picks=[...specials];
+    const label=picks.map(t=>SPECIAL_LABEL[t]||t).join(' · ');
+    const here=picked.sigungu||picked.sido||'선택하신 지역';
+
+    const sec=document.createElement('div');
+    sec.className='tier sp-tier'; sec.style.setProperty('--tc','#7C3AED');
+    sec.dataset.tier='special';
+    sec.innerHTML=`<button type="button" class="tier-hd" aria-expanded="true">
+      <span class="tier-no">특별</span>
+      <span class="tier-nm">${esc(label)}</span>
+      <span class="tier-sub">선택하신 특별한 상황</span>
+      <span class="tier-ct">0건</span>
+      <span class="tier-arrow" aria-hidden="true">▾</span></button>`;
+    const box=document.createElement('div'); box.className='sp-none';
+    sec.appendChild(box); bindFold(sec);
+
+    const SRC='이 조회는 정부24 ‘보조금24’와 지자체복지서비스에 등록된 사업만 '
+      +'다룹니다. 여기에 없다고 해서 지원 자체가 없는 것은 아니니, 관련 부처나 '
+      +'지자체에 직접 확인해 보세요.';
+
+    function fill(){
+      const all=DB.items.filter(s=>s.special && picks.includes(s.special)
+                                   && !isExpired(s));
+      if(!all.length){
+        box.innerHTML=`<p><b>${esc(label)}</b> 관련 복지서비스가 이 목록에는 없습니다.</p>`
+          +`<p class="sp-note">${SRC}</p>`;
+        return;
+      }
+      const cnt={};
+      all.forEach(s=>{
+        const k=s.sigungu ? s.sido+'-'+s.sigungu : (s.sido||'전국');
+        cnt[k]=(cnt[k]||0)+1;
+      });
+      const list=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+      const links=list.slice(0,12).map(([k,n])=>{
+        const nm=k.includes('-')?k.split('-')[1]:k;
+        return k==='전국'
+          ? `<span class="sp-rg">전국 ${n}건</span>`
+          : `<a class="sp-rg" href="/${encodeURIComponent(k)}">${esc(nm)} ${n}건</a>`;
+      }).join('');
+      box.innerHTML=`<p><b>${esc(label)}</b> 사업은 <b>${esc(here)}</b>에는 없습니다.
+          다른 지역에 <b>${all.length}건</b> 있습니다.</p>
+        <div class="sp-regions">${links}</div>
+        ${list.length>12?`<p class="sp-note">외 ${list.length-12}개 지역</p>`:''}
+        <p class="sp-note">지역명을 누르면 그 지역 복지 페이지로 이동합니다. ${SRC}</p>`;
+    }
+
+    /* 지역 페이지는 그 시도 조각만 받아 둔 상태라, 그대로 세면 다른 시도가
+       빠져 "17건"처럼 실제(30건)보다 적게 나온다. 일단 가진 것으로 그려 두고
+       전국 데이터를 받아 다시 센다. */
+    fill();
+    if(!SHARDS.all) ensureAll().then(fill).catch(()=>{});
+    return sec;
+  }
+
+  /* 고른 상황별로 소제목을 달아 나눠 붙인다.
+     한 사업이 두 상황에 모두 해당하면 양쪽에 다 넣는다 — '학생'을 볼 때도
+     '노년'을 볼 때도 눈에 띄어야 하기 때문이다. 그래서 소제목 건수의 합은
+     단계 전체 건수보다 클 수 있다. */
+  function appendByTag(host, rows, color){
+    [...tags].forEach(tg=>{
+      const mine=rows.filter(s=>(s.tags||[]).includes(tg));
+      if(!mine.length) return;
+      const box=document.createElement('div'); box.className='tagsec';
+      box.innerHTML=`<div class="tagsec-hd"><span class="tagsec-nm">${esc(TAG_LABEL[tg]||tg)}</span>`
+        +`<span class="tagsec-ct">${mine.length.toLocaleString('ko-KR')}건</span></div>`;
+      host.appendChild(box);
+      appendList(box, mine, color);
+    });
+  }
+
+  function renderTiers(rowsIn, genericIn){
+  tierHost.innerHTML='';
+  genericIn = genericIn || [];
+  TIERS.forEach(t=>{
+    const rows=hoistCommunity(rowsIn.filter(s=>s.tier===t.k)
+                     .map(s=>[score(s,c),s]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]));
+    const generic=genericIn.filter(s=>s.tier===t.k);
+    const sec=document.createElement('div'); sec.className='tier'; sec.style.setProperty('--tc',t.c);
+    sec.dataset.tier=t.k;          // '우리 동네만 보기'가 순서 대신 이걸로 찾는다
+    const nm=t.k==='national'?'전국':t.k==='regional'?picked.sido:(picked.sigungu||picked.sido);
+    // 단계별로 접었다 펼 수 있게 한다. 3단계(우리 동네)만 보고 싶은 경우가 많다.
+    sec.innerHTML=`<button type="button" class="tier-hd" aria-expanded="true">
+      <span class="tier-no">${t.n}</span>
+      <span class="tier-nm">${esc(nm)}</span><span class="tier-sub">${t.s}</span>
+      <span class="tier-ct">${rows.length.toLocaleString('ko-KR')}건</span>
+      <span class="tier-arrow" aria-hidden="true">▾</span></button>`;
+    if(!rows.length && !generic.length){
+      const e2=document.createElement('div'); e2.className='none';
+      e2.textContent='이 단계에서는 조건에 맞는 복지서비스를 찾지 못했습니다.'; sec.appendChild(e2);
+      bindFold(sec); tierHost.appendChild(sec); return;
+    }
+    if(rows.length>INITIAL){
+      const inf=document.createElement('div'); inf.className='rank-info';
+      inf.innerHTML='<i class="fa-solid fa-arrow-down-wide-short"></i> 관련도가 높은 순서로 보여드립니다';
+      sec.appendChild(inf);
+    }
+    // 상황을 두 개 이상 골랐으면 그 상황별로 나눠서 보여준다.
+    // '학생'과 '노년'을 함께 고른 사람은 아이 것과 부모님 것을 같이 찾는
+    // 경우가 많은데, 한 목록에 섞여 있으면 어느 게 누구 것인지 알 수 없다.
+    if(tags.size>=2) appendByTag(sec, rows, t.c);
+    else appendList(sec, rows, t.c);
+    if(generic.length) sec.appendChild(genericBox(generic, t.c));
+    bindFold(sec);
+    tierHost.appendChild(sec);
+  });
+  }
+  function renderAll(){
+    renderTiers(hits, genericAll);
+    // 특별한 상황은 사용자가 직접 골라야만 나오는 것이라, 고른 이상
+    // 그게 제일 보고 싶은 결과다. 전국·시도·시군구 단계보다 위에 놓는다.
+    if(specialHits.length)
+      tierHost.insertBefore(specialTier(specialHits), tierHost.firstChild);
+    else if(specials.size)
+      // 고른 상황이 이 지역엔 없을 때 — 0건으로 끝내지 않고 어디에 있는지 알려준다
+      tierHost.insertBefore(specialElsewhere(), tierHost.firstChild);
+    pastHost.innerHTML='';
+    if(past.length) pastHost.appendChild(pastBox(past));
+  }
+  renderAll();
+
+  out.appendChild(bd);
+  out.classList.add('on');
+  out.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+/* 조건 없이 통과한 사업을 접어서 따로 보여준다.
+   '전 국민 대상' 이거나, 우리가 조건을 못 읽어낸 것들이다.
+   본문에 섞으면 정작 내 조건에 맞는 혜택이 묻힌다. */
+function genericBox(rows, color){
+  const d=document.createElement('details'); d.className='past generic';
+  d.innerHTML=`<summary>누구나 신청할 수 있는 사업 ${rows.length.toLocaleString('ko-KR')}건 보기</summary>
+    <p class="past-note">나이·소득 조건이 따로 없거나, 공공데이터에 조건이 적혀 있지 않은 사업입니다.
+      전 국민 대상 서비스가 여기에 들어갑니다.</p>`;
+  const {el:box, addRows}=mkList(color);
+  addRows(rows.slice(0,60));
+  d.appendChild(box);
+  if(rows.length>60){
+    const m=document.createElement('p'); m.className='past-note';
+    m.textContent=`외 ${(rows.length-60).toLocaleString('ko-KR')}건은 생략했습니다. 위쪽 '검색으로 찾기'에서 이름으로 찾아보세요.`;
+    d.appendChild(m);
+  }
+  return d;
+}
+
+/* 신청기한이 지난 사업을 접어서 보여준다.
+   해마다 열리는 사업이 작년 날짜로 남아 있는 경우가 많아 삭제하지 않는다. */
+function pastBox(rows){
+  const d=document.createElement('details'); d.className='past';
+  d.innerHTML=`<summary>신청기한이 지난 사업 ${rows.length.toLocaleString('ko-KR')}건 보기</summary>
+    <p class="past-note">아래는 공공데이터의 신청기한이 오늘보다 이전인 사업입니다.
+      해마다 같은 시기에 다시 열리는 사업도 많으니, 관심 있는 항목은 소관기관에 재공고 여부를 확인해 보세요.</p>`;
+  const cardFn=s=>{
+    const cd=card(s, s.tier==='local'?'var(--local)':s.tier==='regional'?'var(--regional)':'var(--national)');
+    cd.classList.add('dim');
+    const t=cd.querySelector('.tags');
+    const chip=document.createElement('span'); chip.className='past-chip';
+    chip.textContent='기한 지남 · '+(s.deadline||'');
+    t.insertBefore(chip,t.firstChild);
+    return cd;
+  };
+  const {el:box, addRows}=mkList('#9CA3AF', cardFn);
+  addRows(rows.slice(0,50));
+  d.appendChild(box);
+  if(rows.length>50){
+    const more=document.createElement('p'); more.className='past-note';
+    more.textContent=`외 ${(rows.length-50).toLocaleString('ko-KR')}건은 생략했습니다.`;
+    d.appendChild(more);
+  }
+  return d;
+}
+
+/* ================= 탭 전환 ================= */
+const tabCond=$('#tabCond'), tabKw=$('#tabKw'), kwPane=$('#kwPane'), condForm=$('#f'), condOut=$('#out');
+function switchTab(kw){
+  tabCond.classList.toggle('on',!kw); tabKw.classList.toggle('on',kw);
+  tabCond.setAttribute('aria-selected',!kw); tabKw.setAttribute('aria-selected',kw);
+  kwPane.hidden=!kw;
+  document.getElementById('condPane').hidden=kw;
+  if(kw) $('#kwq').focus();
+}
+tabCond.onclick=()=>switchTab(false);
+tabKw.onclick=()=>switchTab(true);
+[tabCond,tabKw].forEach(t=>t.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+    e.preventDefault();
+    const toKw = t===tabCond;
+    switchTab(toKw);
+    (toKw?tabKw:tabCond).focus();
+  }
+}));
+
+/* ================= 키워드 검색 (전체 데이터 대상) ================= */
+let lastKwHits=[], kwTimer=null;
+// 9천 건을 매 타건마다 문자열 합치면 모바일에서 눈에 띄게 느려진다.
+// 항목당 한 번만 만들어 붙여둔다.
+function kwBlob(s){
+  if(s.__b===undefined)
+    s.__b=[s.name,s.summary,s.target,s.content,s.org,s.field].filter(Boolean).join(' ');
+  return s.__b;
+}
+function kwRank(s,terms){
+  const ws=Array.isArray(terms)?terms:[terms];
+  let best=0;
+  for(const q of ws){
+    let r=0;
+    if((s.name||'').includes(q))r+=4;
+    if((s.summary||'').includes(q))r+=2;
+    if((s.target||'').includes(q))r+=2;
+    if((s.content||'').includes(q))r+=1;
+    if((s.org||'').includes(q))r+=1;
+    if(r>best)best=r;
+  }
+  return best;
+}
+
+/* 같은 사람을 가리키는데 자료마다 표기가 다른 말들.
+   예) '강원랜드 객실나눔' 신청대상은 '사회복지종사자'라고만 적혀 있어
+   '사회복지사'로 검색하면 끝내 나오지 않았다. 검색어를 한 글자씩 줄이는
+   기존 보정으로도 못 잡는다 — '사회복지사' 자체로 걸리는 사업이 40건 넘게
+   있어서 검색어를 줄이는 단계까지 가질 않기 때문이다.
+   한쪽이 다른 쪽의 부분문자열이면 이미 찾아지므로 넣지 않는다
+   ('유공자'는 '국가유공자'에 들어 있어 불필요). */
+const KW_SYNONYM_GROUPS=[
+  ['사회복지사','사회복지종사자'],
+  ['소방관','소방공무원'],
+  ['해경','해양경찰'],
+  ['농민','농업인','농업종사자','영농종사자'],
+  ['어민','어업인','어업종사자'],
+  ['어르신','노인','고령자'],
+  ['새터민','탈북민','북한이탈주민'],
+  ['임신부','임산부','산모'],
+  ['편부모','한부모'],
+  ['장애우','장애인'],
+  ['경단녀','경력단절'],
+  ['택시기사','운수종사자'],
+  ['보훈대상자','국가유공자']
+];
+const KW_SYNONYMS=(()=>{
+  const m=new Map();
+  KW_SYNONYM_GROUPS.forEach(g=>g.forEach(w=>{
+    const set=m.get(w)||new Set();
+    g.forEach(x=>set.add(x));
+    m.set(w,set);
+  }));
+  return m;
+})();
+/* 검색어와 같은 뜻으로 함께 찾아볼 말들. 첫 항목은 언제나 원래 검색어라
+   점수 계산·강조 표시가 사용자가 친 말 기준으로 유지된다. */
+function kwTerms(q){
+  const set=KW_SYNONYMS.get(q.replace(/\s/g,''));
+  return set ? [q].concat([...set].filter(w=>w!==q)) : [q];
+}
+function tierColor(t){return t==='local'?'var(--local)':t==='regional'?'var(--regional)':'var(--national)';}
+
+function kwCard(s){
+  const d=card(s,tierColor(s.tier));
+  // 지역·기업 표식을 태그 줄 맨 앞에 추가
+  const tags=d.querySelector('.tags');
+  if(s.tier!=='national'){
+    const rc=document.createElement('span'); rc.className='reg-chip';
+    rc.textContent=(s.sido||'')+(s.sigungu?' '+s.sigungu:'');
+    tags.insertBefore(rc,tags.firstChild);
+  }
+  if(s.biz){
+    const bc=document.createElement('span'); bc.className='biz-chip';
+    bc.textContent='기업·단체 대상';
+    tags.insertBefore(bc,tags.firstChild);
+  }
+  return d;
+}
+
+async function kwSearch(qRaw){
+  const q=qRaw.trim();
+  const out=$('#kwOut'); out.innerHTML='';
+  if(q.length<2){ lastKwHits=[]; return; }
+  if(!DB)DB=await load();
+
+  // 검색 범위에 맞는 데이터를 먼저 확보한다.
+  // 지역을 골랐으면 그 시도만, 안 골랐으면 전국을 훑어야 하니 전체를 받는다.
+  if(kwRegion && kwRegion.sido) await ensureSido(kwRegion.sido);
+  else await ensureAll();
+
+  // 정확히 일치하는 게 없으면 검색어를 한 글자씩 줄여 재시도한다.
+  // '원양어선'은 데이터에 없지만 '원양어업'·'원양선사'가 있으므로
+  // '원양'까지 줄이면 찾아진다.
+  // 지역을 골랐으면 전국 사업 + 그 지역 사업만 남긴다
+  const pool = kwRegion
+    ? DB.items.filter(s=>{
+        // 시·도만 고른 경우: 그 동네 전용 사업은 빼고 정부·광역까지만 남긴다
+        if(kwRegion.wide && s.tier==='local') return false;
+        const r=orgRegion(s);
+        if(!r) return true;                                   // 전국
+        if(r.sido!==kwRegion.sido) return false;
+        return !r.sigungu || r.sigungu===kwRegion.sigungu;
+      })
+    : DB.items;
+
+  let used=q, terms=[q], hits=[];
+  for(let cut=q; cut.length>=2; cut=cut.slice(0,-1)){
+    // 같은 뜻의 다른 표기(사회복지사 = 사회복지종사자)까지 함께 본다.
+    // 줄여나가는 단계에서도 마찬가지 — '사회복지사자격증'처럼 길게 쳐도
+    // '사회복지사'까지 줄어든 순간 동의어가 함께 걸린다.
+    const ts=kwTerms(cut);
+    hits=pool.filter(s=>{ const b=kwBlob(s); return ts.some(t=>b.includes(t)); });
+    if(hits.length){ used=cut; terms=ts; break; }
+  }
+  hits=hits.map(s=>[kwRank(s,terms),s]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+  const kwPast=hits.filter(isExpired);
+  hits=hits.filter(s=>!isExpired(s));
+  lastKwHits=hits;
+  const relaxed = used!==q;
+  // 동의어 덕분에 새로 걸린 게 실제로 있을 때만 안내한다 (없는데 적어두면 헷갈린다)
+  const synUsed = terms.slice(1).filter(t=>
+    hits.some(s=>{ const b=kwBlob(s); return b.includes(t) && !b.includes(used); }));
+
+  const hd=document.createElement('div'); hd.className='res-hd';
+  hd.innerHTML=`<span class="cond">'${esc(used)}'${synUsed.length?` · <b>${synUsed.map(esc).join('·')}</b> 포함`:''} 검색 결과${kwRegion?' · '+esc(kwRegionLabel(kwRegion)):' · 전국'}</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="exp">
+        <button type="button" id="kwXls"><i class="fa-solid fa-file-excel"></i> 엑셀</button>
+        <button type="button" id="kwPdf"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+      </div>
+      <span class="cnt">${hits.length.toLocaleString('ko-KR')}건</span>
+    </div>`;
+  out.appendChild(hd);
+
+  // 지역을 골랐을 때는 전국·시도·시군구를 단계별로 나눠 보여준다.
+  // 하나의 목록에 섞어두면 전국 사업이 워낙 많아(중앙부처는 어디서든 다 걸리므로)
+  // 정작 찾고 싶은 그 지역 사업이 아래로 묻힌다. '내 조건으로 찾기' 탭과
+  // 같은 방식(단계별 머리글 + 개별 더보기 + 접기)으로 통일한다.
+  if(kwRegion){
+    const bd=document.createElement('div'); bd.className='res-bd';
+    if(kwRegion.wide){
+      bd.insertAdjacentHTML('beforeend',
+        `<div class="notice"><b>${esc(kwRegion.sido)} 전체</b>로 찾았습니다 — 정부와 ${esc(kwRegion.sido)}가 하는 사업까지만 나옵니다.
+         시·군·구 전용 사업까지 보시려면 '${esc(kwRegion.sido)} ○○구'처럼 시·군·구를 골라 주세요.</div>`);
+    }
+    if(relaxed && hits.length){
+      bd.insertAdjacentHTML('beforeend',
+        `<div class="notice">'${esc(q)}' 결과가 없어 <b>'${esc(used)}'</b>(으)로 넓혀 검색했습니다.</div>`);
+    }
+    if(!hits.length){
+      bd.innerHTML+='<div class="zero"><b>검색 결과가 없습니다.</b><p>다른 단어로 시도해 보세요.</p></div>';
+    } else {
+      TIERS.forEach(t=>{
+        const rows=hits.filter(s=>s.tier===t.k).map(s=>[kwRank(s,terms),s])
+                       .sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+        if(!rows.length) return;
+        const sec=document.createElement('div'); sec.className='tier'; sec.style.setProperty('--tc',t.c);
+        const nm=t.k==='local'?`${kwRegion.sido} ${kwRegion.sigungu||''}`.trim()
+                :t.k==='regional'?kwRegion.sido:'전국';
+        sec.innerHTML=`<button type="button" class="tier-hd" aria-expanded="true">
+          <span class="tier-no">${t.n}</span><span class="tier-nm">${esc(nm)}</span>
+          <span class="tier-sub">${t.s}</span>
+          <span class="tier-ct">${rows.length.toLocaleString('ko-KR')}건</span>
+          <span class="tier-arrow" aria-hidden="true">▾</span></button>`;
+        appendList(sec, rows, t.c, LIST_INITIAL, kwCard);
+        bindFold(sec);
+        bd.appendChild(sec);
+      });
+    }
+    if(kwPast.length) bd.appendChild(pastBox(kwPast));
+    out.appendChild(bd);
+    out.classList.add('on');
+    return;
+  }
+
+  const bd=document.createElement('div'); bd.className='res-bd';
+  if(relaxed && hits.length){
+    bd.insertAdjacentHTML('beforeend',
+      `<div class="notice">'${esc(q)}' 결과가 없어 <b>'${esc(used)}'</b>(으)로 넓혀 검색했습니다.</div>`);
+  }
+  if(!hits.length){
+    bd.innerHTML='<div class="zero"><b>검색 결과가 없습니다.</b><p>다른 단어로 시도해 보세요.</p></div>';
+  } else {
+    // 개인이 신청하는 사업과 기업·단체가 신청하는 사업은 성격이 완전히 달라
+    // 섞어 놓으면 읽기 어렵다. 두 묶음으로 나눈다.
+    const mine=hits.filter(s=>!s.biz), biz=hits.filter(s=>s.biz);
+    const CHUNK=30;
+
+    function group(rows, title, sub, cls){
+      if(!rows.length) return;
+      const sec=document.createElement('div'); sec.className='kwgrp '+cls;
+      sec.innerHTML=`<div class="kwgrp-hd"><span class="kwgrp-nm">${title}</span>
+        <span class="kwgrp-sub">${sub}</span>
+        <span class="kwgrp-ct">${rows.length.toLocaleString('ko-KR')}건</span></div>`;
+      appendList(sec, rows, cls==='biz'?'#EA580C':'var(--navy)', LIST_CHUNK, kwCard);
+      bd.appendChild(sec);
+    }
+    group(mine, '개인이 신청하는 사업', '나·우리 가족이 받는 혜택', 'mine');
+    group(biz,  '기업·단체가 신청하는 사업', '법인·사업자·시설 대상', 'biz');
+  }
+  if(kwPast.length) bd.appendChild(pastBox(kwPast));
+  out.appendChild(bd);
+  const x=$('#kwXls'), pd=$('#kwPdf');
+  if(x) x.onclick=()=>exportExcel(lastKwHits, `복지서비스_검색_${q}`);
+  if(pd) pd.onclick=()=>exportPdf(out, lastKwHits, kwCard);
+}
+/* 검색 탭 지역 선택 (비워두면 전국) */
+let kwRegion=null;
+
+/* 시·도 자동완성용 별칭(정식명 → 사람들이 실제로 치는 말).
+   위쪽 SIDO_SHORT(줄임말 → 정식명)를 뒤집어 쓴다 — 표를 두 벌 두면
+   행정구역이 바뀔 때 한쪽만 고치게 된다.
+   '서울시'처럼 정식명 대신 붙여 쓰는 표기만 따로 더한다.
+   ('광주시'는 경기도 광주시와 겹쳐서 넣지 않는다) */
+const SIDO_ALIASES=(()=>{
+  const m={};
+  Object.entries(SIDO_SHORT).forEach(([short,full])=>{ (m[full]=m[full]||[]).push(short); });
+  [['서울특별시','서울시'],['부산광역시','부산시'],['대구광역시','대구시'],
+   ['인천광역시','인천시'],['대전광역시','대전시'],['울산광역시','울산시'],
+   ['세종특별자치시','세종시']]
+    .forEach(([full,a])=>{ if(m[full] && !m[full].includes(a)) m[full].push(a); });
+  return m;
+})();
+
+/* 검색 탭 지역 후보.
+   시·군·구뿐 아니라 '시·도 전체'(wide)도 고를 수 있게 맨 앞에 넣는다.
+   시·도만 고르면 그 동네 전용 사업(시·군·구)은 빼고 정부·광역 사업까지만
+   보여준다 — '서울시 복지'를 찾는 사람에게 25개 자치구 사업이 다 쏟아지면
+   정작 서울시가 하는 사업이 묻히기 때문이다. */
+const KW_REGIONS=(()=>{
+  const wide=[...new Set(REGIONS.map(r=>r.sido))].map(sd=>({
+    sido:sd, sigungu:'', label:sd, wide:true,
+    keys:[sd].concat(SIDO_ALIASES[sd]||[])
+  }));
+  const narrow=REGIONS.filter(r=>r.sigungu).map(r=>({
+    ...r, keys:[r.label].concat((SIDO_ALIASES[r.sido]||[]).map(a=>a+' '+r.sigungu))
+  }));
+  return wide.concat(narrow);
+})();
+const kwRegionLabel=r=>r ? (r.wide?r.label+' 전체':r.label) : '';
+
+(function(){
+  const inp=$('#kwreg'), box=$('#kwac'); let idx=-1;
+  inp.addEventListener('input',()=>{
+    const q=inp.value.trim(); kwRegion=null; idx=-1;
+    if(!q){box.classList.remove('on');inp.setAttribute('aria-expanded','false');
+      kwSearch($('#kwq').value); return;}
+    const qn=q.replace(/\s/g,'');
+    const hits=KW_REGIONS.filter(r=>r.keys.some(k=>k.replace(/\s/g,'').includes(qn))).slice(0,40);
+    box.innerHTML='';
+    if(!hits.length){box.classList.remove('on');inp.setAttribute('aria-expanded','false');return;}
+    hits.forEach((hh,i)=>{
+      const b=document.createElement('button');
+      b.type='button'; b.role='option'; b.id='kwopt'+i;
+      const el=esc(hh.label), eq=esc(q);
+      b.innerHTML = (el.includes(eq)? el.split(eq).join(`<mark>${eq}</mark>`) : el)
+        + (hh.wide?'<span class="ac-note">시·도 전체 — 정부·광역 사업만</span>':'');
+      b.onclick=()=>{kwRegion=hh; inp.value=kwRegionLabel(hh); box.classList.remove('on');
+        inp.setAttribute('aria-expanded','false'); kwSearch($('#kwq').value);};
+      box.appendChild(b);
+    });
+    box.classList.add('on'); inp.setAttribute('aria-expanded','true');
+  });
+  inp.addEventListener('keydown',e=>{
+    if(!box.classList.contains('on'))return;
+    const o=[...box.querySelectorAll('button')]; if(!o.length)return;
+    if(e.key==='ArrowDown'){e.preventDefault();idx=(idx+1)%o.length;}
+    else if(e.key==='ArrowUp'){e.preventDefault();idx=(idx-1+o.length)%o.length;}
+    else if(e.key==='Enter'){e.preventDefault();(o[idx]||o[0]).click();return;}
+    else if(e.key==='Escape'){box.classList.remove('on');return;}
+    o.forEach((x,i)=>{x.setAttribute('aria-selected',i===idx);
+      if(i===idx)x.scrollIntoView({block:'nearest'});});
+  });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('#kwreg')&&!e.target.closest('#kwac'))box.classList.remove('on');
+  });
+})();
+
+$('#kwq').addEventListener('input',e=>{
+  clearTimeout(kwTimer);
+  kwTimer=setTimeout(()=>kwSearch(e.target.value), 250);
+});
+
+/* ================= 엑셀 저장 ================= */
+function rowsToTable(rows){
+  const T={national:'전국',regional:'시도',local:'시군구'};
+  return rows.map(s=>({
+    "단계":T[s.tier]||'', "지역":((s.sido||'')+' '+(s.sigungu||'')).trim()||'전국',
+    "서비스명":s.name||'', "대상구분":s.biz?'기업·단체':'개인',
+    "요약":s.summary||'', "지원대상":s.target||'', "지원내용":s.content||'',
+    "지원유형":s.sprt_type||'', "신청방법":s.how||'', "신청기한":s.deadline||'',
+    "문의처":s.tel||'', "소관기관":s.org||'', "신청URL":s.url||''
+  }));
+}
+function exportExcel(rows, fname){
+  if(!rows.length){alert('저장할 결과가 없습니다.');return;}
+  const data=rowsToTable(rows);
+  const done=()=>{};
+  const useSheet=()=>{
+    const ws=XLSX.utils.json_to_sheet(data);
+    ws['!cols']=[{wch:6},{wch:14},{wch:30},{wch:9},{wch:40},{wch:30},{wch:40},
+                 {wch:10},{wch:24},{wch:14},{wch:16},{wch:16},{wch:30}];
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'복지서비스');
+    XLSX.writeFile(wb, fname+'.xlsx');
+  };
+  if(window.XLSX){useSheet();return;}
+  const sc=document.createElement('script');
+  sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  sc.onload=useSheet;
+  sc.onerror=()=>{   // CDN 실패 시 CSV(BOM)로 대체 — 한글 엑셀에서 바로 열림
+    const cols=Object.keys(data[0]);
+    const csv='\uFEFF'+[cols.join(','),
+      ...data.map(r=>cols.map(c=>'"'+String(r[c]).replace(/"/g,'""')+'"').join(','))].join('\n');
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.download=fname+'.csv'; a.click(); URL.revokeObjectURL(a.href);
+  };
+  document.head.appendChild(sc);
+}
+
+/* ================= PDF 저장 (브라우저 인쇄 → PDF) ================= */
+function exportPdf(container, rows, cardFn){
+  if(!rows||!rows.length){alert('저장할 결과가 없습니다.');return;}
+  // 아직 화면에 안 그린 나머지까지 전부 그린 뒤 상세를 펼친다
+  document.body.classList.add('printing');
+  const restore=[];
+  container.querySelectorAll('.more:not([hidden])').forEach(b=>{
+    let guard=0;
+    while(!b.hidden && guard++ < 500) b.click();   // 안전장치: 무한루프 방지
+  });
+  container.querySelectorAll('details:not([open])').forEach(d=>{d.open=true;restore.push(d);});
+  const after=()=>{
+    document.body.classList.remove('printing');
+    restore.forEach(d=>d.open=false);
+    window.removeEventListener('afterprint',after);
+  };
+  window.addEventListener('afterprint',after);
+  setTimeout(()=>window.print(),150);
+}
+
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

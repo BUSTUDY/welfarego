@@ -1,0 +1,31 @@
+name: Initial welfare snapshot
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/bootstrap-snapshot.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: welfare-data
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Copy and verify the existing public welfare snapshot
+        run: python scripts/bootstrap_snapshot.py
+      - name: Save the snapshot in this repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/welfare_services.json static/og/welfare.png
+          git diff --staged --quiet && exit 0
+          git commit -m "Seed independent welfare dataset and image"
+          git pull --rebase origin main
+          git push origin HEAD:main

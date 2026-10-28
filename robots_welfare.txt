@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+Disallow: /data/
+Disallow: /admin
+
+# ── AI 검색·답변 엔진 ──────────────────────────────────────────
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Applebot
+User-agent: Amazonbot
+User-agent: meta-externalagent
+User-agent: Bytespider
+Allow: /
+Disallow: /data/
+Disallow: /admin
+
+# 학습 활용 opt-in 신호 (크롤러가 아니라 별도 토큰입니다)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://welfarego.co.kr/sitemap.xml

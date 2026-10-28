@@ -1,0 +1,53 @@
+name: 복지 데이터 갱신
+# 매일 한국시간 오전 5시
+on:
+  schedule:
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: welfare-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GOV24_KEY: ${{ secrets.GOV24_KEY }}
+      KOSSI_KEY: ${{ secrets.KOSSI_KEY }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install "requests>=2.31,<3"
+      - name: Check required API configuration
+        run: |
+          if [ -z "$GOV24_KEY" ]; then
+            echo "::error::Add GOV24_KEY in this repository's Actions secrets before enabling data refresh."
+            exit 1
+          fi
+      - name: Collect welfare data
+        run: python scripts/update_welfare.py
+      - name: Summarize
+        run: |
+          python - <<'PY'
+          import json, os
+          data = json.load(open("data/welfare_services.json", encoding="utf-8"))
+          summary = f"Updated: {data.get('updated')}\nServices: {len(data.get('items', [])):,}\n"
+          print(summary)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as output:
+              output.write(summary)
+          PY
+      - name: Commit only welfare data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- data/welfare_services.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Update welfare services"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1

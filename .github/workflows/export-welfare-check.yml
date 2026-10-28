@@ -1,0 +1,86 @@
+name: 복지 데이터 점검파일 만들기
+
+# 수동 실행 전용. Actions 탭에서 "Run workflow" 를 누르면
+# 실제 API 데이터를 받아 점검용 파일을 만든다.
+#
+# 만들어진 파일은 두 곳에서 받을 수 있다.
+#   1) 저장소의 data/ 폴더에 바로 커밋된다  <- 찾기 쉬움
+#   2) 실행 화면 맨 아래 Artifacts 에서도 내려받을 수 있다
+# 요약은 실행 화면에 글로도 표시되므로 내려받지 않고 바로 읽을 수 있다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write        # data/ 에 결과를 커밋하려면 필요하다
+
+# 이 워크플로우끼리 겹쳐 실행되는 것을 막는다 (update-welfare.yml 에서
+# 겪었던 것과 같은 git push 충돌을 예방한다).
+concurrency:
+  group: export-welfare-check
+  cancel-in-progress: false
+
+jobs:
+  export-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v6
+
+      - name: Python 설치
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: 필요한 패키지 설치
+        run: pip install requests
+
+      - name: 점검 파일 만들기
+        env:
+          GOV24_KEY: ${{ secrets.GOV24_KEY }}
+          KOSSI_KEY: ${{ secrets.KOSSI_KEY }}
+        run: python3 scripts/export_welfare_check.py
+
+      - name: 요약을 실행 화면에 표시
+        run: |
+          {
+            echo "## 복지 데이터 점검 요약"
+            echo '```'
+            cat data/welfare_check_summary.txt
+            echo '```'
+            echo ""
+            echo "**data/welfare_check.csv.gz** 파일이 저장소에 저장되었습니다."
+            echo "Code 탭 -> data 폴더에서 받을 수 있습니다."
+          } >> "$GITHUB_STEP_SUMMARY"
+          ls -lh data/welfare_check*
+
+      - name: 저장소 data 폴더에 저장
+        run: |
+          # 용량이 큰 원본 CSV 는 커밋하지 않는다. 압축본(150KB 내외)과 요약만 남긴다.
+          rm -f data/welfare_check.csv
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/welfare_check.csv.gz data/welfare_check_summary.txt
+          git diff --staged --quiet && { echo "변경 없음 — 커밋 건너뜀"; exit 0; }
+          git commit -m "chore: 복지 데이터 점검파일 생성 ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "푸시 성공"
+              break
+            fi
+            echo "푸시 실패 (시도 $attempt/3) — 최신 내용을 받아 다시 시도합니다"
+            git fetch origin main
+            git rebase --autostash origin/main
+            if [ "$attempt" = 3 ]; then
+              echo "3회 재시도 후에도 실패했습니다."
+              exit 1
+            fi
+          done
+
+      - name: 첨부파일로도 올리기
+        uses: actions/upload-artifact@v4
+        with:
+          name: welfare-check
+          path: |
+            data/welfare_check.csv.gz
+            data/welfare_check_summary.txt
+          retention-days: 7
