@@ -1,6 +1,13 @@
 name: 복지 데이터 갱신
 # 매일 한국시간 오전 5시
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/update-welfare.yml
+      - scripts/update_welfare.py
+      - scripts/welfare_parsers.py
+      - scripts/welfare_regions.py
   schedule:
     - cron: "0 20 * * *"
   workflow_dispatch:
@@ -12,6 +19,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       GOV24_KEY: ${{ secrets.GOV24_KEY }}
       KOSSI_KEY: ${{ secrets.KOSSI_KEY }}
