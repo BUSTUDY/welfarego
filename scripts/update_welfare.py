@@ -298,11 +298,9 @@ def probe_local():
 def call_kossi(op, page=1, per_page=PER_PAGE, retries=3):
     """apis.data.go.kr 계열(한국사회보장정보원) 호출. 보조금24와 파라미터 관례가 다르다.
 
-    공공데이터포털은 "인코딩(Encoding)" 키와 "디코딩(Decoding)" 키를 따로 낸다.
-    인코딩 키에는 %2B, %2F 같은 문자가 이미 들어 있는 경우가 많은데, 이걸 그냥
-    requests의 params= 에 넣으면 requests가 또 한 번 인코딩해서(%2B -> %252B)
-    서비스키 자체가 깨진다. 그래서 serviceKey 는 URL 문자열에 직접 붙여
-    재인코딩을 피하고, 나머지 파라미터만 params= 로 넘긴다.
+    일반 인증키의 원문과 URL 인코딩된 표시 형식을 모두 받는다.
+    먼저 URL 인코딩만 풀고 requests가 한 번 인코딩하도록 하여,
+    원문의 + 문자가 공백으로 바뀌거나 %2B가 이중 인코딩되는 것을 막는다.
 
     type=json 파라미터는 일부러 안 보낸다 — 이 API는 원래 XML 전용이라
     (포털 화면 "데이터포맷: XML"), type=json 을 붙이면 게이트웨이가
@@ -313,12 +311,12 @@ def call_kossi(op, page=1, per_page=PER_PAGE, retries=3):
         return {}
     last = None
     path = f"{KOSSI_BASE}/{op}" if op else KOSSI_BASE
-    url = f"{path}?serviceKey={KOSSI_KEY}"
+    service_key = unquote(KOSSI_KEY.strip())
     for attempt in range(retries):
         try:
             r = requests.get(
-                url,
-                params={"pageNo": page, "numOfRows": per_page},
+                path,
+                params={"serviceKey": service_key, "pageNo": page, "numOfRows": per_page},
                 timeout=30,
             )
             if r.status_code in (401, 500):

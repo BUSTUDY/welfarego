@@ -35,6 +35,21 @@ jobs:
             echo "::error::Add GOV24_KEY in this repository's Actions secrets before enabling data refresh."
             exit 1
           fi
+      - name: Check API access before full collection
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, "scripts")
+          import update_welfare as collector
+          try:
+              collector.call("serviceList", per_page=1, retries=1)
+              if collector.KOSSI_KEY:
+                  collector.call_kossi(collector.KOSSI_LIST_OP, per_page=1, retries=1)
+          except (Exception, SystemExit) as error:
+              print(collector.safe_error(error), file=sys.stderr)
+              raise SystemExit(1)
+          print("Configured government APIs are reachable.")
+          PY
       - name: Collect welfare data
         run: python scripts/update_welfare.py
       - name: Summarize
@@ -59,3 +74,4 @@ jobs:
             if git push origin HEAD:main; then exit 0; fi
           done
           exit 1
+
