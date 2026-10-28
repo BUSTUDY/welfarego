@@ -1,0 +1,55 @@
+name: 지자체복지서비스 API 진단
+
+# 수동 실행 전용. KOSSI(한국사회보장정보원_지자체복지서비스) API 가
+# 실제로 호출되는지, 호출된다면 어떤 모양의 응답을 주는지를 화면에
+# 그대로 보여준다. 저장소에는 아무것도 저장하지 않는 순수 진단용이다.
+#
+# "지자체복지서비스에서 새로 추가된 항목: 0건" 이 계속 나올 때,
+# 원인이 (가) API 호출 자체가 실패하는 것인지 (나) 호출은 되는데
+# 받아온 게 전부 기존 GOV24 데이터와 겹치는 것으로 판단되는지를
+# 구분하기 위해 만들었다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe-kossi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v6
+
+      - name: Python 설치
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: 필요한 패키지 설치
+        run: pip install requests
+
+      - name: KOSSI 원본 응답 확인
+        env:
+          GOV24_KEY: ${{ secrets.GOV24_KEY }}
+          KOSSI_KEY: ${{ secrets.KOSSI_KEY }}
+        run: |
+          {
+            echo "## 지자체복지서비스(KOSSI) API 진단 결과"
+            echo ""
+            echo "요청 주소: \`https://apis.data.go.kr/B554287/LocalWelfarelistV001\`"
+            echo ""
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # stdout 과 stderr 를 모두 요약에 남긴다 — 실패 메시지는 stderr,
+          # 정상 응답의 필드 목록은 stdout 으로 나가게 만들어 두었어서
+          # 둘 다 봐야 전체 그림이 보인다.
+          python3 scripts/update_welfare.py --probe-local >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
+          {
+            echo '```'
+            echo ""
+            echo "위에 필드 목록(servId, servNm 등)이 나오면 API 호출은 성공한 것입니다."
+            echo "\"호출 실패\" 문구가 나오면 오퍼레이션 이름이나 인증키 문제입니다."
+            echo "\"행이 없습니다\" 가 나오면 호출은 성공했지만 응답을 해석하는 방식이"
+            echo "다시 조정되어야 합니다 — 그 아래 원본 응답을 같이 캡처해 주세요."
+          } >> "$GITHUB_STEP_SUMMARY"
