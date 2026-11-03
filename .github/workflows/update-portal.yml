@@ -1,0 +1,49 @@
+name: 포털 공공데이터 갱신
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/update-portal.yml
+      - scripts/update_portal.py
+  schedule:
+    - cron: "30 20 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: portal-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        kind: [jobs, care, grants]
+    env:
+      WELFARE_API_KEY: ${{ secrets.WELFARE_API_KEY || secrets.GOV24_KEY || secrets.KOSSI_KEY }}
+      WELFARE_JOBS_KEY: ${{ secrets.WELFARE_JOBS_KEY }}
+      LONGTERMCARE_KEY: ${{ secrets.LONGTERMCARE_KEY }}
+      BOJO_KEY: ${{ secrets.BOJO_KEY }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install "requests>=2.31,<3"
+      - name: Collect and validate official data
+        run: python scripts/update_portal.py ${{ matrix.kind }}
+      - name: Commit verified snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- data/portal_${{ matrix.kind }}.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Update ${{ matrix.kind }} public data"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main
+            if git push origin HEAD:main; then exit 0; fi
+          done
+          exit 1
