@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime, timedelta
@@ -70,10 +71,21 @@ def parse_response(body):
         if not rows and total != 0:
             raise CollectionError("예상한 목록 필드를 찾지 못했습니다. 기존 데이터를 보존합니다.")
         return rows, total
+    # Some job descriptions contain raw control characters or unescaped '&'.
+    # Repair only these XML text-encoding defects, never accept an HTML error page.
+    if isinstance(body, bytes):
+        decoded = body.decode("utf-8-sig", errors="replace")
+    else:
+        decoded = body.lstrip("\ufeff")
+    cleaned = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", decoded)
+    cleaned = re.sub(r"&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[\da-fA-F]+;)", "&amp;", cleaned)
     try:
-        root = ET.fromstring(body)
-    except ET.ParseError:
-        raise CollectionError("XML 응답이 아닙니다. 제공기관의 서비스 상태를 확인하세요.") from None
+        root = ET.fromstring(cleaned)
+    except ET.ParseError as error:
+        first_tag = re.search(r"<(?!\?)([A-Za-z][A-Za-z0-9_:]*)", cleaned)
+        structure = first_tag.group(1)[:30] if first_tag else "text"
+        raise CollectionError("응답 해석 실패 (형식 " + structure + ", " + str(len(body))
+                              + "바이트, XML 오류 위치 " + str(error.position) + "). 기존 데이터를 보존합니다.") from None
     for node in root.iter():
         node.tag = node.tag.rsplit("}", 1)[-1]
     code = next((node.text.strip() for name in ("resultCode", "returnReasonCode", "errCd")
