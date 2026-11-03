@@ -7,3 +7,4 @@ __pycache__/
 *.log
 data/*.tmp
 data/welfare_check.csv
+test-output/

@@ -331,9 +331,15 @@ def _welfare_html(title=None, desc=None, canonical=None, preset=None,
     return html
 
 
-@welfare_bp.route("/")
+@welfare_bp.route("/welfare")
 def welfare_home():
-    return _welfare_html(crumbs=[("복지 서비스 찾기", "/")])
+    base = current_app.config.get("SITE_BASE", "https://welfarego.co.kr")
+    return _welfare_html(canonical=base + "/welfare", crumbs=[("웰페어고", "/"), ("복지 서비스 찾기", "/welfare")])
+
+
+@welfare_bp.route("/welfare/")
+def welfare_home_slash():
+    return redirect("/welfare" + ("?" + request.query_string.decode("utf-8", errors="replace") if request.query_string else ""), code=308)
 
 
 @welfare_bp.route("/s/<svc_id>")
@@ -356,7 +362,7 @@ def welfare_service(svc_id):
 
     if not svc:
         # 데이터가 갱신되며 사라진 서비스일 수 있다. 검색기 첫 화면으로 보낸다.
-        return redirect("/", code=302)
+        return redirect("/welfare", code=302)
 
     name = svc.get("name", "복지 서비스")
     org = svc.get("org", "")

@@ -7,16 +7,18 @@ welfarego.co.kr 전용 웹 앱.
 """
 
 import os
-from datetime import datetime
 
 from flask import Flask, send_from_directory, jsonify
 
 from welfare_site import welfare_bp, welfare_sitemap_urls
+from portal import portal_bp
+from portal_data import today as korea_today
 
 app = Flask(__name__)
 
-app.config["SITE_BASE"] = os.environ.get("WELFARE_SITE_BASE", "https://welfarego.co.kr")
+app.config["SITE_BASE"] = os.environ.get("WELFARE_SITE_BASE", "https://welfarego.co.kr").rstrip("/")
 
+app.register_blueprint(portal_bp)
 app.register_blueprint(welfare_bp)
 
 
@@ -40,10 +42,15 @@ def ads_txt():
 def sitemap():
     from xml.sax.saxutils import escape as _xe
     site = app.config["SITE_BASE"]
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = korea_today().isoformat()
 
     items = []
-    for path, pri, freq in welfare_sitemap_urls(site):
+    pages = welfare_sitemap_urls(site) + [
+        ("/welfare", "0.9", "weekly"), ("/jobs", "0.8", "daily"),
+        ("/care", "0.8", "weekly"), ("/benefits", "0.8", "daily"),
+        ("/grants", "0.8", "daily"), ("/about", "0.3", "monthly"),
+    ]
+    for path, pri, freq in pages:
         items.append(f"<url><loc>{site}{_xe(path)}</loc><lastmod>{today}</lastmod>"
                      f"<changefreq>{freq}</changefreq><priority>{pri}</priority></url>")
 
@@ -56,6 +63,14 @@ def sitemap():
 @app.route("/healthz")
 def healthz():
     return jsonify({"ok": True})
+
+
+@app.after_request
+def response_policy(response):
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    return response
 
 
 if __name__ == "__main__":

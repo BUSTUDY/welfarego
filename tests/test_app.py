@@ -39,7 +39,7 @@ class WelfareAppTests(unittest.TestCase):
         self.assertEqual(sitemap.status_code, 200)
         root = ET.fromstring(sitemap.data)
         urls = [node.text for node in root.findall(".//{*}loc")]
-        self.assertEqual(len(urls), 252)
+        self.assertEqual(len(urls), 258)
         for url in urls:
             with self.subTest(url=url):
                 self.assertEqual(urlsplit(url).hostname, "welfarego.co.kr")
@@ -60,6 +60,7 @@ class WelfareAppTests(unittest.TestCase):
         self.assertIn('href="https://welfarego.co.kr/s/national-1"', html)
         self.assertIsNone(FORBIDDEN.search(html))
         self.assertEqual(self.client.get("/s/missing").status_code, 302)
+        self.assertEqual(self.client.get("/s/missing").location, "/welfare")
 
     def test_json_delivery_cache_and_gzip(self):
         response = self.client.get("/data/welfare/national.json", headers={"Accept-Encoding": "gzip"})

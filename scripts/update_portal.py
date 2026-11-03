@@ -179,6 +179,8 @@ def care(row, region):
 
 def grant(row):
     identity = "|".join(text(row.get(k)) for k in ("BSNSYEAR", "PSSRP_INSTT_NM", "PBLANC_NM", "PBLANC_BEGIN_DE"))
+    closing_time = str(row.get("RCEPT_END_TM", "")).strip()
+    closing_time = closing_time.zfill(4) if closing_time else ""
     return normalize("grants", {
         "id": hashlib.sha256(identity.encode()).hexdigest()[:24],
         "name": row.get("PBLANC_NM"), "org": row.get("PSSRP_INSTT_NM"),
@@ -188,6 +190,7 @@ def grant(row):
         "posted": row.get("PBLANC_BEGIN_DE"),
         # Project and announcement periods are NOT application periods.
         "start": row.get("RCEPT_BEGIN_DE"), "end": row.get("RCEPT_END_DE"),
+        "end_time": closing_time[:2] + ":" + closing_time[2:] if closing_time.isdigit() and len(closing_time) == 4 else "",
         "deadline": row.get("RCEPT_PD_DC"), "url": SERVICE_MAP["grants"]["official"],
         "region": row.get("CTPRVN_NM"), "district": row.get("SIGNGU_NM"),
     })

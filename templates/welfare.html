@@ -358,6 +358,14 @@ footer b{color:var(--tx)}
 
 </head>
 <body>
+<style>
+.wg-nav{background:#fff;border-bottom:1px solid #e0e9e2;font-family:'Noto Sans KR',sans-serif;padding:15px 20px}
+.wg-nav-inner{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.wg-nav .wg-brand{font-size:22px;font-weight:800;color:#08776a;text-decoration:none;white-space:nowrap}
+.wg-nav nav{display:flex;flex-wrap:wrap;gap:16px;font-size:12px;font-weight:600}.wg-nav nav a{color:#62735e;text-decoration:none}.wg-nav nav a[aria-current]{color:#08776a}
+@media(max-width:640px){.wg-nav{padding:13px 18px}.wg-nav-inner{gap:10px}.wg-nav nav{gap:12px;font-size:11px}.wg-nav .wg-brand{font-size:20px}}
+</style>
+<header class="wg-nav"><div class="wg-nav-inner"><a class="wg-brand" href="/">웰페어고</a><nav aria-label="주요 서비스"><a href="/welfare" aria-current="page">맞춤 복지검색</a><a href="/jobs">복지 일자리</a><a href="/care">돌봄기관 찾기</a><a href="/benefits">동네 복지혜택</a><a href="/grants">시설 지원사업</a><a href="/saved">관심 공고</a></nav></div></header>
 
 <!-- 다른 계산기로 가는 모달 내비게이션은 원래도 여는 버튼이 없어 죽어 있던
      코드였다(상단 네비 자체가 이미 빠져 있었음). welfarego.co.kr로 도메인을
