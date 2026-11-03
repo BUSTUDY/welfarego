@@ -35,6 +35,41 @@ class CollectionError(Exception):
 
 
 def parse_response(body):
+    # SSIS can return JSON despite its XML-only catalogue entry.
+    try:
+        document = json.loads(body)
+    except (ValueError, UnicodeDecodeError):
+        document = None
+    if document is not None:
+        nodes = []
+        def walk(value):
+            if isinstance(value, dict):
+                nodes.append(value)
+                for child in value.values():
+                    walk(child)
+            elif isinstance(value, list):
+                for child in value:
+                    walk(child)
+        walk(document)
+        code = next((str(n[k]) for k in ("resultCode", "returnReasonCode", "errCd") for n in nodes if k in n), "")
+        if code and code not in ("00", "0", "0000", "NORMAL_CODE", "INFO-000"):
+            safe_code = code if code.isalnum() and len(code) < 20 else "UNKNOWN"
+            raise CollectionError("공공 API 오류 코드 " + safe_code + ". 활용 승인·인증키·호출 한도를 확인하세요.")
+        total = next((n["totalCount"] for n in nodes if "totalCount" in n), None)
+        try:
+            total = int(total) if total is not None else None
+        except (TypeError, ValueError):
+            raise CollectionError("전체 건수를 확인할 수 없습니다.") from None
+        rows = next((n["item"] for n in nodes if "item" in n), None)
+        if rows is None:
+            rows = next((n["items"] for n in nodes if isinstance(n.get("items"), list)), [])
+        if isinstance(rows, dict):
+            rows = [rows]
+        if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+            raise CollectionError("예상한 목록 필드를 찾지 못했습니다.")
+        if not rows and total != 0:
+            raise CollectionError("예상한 목록 필드를 찾지 못했습니다. 기존 데이터를 보존합니다.")
+        return rows, total
     try:
         root = ET.fromstring(body)
     except ET.ParseError:
