@@ -26,30 +26,34 @@ jobs:
       - name: Checkout Welfarego OFFICE
         uses: actions/checkout@v4
 
-      - name: Free disk space on GitHub-hosted Windows runner
+      - name: Optimize Windows Defender & free disk space on hosted runner
         if: runner.environment == 'github-hosted'
         shell: pwsh
         run: |
+          Write-Host "Disabling Windows Defender real-time scanning for build speed..."
+          try { Set-MpPreference -DisableRealtimeMonitoring $true } catch { Write-Host "Defender skip: $_" }
+
           Write-Host "Disk space BEFORE cleanup:"
           Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
-          $paths = @(
+
+          $empty = "C:\_empty_tmp"
+          New-Item -ItemType Directory -Force -Path $empty | Out-Null
+          $targets = @(
             "C:\Android",
             "C:\ghcup",
-            "C:\hostedtoolcache\windows\CodeQL",
-            "C:\Program Files\Microsoft SDKs\Azure",
-            "C:\Program Files (x86)\Android",
-            "C:\ProgramData\Chocolatey\lib"
+            "C:\Program Files\Microsoft SDKs\Azure"
           )
-          $procs = @()
-          foreach ($p in $paths) {
-            if (Test-Path $p) {
-              Write-Host "Fast-removing $p..."
-              $procs += Start-Process -FilePath "cmd.exe" -ArgumentList "/c", "rmdir /s /q `"$p`"" -PassThru -NoNewWindow
+          foreach ($t in $targets) {
+            if (Test-Path $t) {
+              Write-Host "Fast-clearing $t..."
+              & robocopy $empty $t /MIR /R:0 /W:0 /MT:16 /NFL /NDL /NJH /NJS /NC /NS /NP | Out-Null
+              cmd /c rmdir /s /q "$t" 2>$null
+              $global:LASTEXITCODE = 0
             }
           }
-          if ($procs.Count -gt 0) {
-            $procs | Wait-Process
-          }
+          Remove-Item -Force -Recurse $empty -ErrorAction SilentlyContinue
+          $global:LASTEXITCODE = 0
+
           Write-Host "Disk space AFTER cleanup:"
           Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
 
