@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welfarego OFFICE — 모던 플루언트 리본 UI 미리보기</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", "Segoe UI", sans-serif; background: #F4F7F6; color: #192D2A; padding: 24px; }
+    .wrap { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    .bar { background: #fff; border: 1px solid #DFE7E4; border-radius: 12px; padding: 14px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .emblem { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg,#08776A,#075C53); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 18px; }
+    .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #E6F4F1; color: #08776A; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; }
+    .seg { display: inline-flex; border: 1px solid #D5E0DC; border-radius: 8px; padding: 2px; background: #F7F9F8; }
+    .seg button, .btn { border: none; background: transparent; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #4A5F5A; }
+    .btn { border: 1px solid #D5E0DC; background: #fff; color: #192D2A; }
+    .window { border-radius: 12px; overflow: hidden; border: 1px solid #CFDAD6; box-shadow: 0 14px 36px rgba(10,36,32,0.10); }
+    .titlebar { height: 38px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-bottom: 1px solid #DFE7E4; }
+    .tabs { padding: 6px 10px 0; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #DFE7E4; }
+    .tab-list { display: flex; gap: 4px; }
+    .tab { position: relative; padding: 7px 16px; font-size: 12px; border: 1px solid transparent; border-bottom: none; border-radius: 7px 7px 0 0; background: transparent; cursor: pointer; font-weight: 500; }
+    .tab.active { font-weight: 700; }
+    .tab.active.modern::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 3px; border-radius: 99px; background: var(--accent); }
+    .ribbon { padding: 10px 14px; display: flex; align-items: center; gap: 8px; min-height: 74px; border-bottom: 1px solid #DFE7E4; overflow-x: auto; }
+    .rbtn { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 10px; font-size: 11px; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 6px; min-width: 50px; }
+    .rbtn-sm { padding: 4px 8px; font-size: 12px; font-weight: 700; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 6px; }
+    .sep { width: 1px; height: 42px; margin: 0 4px; flex-shrink: 0; }
+    .canvas { padding: 28px; display: flex; justify-content: center; min-height: 260px; }
+    .paper { width: 100%; max-width: 680px; padding: 32px; border-radius: 3px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .status { height: 28px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-top: 1px solid #DFE7E4; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">
+        <div class="emblem">W</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <strong style="font-size:15px;">Welfarego OFFICE</strong>
+            <span class="pill">Offline Preview · MPL-2.0</span>
+          </div>
+          <div style="font-size:12px;color:#5D716C;">Fluent Ribbon UI Preview (patches/0003-fluent-ribbon-rendering.patch)</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="seg">
+          <button id="m-modern" onclick="S.style='modern';render()">Welfarego 모던 리본</button>
+          <button id="m-classic" onclick="S.style='classic';render()">기존 LibreOffice</button>
+        </div>
+        <button class="btn" id="m-dark" onclick="S.dark=!S.dark;render()">🌙 다크 모드</button>
+      </div>
+    </div>
+
+    <div class="window" id="win">
+      <div class="titlebar" id="tb">
+        <span id="title-txt" style="font-weight:600;">2026_사업계획서.odt — Welfarego OFFICE Writer</span>
+        <span style="opacity:.6;font-family:monospace;">─ &nbsp; □ &nbsp; ✕</span>
+      </div>
+      <div class="tabs" id="tabbar">
+        <div class="tab-list" id="tablist"></div>
+        <span id="mode-tag" style="font-size:11px;padding-bottom:6px;opacity:.8;">Sukapura SVG · Tabbed</span>
+      </div>
+      <div class="ribbon" id="ribbon"></div>
+      <div class="canvas" id="canvas">
+        <div class="paper" id="paper">
+          <div style="font-size:11px;font-weight:700;color:#08776A;margin-bottom:8px;">WELFAREGO OFFICE WRITER</div>
+          <h2 id="doc-h" contenteditable="true" style="margin-bottom:12px;outline:none;">2026년 업무용 설치형 오피스 도입 안내</h2>
+          <p id="doc-p" style="font-size:14px;line-height:1.7;opacity:.88;">
+            Welfarego OFFICE는 익숙한 리본 메뉴 디자인과 깔끔한 벡터 아이콘을 기본 제공하며, MPL-2.0 오픈소스 규정을 완벽하게 준수합니다.
+          </p>
+        </div>
+      </div>
+      <div class="status" id="status">
+        <span id="msg">준비 · 한국어 (대한민국)</span>
+        <span>페이지 1 / 1 · 100%</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    const S = { style: 'modern', dark: false, tab: '홈', bold: true, italic: false, underline: false };
+    const TABS = ['파일', '홈', '삽입', '레이아웃', '검토', '보기'];
+    function pal() {
+      if (S.style === 'classic') return { h:'#D8D8D8', b:'#F0F0F0', bd:'#9E9E9E', cv:'#CCCCCC', tx:'#111', ac:'#18A303', ck:'#C4D9F2', ckbd:'#5B8AC6', pp:'#fff', pt:'#111' };
+      if (S.dark) return { h:'#181E1D', b:'#222A29', bd:'#323E3C', cv:'#141918', tx:'#CBD5D3', ac:'#2DD4BF', ck:'#183F3A', ckbd:'#14B8A6', pp:'#1F2625', pt:'#EDF3F1' };
+      return { h:'#F3F6F5', b:'#FFFFFF', bd:'#DFE7E4', cv:'#EEF2F0', tx:'#192D2A', ac:'#08776A', ck:'#DCF3EE', ckbd:'#0F9687', pp:'#fff', pt:'#192D2A' };
+    }
+    function render() {
+      const p = pal();
+      document.getElementById('m-modern').style.cssText = S.style==='modern' ? 'background:#08776A;color:#fff' : '';
+      document.getElementById('m-classic').style.cssText = S.style==='classic' ? 'background:#08776A;color:#fff' : '';
+      document.getElementById('m-dark').textContent = S.dark ? '☀️ 라이트 모드' : '🌙 다크 모드';
+      const w = document.getElementById('win');
+      w.style.setProperty('--accent', p.ac);
+      w.style.borderColor = p.bd;
+      ['tb','tabbar','status'].forEach(id => { const el = document.getElementById(id); el.style.background = p.h; el.style.borderColor = p.bd; el.style.color = p.tx; });
+      document.getElementById('tablist').innerHTML = TABS.map(t => {
+        const a = S.tab === t;
+        return `<button class="tab ${a?'active':''} ${S.style==='modern'?'modern':''}" onclick="S.tab='${t}';render()" style="background:${a?p.b:'transparent'};color:${a?p.ac:p.tx};border-color:${a?p.bd:'transparent'};">${t}</button>`;
+      }).join('');
+      const rb = document.getElementById('ribbon');
+      rb.style.background = p.b; rb.style.borderColor = p.bd;
+      const rad = S.style==='modern' ? '6px' : '2px';
+      const mkBtn = (lbl, on, fn) => `<button class="rbtn-sm" onclick="${fn}" style="border-radius:${rad};color:${p.tx};background:${on?p.ck:'transparent'};border-color:${on?p.ckbd:'transparent'};">${lbl}</button>`;
+      rb.innerHTML = `
+        <button class="rbtn" style="color:${p.tx};border-radius:${rad};" onclick="document.getElementById('msg').textContent='붙여넣기 완료'"><span style="font-size:17px;">📋</span><span>붙여넣기</span></button>
+        <div class="sep" style="background:${p.bd};"></div>
+        <div style="display:flex;gap:4px;align-items:center;">
+          ${mkBtn('B', S.bold, 'S.bold=!S.bold;render()')}
+          ${mkBtn('<i>I</i>', S.italic, 'S.italic=!S.italic;render()')}
+          ${mkBtn('<u>U</u>', S.underline, 'S.underline=!S.underline;render()')}
+        </div>
+        <div class="sep" style="background:${p.bd};"></div>
+        <button class="rbtn" style="color:${p.tx};border-radius:${rad};" onclick="document.getElementById('msg').textContent='PDF 내보내기 준비 완료'"><span style="font-size:17px;">📑</span><span>PDF 저장</span></button>
+      `;
+      document.getElementById('canvas').style.background = p.cv;
+      const pp = document.getElementById('paper');
+      pp.style.background = p.pp; pp.style.color = p.pt;
+      const h = document.getElementById('doc-h');
+      h.style.fontWeight = S.bold ? '700' : '400';
+      h.style.fontStyle = S.italic ? 'italic' : 'normal';
+      h.style.textDecoration = S.underline ? 'underline' : 'none';
+    }
+    render();
+  </script>
+</body>
+</html>

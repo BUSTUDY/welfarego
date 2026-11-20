@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="72" viewBox="0 0 360 72">
+  <defs>
+    <linearGradient id="wgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08776A"/>
+      <stop offset="100%" stop-color="#075C53"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="56" height="56" rx="14" fill="url(#wgGrad)"/>
+  <rect x="14" y="16" width="24" height="32" rx="4" fill="#FFFFFF" fill-opacity="0.22"/>
+  <path d="M16 25 L22.5 47 L29.5 32 L36.5 47 L43 25" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="45" cy="23" r="3.2" fill="#5EEAD4"/>
+  <text x="74" y="46" font-family="Segoe UI, Roboto, Noto Sans KR, Liberation Sans, sans-serif" font-size="28" font-weight="800" fill="#192D2A">Welfarego</text>
+  <rect x="218" y="21" width="90" height="30" rx="8" fill="#E6F4F1"/>
+  <text x="263" y="42" text-anchor="middle" font-family="Segoe UI, Roboto, Noto Sans KR, Liberation Sans, sans-serif" font-size="15" font-weight="800" fill="#08776A" letter-spacing="1.5">OFFICE</text>
+</svg>

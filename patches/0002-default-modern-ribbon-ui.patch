@@ -1,0 +1,202 @@
+diff --git a/officecfg/registry/data/org/openoffice/Office/Common.xcu b/officecfg/registry/data/org/openoffice/Office/Common.xcu
+index 2222488..6f01b4e 100644
+--- a/officecfg/registry/data/org/openoffice/Office/Common.xcu
++++ b/officecfg/registry/data/org/openoffice/Office/Common.xcu
+@@ -464,6 +464,7 @@
+     </prop>
+     <prop oor:name="ShowDonation">
+      <value install:module="macosxsandbox">false</value>
++     <value install:module="wnt">false</value>
+     </prop>
+   </node>
+   <node oor:name="Save">
+diff --git a/officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu b/officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu
+index f7b65b9..afdfd04 100644
+--- a/officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu
++++ b/officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu
+@@ -16,7 +16,7 @@
+   <node oor:name="Applications">
+     <node oor:name="Writer" oor:op="replace">
+       <prop oor:name="Active">
+-        <value>Default</value>
++        <value>Tabbed</value>
+       </prop>
+       <node oor:name="Modes">
+         <node oor:name="Default" oor:op="replace">
+@@ -296,7 +296,7 @@
+     </node>
+     <node oor:name="Calc" oor:op="replace">
+       <prop oor:name="Active">
+-        <value>Default</value>
++        <value>Tabbed</value>
+       </prop>
+       <node oor:name="Modes">
+         <node oor:name="Default" oor:op="replace">
+@@ -545,7 +545,7 @@
+     </node>
+     <node oor:name="Impress" oor:op="replace">
+       <prop oor:name="Active">
+-        <value>Default</value>
++        <value>Tabbed</value>
+       </prop>
+       <node oor:name="Modes">
+         <node oor:name="Default" oor:op="replace">
+@@ -800,7 +800,7 @@
+     </node>
+     <node oor:name="Draw" oor:op="replace">
+       <prop oor:name="Active">
+-        <value>Default</value>
++        <value>Tabbed</value>
+       </prop>
+       <node oor:name="Modes">
+         <node oor:name="Default" oor:op="replace">
+diff --git a/officecfg/registry/data/org/openoffice/VCL.xcu b/officecfg/registry/data/org/openoffice/VCL.xcu
+index e68b0c5..7b86cf0 100644
+--- a/officecfg/registry/data/org/openoffice/VCL.xcu
++++ b/officecfg/registry/data/org/openoffice/VCL.xcu
+@@ -370,22 +370,22 @@
+         <value>Noto Sans Mono CJK KR;Source Han Mono KR;Source Han Mono;D2 Coding;Nanum Gothic Coding;Noto Sans CJK KR;Noto Sans KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+       </prop>
+       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+       </prop>
+       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+       </prop>
+       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+       </prop>
+       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim</value>
+       </prop>
+       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+       </prop>
+       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+       </prop>
+       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
+         <value>Noto Sans CJK KR;Source Han Sans CJK KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;Baekmuk Gulim;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;Baekmuk Batang;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
+@@ -394,25 +394,25 @@
+         <value>Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;나눔명조 옛한글;NanumMyeongjo YetHangul;Noto Serif KR;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+       </prop>
+       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS</value>
+       </prop>
+       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
+       </prop>
+       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
+       </prop>
+       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode</value>
+       </prop>
+       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;NanumMyeongjo YetHangul;나눔고딕;NanumGothic;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;굴림;Gulim;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Arial Unicode MS;Lucida Sans Unicode</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;NanumMyeongjo YetHangul;나눔고딕;NanumGothic;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;굴림;Gulim;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Arial Unicode MS;Lucida Sans Unicode</value>
+       </prop>
+       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+       </prop>
+       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+-        <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;AndaleSansUI;GNU-Unifont</value>
++        <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;AndaleSansUI;GNU-Unifont</value>
+       </prop>
+       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+         <value>Noto Sans Mono CJK KR;Source Han Mono KR;Source Han Mono;D2 Coding;Nanum Gothic Coding;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+@@ -2072,7 +2072,7 @@
+       </node>
+       <node oor:name="dotum" oor:op="replace">
+         <prop oor:name="SubstFonts">
+-          <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
++          <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
+         </prop>
+         <prop oor:name="SubstFontsMS">
+           <value/>
+@@ -2089,7 +2089,7 @@
+       </node>
+       <node oor:name="dotumche" oor:op="replace">
+         <prop oor:name="SubstFonts">
+-          <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
++          <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
+         </prop>
+         <prop oor:name="SubstFontsMS">
+           <value/>
+@@ -2106,7 +2106,7 @@
+       </node>
+       <node oor:name="haansoftdotum" oor:op="replace">
+         <prop oor:name="SubstFonts">
+-          <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
++          <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
+         </prop>
+         <prop oor:name="SubstFontsMS">
+           <value/>
+@@ -2565,7 +2565,7 @@
+       </node>
+       <node oor:name="gulim" oor:op="replace">
+         <prop oor:name="SubstFonts">
+-          <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
++          <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
+         </prop>
+         <prop oor:name="SubstFontsMS">
+           <value/>
+@@ -2582,7 +2582,7 @@
+       </node>
+       <node oor:name="gulimche" oor:op="replace">
+         <prop oor:name="SubstFonts">
+-          <value>Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
++          <value>Pretendard;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode</value>
+         </prop>
+         <prop oor:name="SubstFontsMS">
+           <value/>
+diff --git a/officecfg/registry/schema/org/openoffice/Office/Common.xcs b/officecfg/registry/schema/org/openoffice/Office/Common.xcs
+index e2506f8..11f6649 100644
+--- a/officecfg/registry/schema/org/openoffice/Office/Common.xcs
++++ b/officecfg/registry/schema/org/openoffice/Office/Common.xcs
+@@ -5453,14 +5453,14 @@
+         <info>
+           <desc>Enable sending crash reports to The Document Foundation</desc>
+         </info>
+-        <value>true</value>
++        <value>false</value>
+       </prop>
+       <prop oor:name="ShowTipOfTheDay" oor:type="xs:boolean" oor:nillable="false">
+         <!-- UIHints: Tools - Options - General -->
+         <info>
+           <desc>Determines whether the Tip-of-the-Day dialog is shown on startup.</desc>
+         </info>
+-        <value>true</value>
++        <value>false</value>
+       </prop>
+       <prop oor:name="LastTipOfTheDayShown" oor:type="xs:int" oor:nillable="false">
+           <info>
+@@ -5515,7 +5515,7 @@
+         <info>
+           <desc>Determines whether to show a donation button in the start center or extension.</desc>
+         </info>
+-        <value>true</value>
++        <value>false</value>
+       </prop>
+       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
+         <info>
+@@ -5635,7 +5635,7 @@
+           names of the various icon themes ("breeze", "crystal", "elementary",
+           etc.).</desc>
+         </info>
+-        <value>auto</value>
++        <value>sukapura_svg</value>
+       </prop>
+       <prop oor:name="FormControlPilotsEnabled" oor:type="xs:boolean" oor:nillable="false">
+         <info>

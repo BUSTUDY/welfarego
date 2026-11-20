@@ -1,0 +1,68 @@
+name: Verify Compliance & Upstream Patches
+
+on:
+  push:
+    branches: ["main", "office"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Welfarego OFFICE
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Pillow
+        run: python3 -m pip install --upgrade pillow
+
+      - name: Read upstream tag from branding/brand.json
+        id: brand
+        run: |
+          TAG=$(python3 -c "import json; print(json.load(open('branding/brand.json'))['upstream_tag'])")
+          REPO=$(python3 -c "import json; print(json.load(open('branding/brand.json'))['upstream_repo'])")
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "repo=${REPO}" >> "$GITHUB_OUTPUT"
+
+      - name: Sparse-checkout upstream LibreOffice target files
+        run: |
+          git clone --depth 1 --branch "${{ steps.brand.outputs.tag }}" --filter=blob:none --sparse \
+            "${{ steps.brand.outputs.repo }}" /tmp/lo-check
+          git -C /tmp/lo-check sparse-checkout set --no-cone \
+            '/configure.ac' \
+            '/include/default.rc' \
+            '/include/vcl/tabctrl.hxx' \
+            '/instsetoo_native/inc_common/windows/msi_templates/Binary/' \
+            '/instsetoo_native/inc_openoffice/windows/msi_languages/' \
+            '/instsetoo_native/inc_openoffice/windows/msi_templates/codes.txt' \
+            '/instsetoo_native/util/openoffice.lst.in' \
+            '/icon-themes/colibre/brand/' \
+            '/officecfg/registry/data/org/openoffice/Office/Common.xcu' \
+            '/officecfg/registry/data/org/openoffice/Office/UI/ToolbarMode.xcu' \
+            '/officecfg/registry/data/org/openoffice/VCL.xcu' \
+            '/officecfg/registry/schema/org/openoffice/Office/Common.xcs' \
+            '/postprocess/CustomTarget_registry.mk' \
+            '/readlicense_oo/docs/readme.xrm' \
+            '/scp2/source/ooo/folderitem_ooo.ulf' \
+            '/sysui/desktop/icons/' \
+            '/vcl/source/control/tabctrl.cxx' \
+            '/vcl/source/window/tabpage.cxx' \
+            '/vcl/source/window/toolbox.cxx'
+
+      - name: Run full compliance & live patch dry-run verification
+        run: python3 scripts/verify_compliance.py --lo-dir /tmp/lo-check
+
+      - name: Test full apply_patches.py pipeline
+        run: |
+          python3 scripts/apply_patches.py --lo-dir /tmp/lo-check
+          test -f /tmp/lo-check/autogen.input
+          test -f /tmp/lo-check/welfarego-branding/intro-highres.png
+          test -f /tmp/lo-check/welfarego-branding/logo.svg
+          test -f /tmp/lo-check/welfarego-legal/LICENSE
+          test -f /tmp/lo-check/welfarego-legal/NOTICE
+          git -C /tmp/lo-check diff --stat

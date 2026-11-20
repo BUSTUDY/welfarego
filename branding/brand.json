@@ -1,0 +1,33 @@
+{
+  "product_name": "Welfarego OFFICE",
+  "product_name_no_spaces": "WelfaregoOFFICE",
+  "short_name": "Welfarego",
+  "vendor": "Welfarego",
+  "package_version": "26.2.7.3",
+  "upstream_tag": "libreoffice-26.2.7.3",
+  "upstream_repo": "https://github.com/LibreOffice/core.git",
+  "homepage_url": "https://github.com/BUSTUDY/welfarego",
+  "release_notes_url": "https://github.com/BUSTUDY/welfarego/releases",
+  "credits_url": "https://github.com/BUSTUDY/welfarego/blob/main/legal/THIRD-PARTY-LICENSES.md",
+  "privacy_policy_url": "https://github.com/BUSTUDY/welfarego/blob/main/legal/PRIVACY.md",
+  "languages": "en-US ko",
+  "default_ui_mode": "Tabbed",
+  "default_icon_theme": "sukapura_svg",
+  "default_dark_icon_theme": "sukapura_dark_svg",
+  "colors": {
+    "primary": "#08776A",
+    "primary_dark": "#075C53",
+    "primary_light": "#E6F4F1",
+    "ink": "#192D2A",
+    "muted": "#6B7975",
+    "line": "#E3E9E6",
+    "surface": "#F7F9F7",
+    "paper": "#FFFFFF",
+    "writer": "#2B579A",
+    "calc": "#107C41",
+    "impress": "#C43E1C",
+    "draw": "#D97706",
+    "base": "#7460A7",
+    "math": "#475569"
+  }
+}

@@ -1,0 +1,40 @@
+# Welfarego OFFICE — Windows x64 Release MSI Build Configuration
+# Based on LibreOffice 26.2.7.3 (MPL-2.0 Subset for clean commercial compliance)
+# Note: autogen.sh passes each line verbatim as a single argument (do NOT wrap values in quotes).
+
+--host=x86_64-pc-cygwin
+--with-visual-studio=2022
+--enable-release-build
+
+# Product Identity & Trademark Separation
+--with-product-name=Welfarego OFFICE
+--with-vendor=Welfarego
+--with-privacy-policy-url=https://github.com/BUSTUDY/welfarego/blob/main/legal/PRIVACY.md
+
+# Commercial Open-Source Cleanliness (Pure MPL-2.0 + Permissive Licenses Only)
+# Excludes all GPL/LGPL-only modules (breeze/elementary icons, poppler, lpsolve, postgresql, lotuswordpro, report-builder)
+--enable-mpl-subset
+--without-java
+--disable-report-builder
+--disable-postgresql-sdbc
+--disable-lotuswordpro
+--disable-poppler
+--disable-lpsolve
+--with-theme=colibre colibre_svg colibre_dark colibre_dark_svg sukapura sukapura_svg sukapura_dark sukapura_dark_svg
+
+# Language Support (en-US is always included automatically; ko adds full Korean UI)
+--with-lang=ko
+
+# Windows Native MSI Installer & Runtime Optimization
+--with-package-format=msi
+--enable-python=fully-internal
+--enable-mergelibs=more
+--without-junit
+--without-helppack-integration
+--without-myspell-dicts
+--without-doxygen
+--disable-odk
+--disable-online-update
+--disable-breakpad
+--disable-ccache
+--disable-dependency-tracking

@@ -1,0 +1,220 @@
+diff --git a/include/default.rc b/include/default.rc
+index eec3012..20c367f 100644
+--- a/include/default.rc
++++ b/include/default.rc
+@@ -45,12 +45,12 @@ VS_VERSION_INFO VERSIONINFO
+             {
+                 // International StringTable
+                 VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
+-                VALUE "ProductName",      "LibreOffice\0"
++                VALUE "ProductName",      "Welfarego OFFICE\0"
+                 VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
+                 VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
+                 VALUE "OriginalFilename", PPS(ORG_NAME) "\0"
+                 VALUE "InternalName",     PPS(INTERNAL_NAME) "\0"
+-                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors. All rights reserved.\0"
++                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and Welfarego. Licensed under MPL-2.0.\0"
+                 ADDITIONAL_VERINFO1
+                 ADDITIONAL_VERINFO2
+                 ADDITIONAL_VERINFO3
+diff --git a/instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf b/instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf
+index 432e451..97945cc 100644
+--- a/instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf
++++ b/instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf
+@@ -275,7 +275,7 @@ en-US = "< &Back"
+ en-US = "Cancel"
+ 
+ [OOO_CONTROL_124]
+-en-US = "Build contributed in collaboration with the community by [Manufacturer]. For credits, see: https://www.documentfoundation.org"
++en-US = "Provided by [Manufacturer]. Derived from LibreOffice under MPL-2.0. Credits and source: https://github.com/BUSTUDY/welfarego"
+ 
+ [OOO_CONTROL_125]
+ en-US = "&Next >"
+diff --git a/instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf b/instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf
+index fb1f0b0..b155ea6 100644
+--- a/instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf
++++ b/instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf
+@@ -17,16 +17,16 @@
+  */
+ 
+ [OOO_ARPCONTACTTEMPLATE]
+-en-US = "LibreOffice Community"
++en-US = "Welfarego"
+ 
+ [OOO_ARPHELPLINKTEMPLATE]
+-en-US = "https://www.libreoffice.org/get-help"
++en-US = "https://github.com/BUSTUDY/welfarego"
+ 
+ [OOO_ARPURLINFOABOUTTEMPLATE]
+-en-US = "https://www.libreoffice.org/"
++en-US = "https://github.com/BUSTUDY/welfarego"
+ 
+ [OOO_ARPURLUPDATEINFOTEMPLATE]
+-en-US = "https://www.libreoffice.org/download"
++en-US = "https://github.com/BUSTUDY/welfarego/releases"
+ 
+ [OOO_STR_NEW_DISPLAY_NAME]
+ en-US = "~New"
+diff --git a/instsetoo_native/inc_openoffice/windows/msi_templates/codes.txt b/instsetoo_native/inc_openoffice/windows/msi_templates/codes.txt
+index 316e4f4..feb5758 100644
+--- a/instsetoo_native/inc_openoffice/windows/msi_templates/codes.txt
++++ b/instsetoo_native/inc_openoffice/windows/msi_templates/codes.txt
+@@ -24,7 +24,7 @@ da = "{16F54808-4A44-4C87-9A9B-AE038D4E1003}"
+ de = "{C54B62B7-32CA-4A12-90AD-425F68965DF2}"
+ el = "{C61808D3-AE08-4EAA-9427-8B1E71B66973}"
+ en-GB = "{D6502F20-0CE2-4644-A7A2-C44337A84E54}"
+-en-US = "{B53C819A-A084-42F1-A18E-D7C6DD1CCB59}"
++en-US = "{7E4A2F91-6C3B-4B8E-9D15-3A8C5F2E01B4}"
+ es = "{48A6F206-C8E5-4E40-8A2B-EED45A576821}"
+ et = "{C6C1A6A0-0112-4A6C-9EF1-25672676D909}"
+ fi = "{BD481859-9803-4606-91D5-10ABEF4C4ADC}"
+@@ -35,7 +35,7 @@ hu = "{6DA595F9-4F00-4288-858B-A281C90D87D5}"
+ it = "{2C1B2B2A-303B-499E-AE35-929EB2B8FDE7}"
+ ja = "{1FBD7128-5220-4F02-B94D-40AA38A63A16}"
+ km = "{062A1AD1-05AD-4D46-872B-B0ADA08DC3FC}"
+-ko = "{B5B62297-3658-4C79-A3E3-CD714250DE0C}"
++ko = "{9C3D81E4-2F7A-4A61-B842-6E1F9D0C45A7}"
+ nl = "{7A20B473-85A8-4A57-AAFA-F74362FCDE2E}"
+ no = "{08B1A917-7FA7-474A-952A-AC0CE00ABDDB}"
+ pl = "{A069E3EB-E23C-43A7-8D95-80C92971C981}"
+@@ -48,8 +48,8 @@ th = "{B27DED2F-51D7-4C0E-A011-F243E53814A1}"
+ tr = "{F8FB0DCF-96C0-4C03-B748-951C679FD7C6}"
+ zh-CN = "{DEE49DC3-8651-4336-BFAF-EDB82F1F8096}"
+ zh-TW = "{2C5F5940-CAA5-4637-B07E-7CBDD812E04F}"
+-multiwestern = "{0DECDE88-DD1C-4E9F-8348-19C5BC6FDF26}"
+-multiasia = "{122A65B5-E37E-453A-924B-E52B808EDA31}"
++multiwestern = "{4F92B6D3-8A1E-4C75-92E0-1B6D4E8A73C9}"
++multiasia = "{6A18E4C2-5B93-4F28-A7C6-8D3F2E9B1045}"
+ 
+ [UPGRADECODE]
+-en-US = "{4B17E523-5D91-4E69-BD96-7FD81CFA81BB}"
++en-US = "{D28F63A9-4E1C-49B7-8F52-9A7C3E6B12D0}"
+diff --git a/instsetoo_native/util/openoffice.lst.in b/instsetoo_native/util/openoffice.lst.in
+index a12aa97..ed544f7 100644
+--- a/instsetoo_native/util/openoffice.lst.in
++++ b/instsetoo_native/util/openoffice.lst.in
+@@ -8,7 +8,7 @@ Globals
+             UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+             URELAYERVERSION 1
+             REFERENCEOOOMAJORMINOR 4.1
+-            WINDOWSBASISROOTNAME LibreOffice
++            WINDOWSBASISROOTNAME @PRODUCTNAME@
+             UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+             HIDELICENSEDIALOG 1
+             PACKAGEPREFIX
+@@ -51,7 +51,7 @@ LibreOffice
+             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+             USERDIRPRODUCTVERSION 4
+             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+-            UPDATEURL https://update.libreoffice.org/check.php
++            UPDATEURL
+             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
+             ADDSYSTEMINTEGRATION 1
+             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+@@ -66,9 +66,9 @@ LibreOffice
+         active          1
+         compression     5
+         script          setup_osl
+-        downloadname    LibreOffice_{productversion}_{os}_install_{languages}
+-        langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
+-        helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
++        downloadname    WelfaregoOFFICE_{productversion}_{os}_install_{languages}
++        langpackdownloadname    WelfaregoOFFICE_{productversion}_languagepack_{os}_install_{languages}
++        helppackdownloadname    WelfaregoOFFICE_{productversion}_helppack_{os}_install_{languages}
+         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+     }
+ }
+@@ -94,7 +94,7 @@ LibreOfficeDev
+             UREPACKAGEPREFIX libreofficedev
+             SOLSUREPACKAGEPREFIX libreofficedev
+             REGISTRYLAYERNAME LayerDev
+-            UPDATEURL https://update.libreoffice.org/check.php
++            UPDATEURL
+             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
+             ADDSYSTEMINTEGRATION 1
+             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+diff --git a/officecfg/registry/data/org/openoffice/Office/Common.xcu b/officecfg/registry/data/org/openoffice/Office/Common.xcu
+index 2222488..01ef2f3 100644
+--- a/officecfg/registry/data/org/openoffice/Office/Common.xcu
++++ b/officecfg/registry/data/org/openoffice/Office/Common.xcu
+@@ -349,13 +349,13 @@
+       <value>https://hub.libreoffice.org/joinus/</value>
+     </prop>
+     <prop oor:name="DonationURL" oor:type="xs:string">
+-      <value>https://hub.libreoffice.org/donation/</value>
++      <value>https://github.com/BUSTUDY/welfarego</value>
+     </prop>
+     <prop oor:name="ReleaseNotesURL" oor:type="xs:string">
+-      <value>https://hub.libreoffice.org/ReleaseNotes/</value>
++      <value>https://github.com/BUSTUDY/welfarego/releases</value>
+     </prop>
+     <prop oor:name="CreditsURL" oor:type="xs:string">
+-      <value>https://hub.libreoffice.org/credits/</value>
++      <value>https://github.com/BUSTUDY/welfarego/blob/main/legal/THIRD-PARTY-LICENSES.md</value>
+     </prop>
+     <prop oor:name="HyphenationMissingURL" oor:type="xs:string">
+       <value>https://hub.libreoffice.org/HyphenationMissing/</value>
+@@ -364,13 +364,13 @@
+       <value>https://hub.libreoffice.org/InstallJava/</value>
+     </prop>
+     <prop oor:name="VolunteerURL" oor:type="xs:string">
+-      <value>https://hub.libreoffice.org/volunteersupport/</value>
++      <value>https://github.com/BUSTUDY/welfarego</value>
+     </prop>
+     <prop oor:name="PrivacyPolicyURL" oor:type="xs:string">
+       <value>${PRIVACY_POLICY_URL}</value>
+     </prop>
+     <prop oor:name="ExtensionsURL" oor:type="xs:string">
+-      <value>https://hub.libreoffice.org/extensions/</value>
++      <value>https://github.com/BUSTUDY/welfarego</value>
+     </prop>
+   </node>
+   <node oor:name="Forms">
+diff --git a/postprocess/CustomTarget_registry.mk b/postprocess/CustomTarget_registry.mk
+index 3458e69..cb948c7 100644
+--- a/postprocess/CustomTarget_registry.mk
++++ b/postprocess/CustomTarget_registry.mk
+@@ -580,7 +580,7 @@ postprocess_main_SED := \
+ 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
+ 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
+ 	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
+-	-e 's,$${STARTCENTER_INFO_URL},https://www.libreoffice.org/,g' \
++	-e 's,$${STARTCENTER_INFO_URL},https://github.com/BUSTUDY/welfarego,g' \
+ 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
+ 	-e 's,$${SYSTEM_LIBNUMBERTEXT_DATA},$(SYSTEM_LIBNUMBERTEXT_DATA),g' \
+ 	-e 's,$${PRIVACY_POLICY_URL},$(PRIVACY_POLICY_URL),g' \
+diff --git a/readlicense_oo/docs/readme.xrm b/readlicense_oo/docs/readme.xrm
+index d5d08b2..0f47382 100644
+--- a/readlicense_oo/docs/readme.xrm
++++ b/readlicense_oo/docs/readme.xrm
+@@ -17,9 +17,9 @@
+ 	<body>
+ 		<div id="Intro">
+ 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
+-			<p id="LatestUpdates" xml:lang="en-US">For the latest updates to this readme file, see <a href="https://git.libreoffice.org/core/tree/master/README.md">https://git.libreoffice.org/core/tree/master/README.md</a></p>
++			<p id="LatestUpdates" xml:lang="en-US">For the latest updates to this readme file, see <a href="https://github.com/BUSTUDY/welfarego">https://github.com/BUSTUDY/welfarego</a></p>
+ 			<p id="A6" xml:lang="en-US">This file contains important information about the ${PRODUCTNAME} software. You are recommended to read this information very carefully before starting installation.</p>
+-			<p id="A7" xml:lang="en-US">The ${PRODUCTNAME} community is responsible for the development of this product, and invites you to consider participating as a community member. If you are a new user, you can visit the ${PRODUCTNAME} site, where you will find lots of information about the ${PRODUCTNAME} project and the communities that exist around it. Go to <a href="https://www.libreoffice.org/">https://www.libreoffice.org/</a>.</p>
++			<p id="A7" xml:lang="en-US">${PRODUCTNAME} is a modern ribbon office productivity suite distributed by Welfarego under the Mozilla Public License 2.0 (MPL-2.0), derived from the open-source LibreOffice codebase. Source code and license notices are available at <a href="https://github.com/BUSTUDY/welfarego">https://github.com/BUSTUDY/welfarego</a>.</p>
+ 			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} Really Free for Any User?</h3>
+ 			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text packaged with this ${PRODUCTNAME} download.</p>
+ 			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} Free for Any User?</h3>
+@@ -206,7 +206,7 @@
+ 
+ 		<div id="Credits">
+ 			<p id="credits" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</p>
+-			<p id="credits2" xml:lang="en-US">The LibreOffice Community</p>
++			<p id="credits2" xml:lang="en-US">Welfarego OFFICE (derived from LibreOffice under MPL-2.0)</p>
+ 		</div>
+ 
+ 		<div id="ModifiedSourceCode">
+diff --git a/scp2/source/ooo/folderitem_ooo.ulf b/scp2/source/ooo/folderitem_ooo.ulf
+index 22f8a37..ffdae16 100644
+--- a/scp2/source/ooo/folderitem_ooo.ulf
++++ b/scp2/source/ooo/folderitem_ooo.ulf
+@@ -26,4 +26,4 @@ en-US = "Open Document"
+ en-US = "%PRODUCTNAME (Safe Mode)"
+ 
+ [STR_FI_TOOLTIP_SOFFICE]
+-en-US = "LibreOffice, the office productivity suite provided by The Document Foundation. See https://www.documentfoundation.org"
++en-US = "%PRODUCTNAME, a modern ribbon office productivity suite derived from LibreOffice."
