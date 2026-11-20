@@ -30,21 +30,28 @@ jobs:
         if: runner.environment == 'github-hosted'
         shell: pwsh
         run: |
+          Write-Host "Disk space BEFORE cleanup:"
+          Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
           $paths = @(
             "C:\Android",
-            "C:\ProgramData\Chocolatey\lib",
             "C:\ghcup",
             "C:\hostedtoolcache\windows\CodeQL",
             "C:\Program Files\Microsoft SDKs\Azure",
-            "C:\Program Files (x86)\Android"
+            "C:\Program Files (x86)\Android",
+            "C:\ProgramData\Chocolatey\lib"
           )
+          $procs = @()
           foreach ($p in $paths) {
             if (Test-Path $p) {
-              Write-Host "Removing $p..."
-              Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $p
+              Write-Host "Fast-removing $p..."
+              $procs += Start-Process -FilePath "cmd.exe" -ArgumentList "/c", "rmdir /s /q `"$p`"" -PassThru -NoNewWindow
             }
           }
-          Get-PSDrive C | Format-Table Name, Used, Free
+          if ($procs.Count -gt 0) {
+            $procs | Wait-Process
+          }
+          Write-Host "Disk space AFTER cleanup:"
+          Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
 
       - name: Setup Python & Pillow for compliance check
         uses: actions/setup-python@v5
@@ -66,10 +73,10 @@ jobs:
             Invoke-WebRequest -Uri "https://cygwin.com/setup-x86_64.exe" -OutFile $setupExe
           }
           $packages = @(
-            "autoconf", "automake", "bison", "cabextract", "flex",
-            "gettext", "gettext-devel", "gnupg", "gperf", "nasm",
-            "patch", "perl", "perl-Archive-Zip", "perl-Font-TTF",
-            "perl-Digest-MD5", "unzip", "wget", "zip"
+            "autoconf", "automake", "bison", "ca-certificates", "cabextract",
+            "curl", "diffutils", "file", "flex", "gettext", "gettext-devel",
+            "gnupg", "gperf", "m4", "nasm", "patch", "perl", "perl-Archive-Zip",
+            "perl-Font-TTF", "perl-Digest-MD5", "unzip", "wget", "which", "zip"
           ) -join ","
           Start-Process -FilePath $setupExe -Wait -ArgumentList @(
             "--quiet-mode",
