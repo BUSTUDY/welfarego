@@ -61,14 +61,17 @@ python (Join-Path $RepoRoot "scripts\verify_compliance.py")
 if ($LASTEXITCODE -ne 0) { throw "Compliance verification failed." }
 
 # 2. Clone or clean LibreOffice core checkout + Korean translations submodule
+# CRITICAL: LibreOffice Windows/Cygwin builds require LF line endings (core.autocrlf=false)
+git config --global core.autocrlf false
 if (-not $SkipClone -or -not (Test-Path (Join-Path $CoreDir ".git"))) {
     if (Test-Path $CoreDir) {
         Write-Host "`n[2/5] Resetting existing LibreOffice checkout..." -ForegroundColor Green
+        git -C $CoreDir config core.autocrlf false
         git -C $CoreDir reset --hard $UpstreamTag
         git -C $CoreDir clean -fdx -e translations
     } else {
-        Write-Host "`n[2/5] Shallow-cloning LibreOffice $UpstreamTag..." -ForegroundColor Green
-        git clone --depth 1 --branch $UpstreamTag $UpstreamRepo $CoreDir
+        Write-Host "`n[2/5] Shallow-cloning LibreOffice $UpstreamTag (LF line endings)..." -ForegroundColor Green
+        git clone -c core.autocrlf=false --depth 1 --branch $UpstreamTag $UpstreamRepo $CoreDir
         if ($LASTEXITCODE -ne 0) { throw "git clone failed." }
     }
 } else {
@@ -80,7 +83,7 @@ $TranslationsDir = Join-Path $CoreDir "translations"
 if (-not (Test-Path (Join-Path $TranslationsDir "source\ko"))) {
     Write-Host "  Fetching Korean translations ($UpstreamTag, sparse source/ko)..." -ForegroundColor Green
     if (Test-Path $TranslationsDir) { Remove-Item $TranslationsDir -Recurse -Force }
-    git clone --depth 1 --branch $UpstreamTag --filter=blob:none --sparse https://github.com/LibreOffice/translations.git $TranslationsDir
+    git clone -c core.autocrlf=false --depth 1 --branch $UpstreamTag --filter=blob:none --sparse https://github.com/LibreOffice/translations.git $TranslationsDir
     if ($LASTEXITCODE -ne 0) { throw "git clone translations failed." }
     git -C $TranslationsDir sparse-checkout set source/ko
     if ($LASTEXITCODE -ne 0) { throw "sparse-checkout source/ko failed." }

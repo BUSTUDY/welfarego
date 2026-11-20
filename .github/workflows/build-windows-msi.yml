@@ -64,7 +64,8 @@ jobs:
             "autoconf", "automake", "bison", "ca-certificates", "cabextract",
             "curl", "diffutils", "file", "flex", "gettext", "gettext-devel",
             "gnupg", "gperf", "m4", "nasm", "patch", "perl", "perl-Archive-Zip",
-            "perl-Font-TTF", "perl-Digest-MD5", "unzip", "wget", "which", "zip"
+            "perl-Font-TTF", "perl-Digest-MD5", "pkg-config", "pkgconf",
+            "unzip", "wget", "which", "zip"
           ) -join ","
           Start-Process -FilePath $setupExe -Wait -ArgumentList @(
             "--quiet-mode",
