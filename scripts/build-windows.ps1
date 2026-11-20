@@ -136,16 +136,15 @@ Compress-Archive -Path `
     (Join-Path $RepoRoot "legal"), `
     (Join-Path $RepoRoot "patches"), `
     (Join-Path $RepoRoot "config"), `
+    (Join-Path $RepoRoot "installer"), `
     (Join-Path $RepoRoot "branding\brand.json"), `
     (Join-Path $RepoRoot "scripts") `
     -DestinationPath $SourceZip
 
-# Generate SHA256SUMS.txt
-$Checksums = Get-ChildItem -Path $DistDir -File | Where-Object { $_.Name -ne "SHA256SUMS.txt" } | ForEach-Object {
-    $hash = (Get-FileHash -Path $_.FullName -Algorithm SHA256).Hash.ToLower()
-    "$hash  $($_.Name)"
-}
-Set-Content -Path (Join-Path $DistDir "SHA256SUMS.txt") -Value $Checksums -Encoding UTF8
+# Wrap compiled MSI into one-click Windows Setup .exe (Inno Setup 6)
+$PrimaryMsi = Join-Path $DistDir ($MsiFiles | Select-Object -First 1).Name
+& (Join-Path $PSScriptRoot "build-exe.ps1") -MsiPath $PrimaryMsi
+if ($LASTEXITCODE -ne 0) { throw "Setup .exe packaging failed." }
 
 Write-Host "`n[DONE] Build complete! Deliverables in: $DistDir" -ForegroundColor Cyan
 Get-ChildItem $DistDir | Format-Table Name, Length

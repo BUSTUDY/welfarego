@@ -113,11 +113,12 @@ jobs:
         shell: pwsh
         run: .\scripts\build-windows.ps1 -WorkDir "$env:LO_WORK_DIR" -CygwinRoot C:\cygwin64
 
-      - name: Upload MSI Installer & MPL-2.0 Source Archive
+      - name: Upload Setup EXE, MSI Installer & MPL-2.0 Source Archive
         uses: actions/upload-artifact@v4
         with:
-          name: Welfarego-OFFICE-Windows-x64-MSI
+          name: Welfarego-OFFICE-Windows-x64-Installer
           path: |
+            dist/*.exe
             dist/*.msi
             dist/*_MPL2_Source_Patches.zip
             dist/SHA256SUMS.txt
@@ -128,13 +129,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
+            dist/*.exe
             dist/*.msi
             dist/*_MPL2_Source_Patches.zip
             dist/SHA256SUMS.txt
           body: |
-            ## Welfarego OFFICE (Windows x64 MSI)
+            ## Welfarego OFFICE (Windows x64 Setup `.exe` & `.msi`)
 
-            - **Modern Fluent Ribbon UI** enabled by default (Writer, Calc, Impress, Draw)
-            - **Sukapura SVG** modern vector icons + Korean (`ko`) & English (`en-US`) UI
-            - **Pure MPL-2.0 Subset Build** (`--enable-mpl-subset`): commercial-friendly with zero GPL/LGPL-only modules
-            - **MPL-2.0 Source Compliance**: Modified source patches and full license notices are included in `*_MPL2_Source_Patches.zip`
+            - **원클릭 Windows 설치 파일**: `WelfaregoOFFICE_26.2.7.3_Setup_x64.exe` (한국어/영문 설치 마법사)
+            - **Modern Fluent Ribbon UI** 기본 적용 (Writer, Calc, Impress, Draw)
+            - **Sukapura SVG** 모던 벡터 아이콘 + 한국어(`ko`) / 영문(`en-US`) UI
+            - **순수 MPL-2.0 서브셋 빌드** (`--enable-mpl-subset`): GPL/LGPL 전용 모듈 배제
+            - **MPL-2.0 소스 공개**: `*_MPL2_Source_Patches.zip` 동봉

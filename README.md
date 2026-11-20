@@ -42,16 +42,21 @@
 .
 ├── .github/workflows/
 │   ├── verify.yml                       # 푸시/PR마다 라이선스·자산·업스트림 패치 적용 자동 검증
-│   └── build-windows-msi.yml            # Windows x64 MSI + MPL-2.0 소스 아카이브 자동 빌드
+│   ├── build-windows-msi.yml            # Windows x64 MSI + Setup .exe + MPL-2.0 소스 자동 빌드
+│   └── package-exe.yml                  # MSI 빌드 완료 시 원클릭 Setup .exe 패키징 & GitHub Release 자동 발행
 ├── branding/
 │   ├── brand.json                       # 제품명·버전·색상·URL 단일 설정 파일
 │   ├── images/                          # 스플래시 PNG, SVG 로고, 앱 아이콘 프리뷰
 │   ├── icons/                           # 31종 Windows 다중 해상도 .ico 아이콘
-│   └── msi/                             # MSI 설치 마법사 비트맵 (Banner/Image)
+│   └── msi/                             # MSI/EXE 설치 마법사 비트맵 (Banner/Image/Wizard*)
 ├── config/
 │   └── windows-x64.autogen.input        # Windows x64 MPL-2.0 Subset 릴리스 빌드 설정
+├── installer/
+│   ├── WelfaregoOFFICE.iss              # Inno Setup 6 원클릭 Windows Setup .exe 스크립트
+│   └── Korean.isl                       # 한국어 설치 마법사 언어 리소스
 ├── legal/
 │   ├── COMPLIANCE-GUIDE.md              # 상업적 배포 오픈소스 규정 준수 체크리스트 (한국어)
+│   ├── INSTALLER-LICENSE-KO.txt         # .exe 설치 마법사 표시용 MPL-2.0 라이선스 고지
 │   ├── THIRD-PARTY-LICENSES.md          # 포함/제외 서드파티 오픈소스 라이선스 목록
 │   ├── SOURCE-OFFER.md                  # MPL-2.0 제3.2조 소스코드 제공 안내
 │   └── PRIVACY.md                       # 오프라인·무텔레메트리 개인정보 정책
@@ -65,34 +70,34 @@
 │   ├── generate_branding.py             # 독자 브랜딩 이미지 및 31종 .ico 재생성기
 │   ├── apply_patches.py                 # LibreOffice 소스에 패치·브랜딩·autogen.input 적용
 │   ├── verify_compliance.py             # 자동 라이선스·상표·패치 무결성 검증 스크립트
-│   └── build-windows.ps1                # Windows x64 MSI 원커맨드 빌드 스크립트
+│   ├── build-windows.ps1                # Windows x64 MSI + Setup .exe 원커맨드 빌드 스크립트
+│   └── build-exe.ps1                    # 기존 MSI를 Inno Setup 6 원클릭 Setup .exe로 패키징
 ├── LICENSE                              # Mozilla Public License 2.0 전문
 └── NOTICE                               # 업스트림 저작권·상표 고지
 ```
 
 ---
 
-## 빌드 방법 (Windows x64 `.msi` 생성)
+## 빌드 및 설치 파일(`.exe` / `.msi`) 생성 방법
 
-### 방법 A. GitHub Actions에서 빌드
+### 방법 A. GitHub Actions에서 자동 빌드 및 다운로드
 1. 저장소 상단 **Actions → Build Welfarego OFFICE Windows x64 MSI → Run workflow** 클릭
-2. `runner` 선택:
-   - `self-hosted` (권장: 16코어 이상, RAM 32GB+, SSD 80GB+ Windows 머신에서 약 1~2시간 소요)
-   - `windows-2022` (GitHub 호스팅 4코어 러너 — 디스크 확보 및 캐시가 설정되어 있으나, 콜드 빌드 시 LibreOffice 특성상 6시간 제한에 근접할 수 있음)
-3. 완료 후 Artifacts 또는 `v*` 태그 Release에서 다음 산출물을 다운로드합니다:
-   - `WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi` (설치 파일)
-   - `WelfaregoOFFICE_26.2.7.3_MPL2_Source_Patches.zip` (MPL-2.0 소스 공개 아카이브)
+2. 빌드가 완료되면 `package-exe.yml`이 자동 실행되어 **GitHub Releases (`v26.2.7.3`)** 와 Artifacts에 아래 4개 파일을 발행합니다:
+   - **`WelfaregoOFFICE_26.2.7.3_Setup_x64.exe`** (원클릭 한국어/영문 Windows 설치 파일 — 더블클릭으로 설치)
+   - `WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi` (기업/IT 무인 배포용 MSI)
+   - `WelfaregoOFFICE_26.2.7.3_MPL2_Source_Patches.zip` (MPL-2.0 제3.2조 준수용 수정 소스 아카이브)
    - `SHA256SUMS.txt`
 
 ### 방법 B. 로컬 Windows PC에서 직접 빌드 (가장 빠르고 안정적)
-**권장 사양:** Windows 10/11 64-bit, RAM 16GB 이상(32GB 권장), NVMe SSD 여유 공간 80GB 이상, Visual Studio 2022 (Desktop development with C++ + ATL + Windows 11 SDK)
+**권장 사양:** Windows 10/11 64-bit, RAM 16GB 이상(32GB 권장), NVMe SSD 여유 공간 80GB 이상, Visual Studio 2022 (Desktop development with C++ + ATL + Windows 11 SDK), Inno Setup 6
 
-1. Cygwin64 (`C:\cygwin64`) 설치 및 LibreOffice 빌드 필수 패키지 설치 (`autoconf, automake, bison, cabextract, flex, gettext, gettext-devel, gperf, nasm, patch, perl, perl-Archive-Zip, perl-Font-TTF, perl-Digest-MD5, unzip, wget, zip`)
-2. PowerShell(관리자 또는 일반)에서 실행:
+1. Cygwin64 (`C:\cygwin64`) 설치 및 LibreOffice 빌드 필수 패키지 설치 (`autoconf, automake, bison, cabextract, flex, gettext, gettext-devel, gperf, nasm, ninja, patch, perl, perl-Archive-Zip, perl-Font-TTF, perl-Digest-MD5, pkg-config, unzip, wget, which, zip`)
+2. PowerShell에서 실행:
    ```powershell
    .\scripts\build-windows.ps1 -WorkDir C:\lo -CygwinRoot C:\cygwin64
    ```
-3. 완료되면 `dist\` 폴더에 `.msi` 설치 파일과 MPL-2.0 소스 패치 아카이브가 생성됩니다.
+3. 완료되면 `dist\` 폴더에 **`WelfaregoOFFICE_26.2.7.3_Setup_x64.exe`** 와 `.msi`, MPL-2.0 소스 패치 아카이브가 모두 생성됩니다.
+4. 이미 빌드된 `.msi`만 `.exe`로 다시 묶고 싶다면 `.\scripts\build-exe.ps1 -MsiPath dist\WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi`를 실행하세요.
 
 ---
 

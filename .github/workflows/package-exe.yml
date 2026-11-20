@@ -1,0 +1,120 @@
+name: Package Windows Setup EXE
+
+on:
+  workflow_run:
+    workflows: ["Build Welfarego OFFICE Windows x64 MSI"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      msi_run_id:
+        description: "Optional completed build-windows-msi run ID to wrap into Setup .exe"
+        required: false
+        default: ""
+        type: string
+      smoke_test:
+        description: "Run fast Inno Setup 6 .exe packaging smoke test without full MSI"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  package-exe:
+    runs-on: windows-2022
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    steps:
+      - name: Checkout Welfarego OFFICE
+        uses: actions/checkout@v4
+
+      - name: Determine mode & MSI run ID
+        id: mode
+        shell: pwsh
+        run: |
+          if ("${{ inputs.smoke_test }}" -eq "true") {
+            "dry_run=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "run_id=" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } elseif ("${{ inputs.msi_run_id }}" -ne "") {
+            "dry_run=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "run_id=${{ inputs.msi_run_id }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } elseif ("${{ github.event_name }}" -eq "workflow_run") {
+            "dry_run=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "run_id=${{ github.event.workflow_run.id }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } else {
+            throw "Provide either msi_run_id or set smoke_test=true."
+          }
+
+      - name: Download MSI artifact from completed build run
+        if: steps.mode.outputs.dry_run == 'false'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          gh run download "${{ steps.mode.outputs.run_id }}" -R "${{ github.repository }}" -D dist
+          # Flatten nested artifact folders into dist/
+          Get-ChildItem -Path dist -Recurse -File | ForEach-Object {
+            if ($_.DirectoryName -ne (Resolve-Path dist).Path) {
+              Move-Item -Path $_.FullName -Destination (Join-Path dist $_.Name) -Force
+            }
+          }
+          Get-ChildItem dist | Format-Table Name, Length
+
+      - name: Build Windows Setup .exe with Inno Setup 6
+        shell: pwsh
+        run: |
+          if ("${{ steps.mode.outputs.dry_run }}" -eq "true") {
+            .\scripts\build-exe.ps1 -DryRun
+          } else {
+            $existingExe = Get-ChildItem -Path dist -Filter "*_Setup_x64.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($existingExe) {
+              Write-Host "Setup .exe already present from build run: $($existingExe.Name)"
+            } else {
+              .\scripts\build-exe.ps1
+            }
+          }
+
+      - name: Upload Setup .exe artifact (smoke test)
+        if: steps.mode.outputs.dry_run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Welfarego-OFFICE-Setup-EXE-SmokeTest
+          path: |
+            dist/*_Setup_x64.exe
+            dist/SHA256SUMS.txt
+          retention-days: 7
+
+      - name: Upload complete Setup .exe + MSI + MPL-2.0 Source Release Bundle
+        if: steps.mode.outputs.dry_run == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Welfarego-OFFICE-Windows-x64-Setup-EXE
+          path: |
+            dist/*_Setup_x64.exe
+            dist/*.msi
+            dist/*_MPL2_Source_Patches.zip
+            dist/SHA256SUMS.txt
+          retention-days: 30
+
+      - name: Publish GitHub Release with direct Setup .exe download
+        if: steps.mode.outputs.dry_run == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v26.2.7.3
+          name: "Welfarego OFFICE 26.2.7.3 (Windows x64 Setup .exe)"
+          files: |
+            dist/*_Setup_x64.exe
+            dist/*.msi
+            dist/*_MPL2_Source_Patches.zip
+            dist/SHA256SUMS.txt
+          body: |
+            ## Welfarego OFFICE 26.2.7.3 (Windows x64)
+
+            ### 다운로드 및 설치
+            - **일반 사용자 (권장):** **`WelfaregoOFFICE_26.2.7.3_Setup_x64.exe`** 를 다운로드해 더블클릭으로 설치하세요. (한국어/영문 설치 마법사, 바탕화면 바로가기 및 MS Office 파일 연결 옵션 지원)
+            - **기업/IT 대량 배포:** `WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi` 사용 (`msiexec /i ... /qn`)
+            - **오픈소스 소스코드 공개 (MPL-2.0 제3.2조):** `WelfaregoOFFICE_26.2.7.3_MPL2_Source_Patches.zip`

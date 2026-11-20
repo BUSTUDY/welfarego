@@ -172,13 +172,15 @@ def check_branding_assets(errors: list[str]) -> None:
             fail(f"Forbidden upstream trademark reference found in {svg_name}", errors)
     ok("All 5 brand SVG files present and free of upstream trademarks")
 
-    # Check Splash PNG dimensions
+    # Check Splash PNG & Installer BMP dimensions
     expected_dims = {
         img_dir / "intro.png": (644, 199),
         img_dir / "intro-highres.png": (990, 254),
         ROOT / "branding" / "msi" / "Banner.bmp": (632, 57),
         ROOT / "branding" / "msi" / "Image.bmp": (162, 312),
         ROOT / "branding" / "msi" / "Image_2.bmp": (493, 312),
+        ROOT / "branding" / "msi" / "WizardImage.bmp": (164, 314),
+        ROOT / "branding" / "msi" / "WizardSmall.bmp": (55, 58),
     }
     for path, dims in expected_dims.items():
         if not path.is_file():
@@ -189,6 +191,16 @@ def check_branding_assets(errors: list[str]) -> None:
                 fail(f"{path.name} has size {im.size}, expected {dims}", errors)
             else:
                 ok(f"{path.relative_to(ROOT)} verified ({dims[0]}x{dims[1]})")
+
+    for req_inst in (
+        ROOT / "installer" / "WelfaregoOFFICE.iss",
+        ROOT / "installer" / "Korean.isl",
+        ROOT / "legal" / "INSTALLER-LICENSE-KO.txt",
+    ):
+        if not req_inst.is_file():
+            fail(f"Missing Windows .exe installer asset: {req_inst.relative_to(ROOT)}", errors)
+        else:
+            ok(f"{req_inst.relative_to(ROOT)} present")
 
     if not (img_dir / "progress.conf").is_file():
         fail("Missing branding/images/progress.conf", errors)

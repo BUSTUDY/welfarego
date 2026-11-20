@@ -635,6 +635,30 @@ def generate_msi_banners(brand: dict) -> None:
     full.paste(side, (0, 0))
     full.save(MSI_DIR / "Image_2.bmp", format="BMP")
 
+    # 4. Inno Setup WizardImage.bmp (164x314) for .exe installer welcome/finish sidebar
+    W, H = 164, 314
+    wiz_side = create_diagonal_gradient(W, H, c_primary, c_dark).convert("RGB")
+    draw = ImageDraw.Draw(wiz_side)
+    draw.rounded_rectangle((28, 36, 94, 102), radius=16, fill=hex_to_rgb("#14B8A6"))
+    draw.text((61, 69), "W", font=f_big, fill=(255, 255, 255), anchor="mm")
+    draw.text((28, 124), "Welfarego", font=f_t, fill=(255, 255, 255))
+    draw.text((28, 148), "OFFICE", font=f_sub, fill=hex_to_rgb("#99F6E4"))
+    draw.text((28, 258), "Fluent Ribbon Suite", font=f_note, fill=hex_to_rgb("#CCFBF1"))
+    draw.text((28, 274), "MPL-2.0 Open Source", font=f_note, fill=hex_to_rgb("#99F6E4"))
+    wiz_side.save(MSI_DIR / "WizardImage.bmp", format="BMP")
+
+    # 5. Inno Setup WizardSmall.bmp (55x58) for .exe installer header badge
+    W, H = 55, 58
+    wiz_sm = Image.new("RGB", (W, H), (255, 255, 255))
+    tile = create_diagonal_gradient(46, 46, c_primary, c_dark).convert("RGB")
+    mask = Image.new("L", (46, 46), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, 45, 45), radius=11, fill=255)
+    wiz_sm.paste(tile, (4, 6), mask)
+    draw = ImageDraw.Draw(wiz_sm)
+    f_sm = load_font(FONT_CANDIDATES_BOLD, 24)
+    draw.text((27, 29), "W", font=f_sm, fill=(255, 255, 255), anchor="mm")
+    wiz_sm.save(MSI_DIR / "WizardSmall.bmp", format="BMP")
+
 
 def main() -> None:
     brand = load_brand()
