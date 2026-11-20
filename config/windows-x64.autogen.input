@@ -33,6 +33,7 @@
 --without-helppack-integration
 --without-myspell-dicts
 --without-doxygen
+--without-lxml
 --disable-odk
 --disable-online-update
 --disable-breakpad

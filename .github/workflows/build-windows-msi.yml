@@ -63,9 +63,9 @@ jobs:
           $packages = @(
             "autoconf", "automake", "bison", "ca-certificates", "cabextract",
             "curl", "diffutils", "file", "flex", "gettext", "gettext-devel",
-            "gnupg", "gperf", "m4", "nasm", "patch", "perl", "perl-Archive-Zip",
-            "perl-Font-TTF", "perl-Digest-MD5", "pkg-config", "pkgconf",
-            "unzip", "wget", "which", "zip"
+            "gnupg", "gperf", "m4", "nasm", "ninja", "patch", "perl",
+            "perl-Archive-Zip", "perl-Font-TTF", "perl-Digest-MD5",
+            "pkg-config", "pkgconf", "unzip", "wget", "which", "zip"
           ) -join ","
           Start-Process -FilePath $setupExe -Wait -ArgumentList @(
             "--quiet-mode",
@@ -76,7 +76,7 @@ jobs:
             "--packages", $packages
           )
 
-          # Install LibreOffice's official MSVC-compatible GNU make and pkgconf into /usr/local/bin
+          # Install LibreOffice's official MSVC-compatible GNU make, pkgconf-2.4.3.exe, and jom.exe into /usr/local/bin
           $localBin = Join-Path $cygRoot "usr\local\bin"
           New-Item -ItemType Directory -Force -Path $localBin | Out-Null
 
@@ -86,11 +86,20 @@ jobs:
             throw "SHA256 mismatch for make-4.2.1-msvc.exe"
           }
 
-          $pkgPath = Join-Path $localBin "pkgconf.exe"
+          $pkgPath = Join-Path $localBin "pkgconf-2.4.3.exe"
           Invoke-WebRequest -Uri "https://dev-www.libreoffice.org/extern/pkgconf-2.4.3.exe" -OutFile $pkgPath
           if ((Get-FileHash $pkgPath -Algorithm SHA256).Hash.ToLower() -ne "791cd6dbc56f7268fbf9c4652d6634b0f5c59687ab4e504565e58245952edd41") {
             throw "SHA256 mismatch for pkgconf-2.4.3.exe"
           }
+
+          $jomZip = "C:\jom_1_1_4.zip"
+          Invoke-WebRequest -Uri "https://download.qt.io/official_releases/jom/jom_1_1_4.zip" -OutFile $jomZip
+          if ((Get-FileHash $jomZip -Algorithm SHA256).Hash.ToLower() -ne "d533c1ef49214229681e90196ed2094691e8c4a0a0bef0b2c901debcb562682b") {
+            throw "SHA256 mismatch for jom_1_1_4.zip"
+          }
+          Expand-Archive -Path $jomZip -DestinationPath "C:\jom_tmp" -Force
+          Copy-Item -Path "C:\jom_tmp\jom.exe" -Destination (Join-Path $localBin "jom.exe") -Force
+          Remove-Item -Recurse -Force "C:\jom_tmp", $jomZip
 
       - name: Cache LibreOffice external source tarballs
         uses: actions/cache@v4
