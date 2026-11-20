@@ -109,7 +109,7 @@ $BuildCmd = @(
     "export PATH=`"/usr/local/bin:/usr/bin:`$PATH`"",
     "cd `"$CygCore`"",
     "./autogen.sh",
-    "make -j`$(nproc) build-nocheck"
+    "/usr/local/bin/make.exe build"
 ) -join "`n"
 & $CygBash --login -c $BuildCmd
 if ($LASTEXITCODE -ne 0) { throw "LibreOffice/Welfarego OFFICE compilation failed." }
