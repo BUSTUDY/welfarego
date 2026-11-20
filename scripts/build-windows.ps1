@@ -99,15 +99,15 @@ python (Join-Path $RepoRoot "scripts\apply_patches.py") `
     --extra-buildid "Welfarego OFFICE $Version (Fluent Ribbon / MPL-2.0)"
 if ($LASTEXITCODE -ne 0) { throw "apply_patches.py failed." }
 
-# 4. Run autogen.sh and build MSI inside Cygwin
+# 4. Run autogen.sh and build MSI inside Cygwin (LF-normalized to avoid CRLF errors in Cygwin bash)
 Write-Host "`n[4/5] Running autogen.sh and compiling Windows x64 MSI..." -ForegroundColor Green
-$BuildCmd = @"
-set -euo pipefail
-export PATH="/usr/local/bin:/usr/bin:`$PATH"
-cd "$CygCore"
-./autogen.sh
-make -j`$(nproc) build-nocheck
-"@
+$BuildCmd = @(
+    "set -euo pipefail",
+    "export PATH=`"/usr/local/bin:/usr/bin:`$PATH`"",
+    "cd `"$CygCore`"",
+    "./autogen.sh",
+    "make -j`$(nproc) build-nocheck"
+) -join "`n"
 & $CygBash --login -c $BuildCmd
 if ($LASTEXITCODE -ne 0) { throw "LibreOffice/Welfarego OFFICE compilation failed." }
 

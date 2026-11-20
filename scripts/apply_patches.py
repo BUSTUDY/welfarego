@@ -91,7 +91,6 @@ def copy_branding_assets(lo_dir: Path) -> None:
     for fname in (
         "intro.png",
         "intro-highres.png",
-        "progress.conf",
         "about.svg",
         "logo.svg",
         "logo_inverted.svg",
@@ -99,6 +98,9 @@ def copy_branding_assets(lo_dir: Path) -> None:
         "logo-sc_inverted.svg",
     ):
         shutil.copy2(src_imgs / fname, dst_brand / fname)
+    # progress.conf is sourced by Cygwin bash during configure.ac -> always enforce LF
+    prog_text = (src_imgs / "progress.conf").read_text(encoding="utf-8").replace("\r\n", "\n")
+    (dst_brand / "progress.conf").write_text(prog_text, encoding="utf-8", newline="\n")
     print(f"[BRAND] Prepared --with-branding directory at {dst_brand}")
 
     # 5. Copy Welfarego NOTICE / LICENSE / SOURCE-OFFER metadata into checkout
@@ -128,7 +130,7 @@ def write_autogen_input(
         lines.append(f"--with-extra-buildid={extra_buildid}")
 
     target = lo_dir / "autogen.input"
-    target.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    target.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     print(f"[CONFIG] Wrote {target}")
 
 
