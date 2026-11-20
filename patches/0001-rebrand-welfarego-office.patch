@@ -90,7 +90,7 @@ index 316e4f4..feb5758 100644
 -en-US = "{4B17E523-5D91-4E69-BD96-7FD81CFA81BB}"
 +en-US = "{D28F63A9-4E1C-49B7-8F52-9A7C3E6B12D0}"
 diff --git a/instsetoo_native/util/openoffice.lst.in b/instsetoo_native/util/openoffice.lst.in
-index a12aa97..ed544f7 100644
+index a12aa97..c7d8cae 100644
 --- a/instsetoo_native/util/openoffice.lst.in
 +++ b/instsetoo_native/util/openoffice.lst.in
 @@ -8,7 +8,7 @@ Globals
@@ -102,6 +102,15 @@ index a12aa97..ed544f7 100644
              UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
              HIDELICENSEDIALOG 1
              PACKAGEPREFIX
+@@ -37,7 +37,7 @@ Globals
+     }
+ }
+ 
+-LibreOffice
++@PRODUCTNAME_WITHOUT_SPACES@
+ {
+     Settings
+     {
 @@ -51,7 +51,7 @@ LibreOffice
              BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
              USERDIRPRODUCTVERSION 4
@@ -133,6 +142,15 @@ index a12aa97..ed544f7 100644
              ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
              ADDSYSTEMINTEGRATION 1
              PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+@@ -118,7 +118,7 @@ LibreOfficeDev
+     }
+ }
+ 
+-LibreOffice_SDK
++@PRODUCTNAME_WITHOUT_SPACES@_SDK
+ {
+     Settings
+     {
 diff --git a/officecfg/registry/data/org/openoffice/Office/Common.xcu b/officecfg/registry/data/org/openoffice/Office/Common.xcu
 index 2222488..01ef2f3 100644
 --- a/officecfg/registry/data/org/openoffice/Office/Common.xcu

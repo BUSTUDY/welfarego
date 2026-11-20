@@ -114,18 +114,24 @@ $BuildCmd = @(
 & $CygBash --login -c $BuildCmd
 if ($LASTEXITCODE -ne 0) { throw "LibreOffice/Welfarego OFFICE compilation failed." }
 
-# 5. Collect Windows MSI installer + create MPL-2.0 source disclosure archive
+# 5. Collect Windows MSI installer + MPL-2.0 source archive + Setup .exe
 Write-Host "`n[5/5] Packaging deliverables into $DistDir..." -ForegroundColor Green
-$MsiFiles = Get-ChildItem -Path (Join-Path $CoreDir "workdir\installation") -Filter "*.msi" -Recurse -ErrorAction SilentlyContinue
-if (-not $MsiFiles) {
-    throw "No .msi file found under $CoreDir\workdir\installation."
+$InstallSearchRoot = Join-Path $CoreDir "workdir\installation"
+$MsiCandidates = Get-ChildItem -Path $InstallSearchRoot -Filter "*.msi" -Recurse -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -match "msi[\\/]install[\\/]" } |
+    Sort-Object Length -Descending
+if (-not $MsiCandidates) {
+    $MsiCandidates = Get-ChildItem -Path $InstallSearchRoot -Filter "*.msi" -Recurse -ErrorAction SilentlyContinue |
+        Sort-Object Length -Descending
+}
+if (-not $MsiCandidates) {
+    throw "No .msi file found under $InstallSearchRoot."
 }
 
-foreach ($msi in $MsiFiles) {
-    $DestMsi = Join-Path $DistDir $msi.Name
-    Copy-Item -Path $msi.FullName -Destination $DestMsi -Force
-    Write-Host "  MSI ready: $DestMsi" -ForegroundColor Yellow
-}
+$BestMsi = $MsiCandidates | Select-Object -First 1
+$DestMsi = Join-Path $DistDir "${ProductNoSpaces}_${Version}_Win_x86-64.msi"
+Copy-Item -Path $BestMsi.FullName -Destination $DestMsi -Force
+Write-Host "  MSI ready: $DestMsi ($($BestMsi.Length) bytes, from $($BestMsi.FullName))" -ForegroundColor Yellow
 
 # Generate MPL-2.0 Section 3.2 source disclosure bundle
 $SourceZip = Join-Path $DistDir "${ProductNoSpaces}_${Version}_MPL2_Source_Patches.zip"
@@ -142,8 +148,7 @@ Compress-Archive -Path `
     -DestinationPath $SourceZip
 
 # Wrap compiled MSI into one-click Windows Setup .exe (Inno Setup 6)
-$PrimaryMsi = Join-Path $DistDir ($MsiFiles | Select-Object -First 1).Name
-& (Join-Path $PSScriptRoot "build-exe.ps1") -MsiPath $PrimaryMsi
+& (Join-Path $PSScriptRoot "build-exe.ps1") -MsiPath $DestMsi
 if ($LASTEXITCODE -ne 0) { throw "Setup .exe packaging failed." }
 
 Write-Host "`n[DONE] Build complete! Deliverables in: $DistDir" -ForegroundColor Cyan
