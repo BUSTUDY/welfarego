@@ -26,35 +26,19 @@ jobs:
       - name: Checkout Welfarego OFFICE
         uses: actions/checkout@v4
 
-      - name: Optimize Windows Defender & free disk space on hosted runner
-        if: runner.environment == 'github-hosted'
+      - name: Configure fast build drive & Windows Defender
         shell: pwsh
         run: |
-          Write-Host "Disabling Windows Defender real-time scanning for build speed..."
-          try { Set-MpPreference -DisableRealtimeMonitoring $true } catch { Write-Host "Defender skip: $_" }
-
-          Write-Host "Disk space BEFORE cleanup:"
-          Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
-
-          $empty = "C:\_empty_tmp"
-          New-Item -ItemType Directory -Force -Path $empty | Out-Null
-          $targets = @(
-            "C:\Android",
-            "C:\ghcup",
-            "C:\Program Files\Microsoft SDKs\Azure"
-          )
-          foreach ($t in $targets) {
-            if (Test-Path $t) {
-              Write-Host "Fast-clearing $t..."
-              & robocopy $empty $t /MIR /R:0 /W:0 /MT:16 /NFL /NDL /NJH /NJS /NC /NS /NP | Out-Null
-              cmd /c rmdir /s /q "$t" 2>$null
-              $global:LASTEXITCODE = 0
-            }
+          if (Test-Path "D:\") {
+            $workDir = "D:\lo"
+          } else {
+            $workDir = "C:\lo"
           }
-          Remove-Item -Force -Recurse $empty -ErrorAction SilentlyContinue
-          $global:LASTEXITCODE = 0
-
-          Write-Host "Disk space AFTER cleanup:"
+          "LO_WORK_DIR=$workDir" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          if ("${{ runner.environment }}" -eq "github-hosted") {
+            try { Set-MpPreference -DisableRealtimeMonitoring $true } catch { Write-Host "Defender skip: $_" }
+          }
+          Write-Host "Selected work directory: $workDir"
           Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}
 
       - name: Setup Python & Pillow for compliance check
@@ -110,14 +94,14 @@ jobs:
       - name: Cache LibreOffice external source tarballs
         uses: actions/cache@v4
         with:
-          path: C:\lo\ext-tar
+          path: ${{ env.LO_WORK_DIR }}\ext-tar
           key: lo-ext-tar-26.2.7.3-${{ hashFiles('config/windows-x64.autogen.input') }}
           restore-keys: |
             lo-ext-tar-26.2.7.3-
 
       - name: Build Welfarego OFFICE Windows x64 MSI
         shell: pwsh
-        run: .\scripts\build-windows.ps1 -WorkDir C:\lo -CygwinRoot C:\cygwin64
+        run: .\scripts\build-windows.ps1 -WorkDir "$env:LO_WORK_DIR" -CygwinRoot C:\cygwin64
 
       - name: Upload MSI Installer & MPL-2.0 Source Archive
         uses: actions/upload-artifact@v4
