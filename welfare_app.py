@@ -13,11 +13,14 @@ from datetime import datetime, timedelta, timezone
 from flask import Flask, jsonify, send_from_directory
 
 from daycare import daycare_bp
+from rate_limit import enforce_request_rate_limit
 
 KST = timezone(timedelta(hours=9))
 
 app = Flask(__name__)
 app.config["SITE_BASE"] = os.environ.get("WELFARE_SITE_BASE", "https://welfarego.co.kr").rstrip("/")
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 86400
+app.before_request(enforce_request_rate_limit)
 app.register_blueprint(daycare_bp)
 
 

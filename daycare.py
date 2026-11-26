@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """웰페어고 주·야간보호시설 실무 포털 (메인·평가매뉴얼·운영매뉴얼·서식자료·무료 오피스)."""
 
+import hashlib
 import io
 import json
 import os
 import zipfile
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 from pathlib import Path
 from urllib.parse import quote
 
@@ -60,6 +62,18 @@ ALLOWED_OFFICE_ASSETS = {
 }
 
 
+def _compute_asset_ver():
+    h = hashlib.sha256()
+    for rel in ("static/css/portal.css", "static/js/portal.js"):
+        p = ROOT / rel
+        if p.is_file():
+            h.update(p.read_bytes())
+    return h.hexdigest()[:8]
+
+
+ASSET_VER = _compute_asset_ver()
+
+
 def korea_today():
     return datetime.now(KST).date()
 
@@ -81,6 +95,7 @@ def _attachment_response(payload_bytes, filename, mimetype):
     headers = {
         "Content-Disposition": f"attachment; filename*=UTF-8''{encoded}",
         "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow",
     }
     return Response(payload_bytes, mimetype=mimetype, headers=headers)
 
@@ -90,6 +105,7 @@ def portal_globals():
     bundle = load_eval_bundle()
     return {
         "today": korea_today(),
+        "asset_ver": ASSET_VER,
         "site_base": current_app.config["SITE_BASE"].rstrip("/"),
         "nav_items": [
             {"key": "home", "path": "/", "label": "포털 메인"},
@@ -323,10 +339,8 @@ def download_office_setup():
     return redirect("https://www.libreoffice.org/download/download-libreoffice/?type=win-x86_64&lang=ko")
 
 
-@daycare_bp.route("/office/download/mpl2-source.zip")
-def download_office_mpl2_source():
-    brand = _load_office_brand()
-    ver = brand.get("package_version", "26.2.7.3")
+@lru_cache(maxsize=2)
+def _build_mpl2_source_zip(ver):
     buf = io.BytesIO()
     include_roots = ["LICENSE", "NOTICE", "README.md", "legal", "patches", "config", "installer"]
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -339,8 +353,15 @@ def download_office_mpl2_source():
                     if sub.is_file():
                         rel = sub.relative_to(OFFICE_DIR)
                         zf.write(sub, arcname=f"WelfaregoOFFICE_{ver}_MPL2/{rel.as_posix()}")
+    return buf.getvalue()
+
+
+@daycare_bp.route("/office/download/mpl2-source.zip")
+def download_office_mpl2_source():
+    brand = _load_office_brand()
+    ver = brand.get("package_version", "26.2.7.3")
     return _attachment_response(
-        buf.getvalue(),
+        _build_mpl2_source_zip(ver),
         f"WelfaregoOFFICE_{ver}_MPL2_Source_Patches.zip",
         "application/zip",
     )

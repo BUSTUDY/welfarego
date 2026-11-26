@@ -162,6 +162,54 @@ class DaycareAndOfficeTests(unittest.TestCase):
             self.assertTrue(any(n.endswith("/LICENSE") for n in names))
             self.assertTrue(any("0003-fluent-ribbon-rendering.patch" in n for n in names))
 
+    def test_rate_limiting_and_bandwidth_guards(self):
+        from rate_limit import reset_rate_limits
+
+        css = self.client.get("/static/css/portal.css")
+        self.assertEqual(css.status_code, 200)
+        self.assertIn("max-age=86400", css.headers.get("Cache-Control", ""))
+        css.close()
+
+        robots = self.client.get("/robots.txt")
+        robots_txt = robots.get_data(as_text=True)
+        robots.close()
+        self.assertIn("Disallow: /forms/bundle.zip", robots_txt)
+
+        reset_rate_limits()
+        welfare_app.app.config["RATELIMIT_IN_TESTS"] = True
+        try:
+            headers_a = {"CF-Connecting-IP": "203.0.113.10"}
+            headers_b = {"CF-Connecting-IP": "203.0.113.11"}
+
+            for _ in range(6):
+                r = self.client.get("/forms/bundle.zip", headers=headers_a)
+                self.assertEqual(r.status_code, 200)
+                self.assertEqual(r.headers.get("X-Robots-Tag"), "noindex, nofollow")
+
+            blocked_zip = self.client.get("/forms/bundle.zip", headers=headers_a)
+            self.assertEqual(blocked_zip.status_code, 429)
+            self.assertTrue(int(blocked_zip.headers.get("Retry-After", "0")) >= 1)
+            self.assertIn("잠시 후 다시 시도해 주세요", blocked_zip.get_data(as_text=True))
+
+            # 다른 IP는 영향받지 않음
+            other_ip = self.client.get("/forms/bundle.zip", headers=headers_b)
+            self.assertEqual(other_ip.status_code, 200)
+
+            # 개별 서식 다운로드는 분당 45회까지 허용 후 46회째에 차단
+            for _ in range(45):
+                d = self.client.get("/forms/contract-notice-form11.docx", headers=headers_a)
+                self.assertEqual(d.status_code, 200)
+            blocked_dl = self.client.get("/forms/contract-notice-form11.docx", headers=headers_a)
+            self.assertEqual(blocked_dl.status_code, 429)
+
+            # 헬스체크는 속도 제한에서 항상 제외
+            for _ in range(20):
+                self.assertEqual(self.client.get("/healthz", headers=headers_a).status_code, 200)
+        finally:
+            welfare_app.app.config.pop("RATELIMIT_IN_TESTS", None)
+            reset_rate_limits()
+
 
 if __name__ == "__main__":
     unittest.main()
+

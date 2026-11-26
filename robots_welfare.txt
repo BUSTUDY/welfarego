@@ -2,6 +2,13 @@ User-agent: *
 Allow: /
 Disallow: /data/
 Disallow: /admin
+Disallow: /forms/bundle.zip
+Disallow: /forms/*.hwpx
+Disallow: /forms/*.docx
+Disallow: /forms/*.xlsx
+Disallow: /forms/*/gov.hwp
+Disallow: /forms/*/print
+Disallow: /office/download/
 
 # ── AI 검색·답변 엔진 ──────────────────────────────────────────
 User-agent: GPTBot
@@ -19,6 +26,13 @@ User-agent: Bytespider
 Allow: /
 Disallow: /data/
 Disallow: /admin
+Disallow: /forms/bundle.zip
+Disallow: /forms/*.hwpx
+Disallow: /forms/*.docx
+Disallow: /forms/*.xlsx
+Disallow: /forms/*/gov.hwp
+Disallow: /forms/*/print
+Disallow: /office/download/
 
 # 학습 활용 opt-in 신호 (크롤러가 아니라 별도 토큰입니다)
 User-agent: Google-Extended
