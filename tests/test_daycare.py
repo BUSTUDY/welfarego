@@ -56,6 +56,19 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertEqual(len(DAYCARE_FORMS), 20)
         self.assertIn("별지 제15호서식", forms_html)
         self.assertIn("/forms/bundle.zip", forms_html)
+        self.assertIn('href="/evaluation#indicator-8"', forms_html)
+        self.assertNotIn('href="https://www.longtermcare.or.kr"', forms_html)
+
+        home_html = self.client.get("/").get_data(as_text=True)
+        self.assertNotIn('href="https://www.longtermcare.or.kr"', home_html)
+
+        for form in DAYCARE_FORMS:
+            self.assertRegex(form["eval_url"], r"^/evaluation#indicator-([1-9]|[12][0-9]|3[0-6])$")
+            self.assertTrue(form["eval_label"])
+            self.assertNotIn(
+                form["gov_url"].rstrip("/"),
+                {"https://www.longtermcare.or.kr", "https://www.nid.or.kr", "https://lst.go.kr"},
+            )
 
     def test_all_20_forms_generate_valid_hwpx_docx_xlsx_and_print(self):
         from hwpx import HwpxDocument, validate_editor_open_safety, validate_package
