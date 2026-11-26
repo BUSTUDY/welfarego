@@ -13,6 +13,7 @@ from xml.sax.saxutils import escape as xe
 from hwpx import HwpxDocument
 
 GOV_FORMS_DIR = Path(__file__).resolve().parent / "data" / "gov_forms"
+HWPX_TEMPLATES_DIR = Path(__file__).resolve().parent / "data" / "hwpx_templates"
 
 FORM_CATEGORIES = [
     "법정 필수서식",
@@ -1249,6 +1250,9 @@ from functools import lru_cache
 
 @lru_cache(maxsize=32)
 def _build_base_hwpx_by_slug(slug):
+    prebaked = HWPX_TEMPLATES_DIR / f"{slug}.hwpx"
+    if prebaked.is_file():
+        return prebaked.read_bytes()
     form = FORM_MAP[slug]
     doc = HwpxDocument.new()
     # A4(59528 x 84186 HWPUNIT), 좌우상하 15mm(4252) 여백 -> 본문 폭 51024(180mm)
