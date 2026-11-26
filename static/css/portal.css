@@ -1131,27 +1131,6 @@ body.drawer-open { overflow: hidden; }
 .office-app-tile span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); }
 .cert-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
 
-.agency-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid var(--gov-border);
-  border-radius: 6px;
-  background: var(--gov-paper);
-  font-size: 0.85rem;
-  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-}
-.agency-link:hover {
-  transform: translateY(-2px);
-  border-color: var(--gov-tint-line);
-  background: var(--gov-tint-soft);
-}
-.agency-link strong { display: block; color: var(--gov-navy-dark); font-weight: 700; }
-.agency-link span { display: block; color: var(--gov-slate-600); margin-top: 3px; font-size: 0.78rem; }
-.agency-link .go { color: var(--gov-navy); font-weight: 800; white-space: nowrap; }
-
 .faq-item {
   border: 1px solid var(--gov-line);
   border-radius: 6px;
@@ -1173,51 +1152,6 @@ body.drawer-open { overflow: hidden; }
   color: var(--gov-slate-600);
   line-height: 1.68;
 }
-
-/* Toast & Footer */
-.gov-toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 70;
-  background: var(--gov-navy-dark);
-  color: #ffffff;
-  font-size: 0.84rem;
-  font-weight: 600;
-  padding: 12px 18px;
-  border-radius: 6px;
-  box-shadow: var(--shadow-lg);
-}
-
-.gov-footer {
-  background: var(--gov-paper);
-  border-top: 1px solid var(--gov-line);
-  padding: 28px 0 32px;
-  font-size: 0.8rem;
-  color: var(--gov-slate-500);
-}
-.gov-footer-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding-bottom: 14px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid var(--gov-line);
-}
-.footer-brand {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-}
-.footer-brand strong { color: var(--gov-navy-dark); font-size: 0.92rem; font-weight: 800; }
-.footer-brand span { color: var(--gov-slate-500); font-size: 0.8rem; }
-.gov-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 600; color: var(--gov-slate-600); }
-.gov-footer-links a:hover { color: var(--gov-navy); }
-.footer-note { line-height: 1.65; }
-
 
 /* =========================================================
    평가·운영 컴포넌트 공통 보정 (복지로 스타일: 각진 박스, 그림자 없음)
@@ -1303,9 +1237,9 @@ body.drawer-open { overflow: hidden; }
   .status-pill-check { padding-left: 6px; }
 
   .home-search { padding: 22px 0 20px; margin-top: -16px; }
-  .search-form select { display: none; }
-  .search-form input { padding: 0 16px; min-height: 48px; font-size: 16px; }
-  .search-form button { width: 54px; }
+  .search-form select { padding: 0 4px 0 12px; font-size: 15px; max-width: 92px; min-height: 48px; }
+  .search-form input { padding: 0 12px; min-height: 48px; font-size: 16px; }
+  .search-form button { width: 52px; }
   .hot-words { justify-content: flex-start; font-size: 0.8rem; }
   .home-wrap { padding-top: 22px; }
 
@@ -1357,10 +1291,11 @@ body.drawer-open { overflow: hidden; }
 
 @media print {
   .no-print { display: none !important; }
-  body { background: var(--gov-paper) !important; }
+  body, .modal-backdrop, .modal-dialog { background: #ffffff !important; color: #222222 !important; }
   .gov-card, .gov-page-banner { border: 1px solid #cbd5e1 !important; }
-  .modal-backdrop { position: static !important; background: var(--gov-paper) !important; padding: 0 !important; }
-  .modal-dialog { max-height: none !important; box-shadow: none !important; border: 0 !important; width: 100% !important; border-radius: 0 !important; }
+  .modal-backdrop { position: static !important; padding: 0 !important; }
+  .modal-dialog { max-height: none !important; box-shadow: none !important; border: 0 !important; width: 100% !important; border-radius: 0 !important; overflow: visible !important; }
+  .modal-body { overflow: visible !important; max-height: none !important; }
 }
 
 #simDomainTabs { margin-top: 16px; }

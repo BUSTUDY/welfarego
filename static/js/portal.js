@@ -120,6 +120,39 @@
     if (checkEl) checkEl.textContent = `${ev.docPct}% (${ev.checkedDocs}/${ev.totalDocs})`;
   }
 
+  function readSavedOrgSuffix() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '{}');
+      const qs = new URLSearchParams();
+      if (saved.org && String(saved.org).trim()) qs.set('org', String(saved.org).trim());
+      if (saved.code && String(saved.code).trim()) qs.set('code', String(saved.code).trim());
+      return qs.toString() ? `?${qs.toString()}` : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  function applySavedOrgToStaticLinks(scope) {
+    const suffix = readSavedOrgSuffix();
+    if (!suffix) return;
+    (scope || document).querySelectorAll('a[href^="/forms/"]').forEach(a => {
+      if (a.classList.contains('dc-form-dl') || a.id === 'dcBundleZipBtn') return;
+      const raw = a.getAttribute('href') || '';
+      const base = raw.split('?')[0];
+      if (base === '/forms/bundle.zip' || /\.(docx|xlsx)$/.test(base) || /\/print$/.test(base)) {
+        a.setAttribute('href', base + suffix);
+      }
+    });
+  }
+
+  function centerActiveSubtab(navEl) {
+    const subtabs = navEl || document.querySelector('.gov-subtabs');
+    const activeSubtab = subtabs?.querySelector('.gov-subtab-btn.active');
+    if (subtabs && activeSubtab) {
+      subtabs.scrollLeft = Math.max(0, activeSubtab.offsetLeft - (subtabs.clientWidth - activeSubtab.offsetWidth) / 2);
+    }
+  }
+
   /* =========================================================
      전체메뉴(드로어) · 메인 통합검색
      ========================================================= */
@@ -129,11 +162,12 @@
     if (!drawer || !openBtn) return;
     const closeBtn = document.getElementById('btnMenuClose');
 
-    function setOpen(open) {
+    function setOpen(open, restoreFocus = true) {
       drawer.hidden = !open;
       openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.body.classList.toggle('drawer-open', open);
-      if (open) closeBtn?.focus(); else openBtn.focus();
+      if (open) closeBtn?.focus();
+      else if (restoreFocus) openBtn.focus();
     }
 
     function showPanel(key) {
@@ -145,16 +179,10 @@
     closeBtn?.addEventListener('click', () => setOpen(false));
     drawer.querySelectorAll('[data-dmenu]').forEach(b => b.addEventListener('click', () => showPanel(b.getAttribute('data-dmenu'))));
     drawer.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', () => {
-      // 같은 페이지 내 해시 이동이면 메뉴만 닫는다.
-      const url = new URL(a.href, location.href);
-      if (url.pathname === location.pathname) {
-        setOpen(false);
-        if (url.hash) { location.hash = url.hash; location.reload(); }
-        else if (a.getAttribute('target') !== '_blank') location.reload();
-      }
+      setOpen(false, false);
     }));
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !drawer.hidden) setOpen(false); });
-    window.matchMedia('(min-width: 901px)').addEventListener?.('change', e => { if (e.matches && !drawer.hidden) setOpen(false); });
+    window.matchMedia('(min-width: 901px)').addEventListener?.('change', e => { if (e.matches && !drawer.hidden) setOpen(false, false); });
 
     // 현재 페이지에 맞는 대분류를 먼저 보여준다.
     const path = location.pathname;
@@ -189,11 +217,28 @@
 
   function initHomeSearch() {
     const form = document.getElementById('homeSearchForm');
-    if (!form) return;
     const kind = document.getElementById('homeSearchKind');
-    form.addEventListener('submit', () => {
-      if (kind && kind.offsetParent !== null) form.setAttribute('action', kind.value);
+    const qInput = document.getElementById('homeSearchQ');
+
+    document.querySelectorAll('a[href="/#search"]').forEach(link => {
+      link.addEventListener('click', e => {
+        if (location.pathname === '/') {
+          e.preventDefault();
+          document.getElementById('search')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          qInput?.focus();
+        }
+      });
     });
+
+    if (!form) return;
+    const syncAction = () => {
+      if (kind && kind.value) form.setAttribute('action', kind.value);
+    };
+    kind?.addEventListener('change', syncAction);
+    form.addEventListener('submit', syncAction);
+    if (location.hash === '#search') {
+      setTimeout(() => qInput?.focus(), 50);
+    }
   }
 
   function applyQueryParam(inputId, handler) {
@@ -224,6 +269,7 @@
     initDrawer();
     initHomeSearch();
     initTheme();
+    applySavedOrgToStaticLinks(document);
 
     document.getElementById('btnFontSm')?.addEventListener('click', () => applyFont('sm'));
     document.getElementById('btnFontMd')?.addEventListener('click', () => applyFont('md'));
@@ -441,7 +487,7 @@
       });
     }
 
-    function openModal(indId) {
+    function openModal(indId, preserveScroll = false) {
       const ind = INDICATORS.find(x => x.id === indId);
       if (!ind) return;
       state.currentModalId = indId;
@@ -458,18 +504,19 @@
       document.getElementById('mPrevBtn').disabled = ind.id === 1;
       document.getElementById('mNextBtn').disabled = ind.id === INDICATORS.length;
 
+      const orgSfx = readSavedOrgSuffix();
       const linkedForms = (ind.form_slugs || []).map(s => FORMS_MAP[s]).filter(Boolean);
       const linkedFormsHtml = linkedForms.length ? `
         <div class="modal-sec no-print">
           <h3 class="modal-sec-title">연계 2026 최신 표준서식 바로 내려받기</h3>
           <div class="stack-sm">
             ${linkedForms.map(f => `
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--gov-tint-line);border-radius:12px;background:var(--gov-tint);">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--gov-tint-line);border-radius:6px;background:var(--gov-tint);">
                 <span style="font-size:0.84rem;font-weight:700;color:var(--gov-navy-dark);">[${esc(f.code_badge)}] ${esc(f.no)}. ${esc(f.title)}</span>
                 <span style="display:flex;gap:6px;flex-wrap:wrap;">
-                  <a class="btn btn-xs btn-primary" href="/forms/${encodeURIComponent(f.slug)}.docx">DOCX</a>
-                  <a class="btn btn-xs btn-soft" href="/forms/${encodeURIComponent(f.slug)}.xlsx">XLSX</a>
-                  <a class="btn btn-xs" href="/forms/${encodeURIComponent(f.slug)}/print" target="_blank" rel="noopener noreferrer">인쇄</a>
+                  <a class="btn btn-xs btn-primary" href="/forms/${encodeURIComponent(f.slug)}.docx${orgSfx}">DOCX</a>
+                  <a class="btn btn-xs btn-soft" href="/forms/${encodeURIComponent(f.slug)}.xlsx${orgSfx}">XLSX</a>
+                  <a class="btn btn-xs" href="/forms/${encodeURIComponent(f.slug)}/print${orgSfx}" target="_blank" rel="noopener noreferrer">인쇄</a>
                 </span>
               </div>
             `).join('')}
@@ -478,6 +525,7 @@
       ` : '';
 
       const body = document.getElementById('mBody');
+      const prevScroll = body.scrollTop;
       body.innerHTML = `
         <div class="modal-sec">
           <div class="gov-table-wrap">
@@ -492,7 +540,7 @@
           </div>
         </div>
 
-        <div class="modal-sec" style="background:var(--gov-tint-soft);border:1px solid var(--gov-tint-line);border-radius:14px;padding:14px 16px;font-size:0.88rem;line-height:1.68;">
+        <div class="modal-sec" style="background:var(--gov-tint-soft);border:1px solid var(--gov-tint-line);border-radius:6px;padding:14px 16px;font-size:0.88rem;line-height:1.68;">
           <div style="font-size:0.78rem;font-weight:800;color:var(--gov-navy);margin-bottom:4px;">실무 핵심 요약</div>
           ${esc(ind.summary)}
         </div>
@@ -515,7 +563,7 @@
                 </div>
                 <div style="font-size:0.88rem;font-weight:700;color:var(--gov-ink);margin:4px 0;">${esc(c.text)}</div>
                 ${res.lockedByLink
-                  ? `<div style="font-size:0.8rem;font-weight:700;color:var(--gov-warn-text);background:var(--gov-warn-soft);border:1px solid var(--gov-warn-line);padding:9px 12px;border-radius:10px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
+                  ? `<div style="font-size:0.8rem;font-weight:700;color:var(--gov-warn-text);background:var(--gov-warn-soft);border:1px solid var(--gov-warn-line);padding:9px 12px;border-radius:6px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
                   : `<div class="opt-group no-print">
                       ${c.options.map((opt, oIdx) => {
                         const cls = res.optIdx === oIdx ? (opt.score === c.maxScore || opt.isNA ? 'is-full' : 'is-lost') : '';
@@ -530,7 +578,7 @@
 
         <div class="modal-sec">
           <h3 class="modal-sec-title">2. 현장 확인방법 및 매뉴얼 유의사항</h3>
-          <div style="background:var(--gov-surface);border:1px solid var(--gov-line);border-radius:14px;padding:14px 18px;">
+          <div style="background:var(--gov-surface);border:1px solid var(--gov-line);border-radius:6px;padding:14px 18px;">
             <ul style="margin:0;padding-left:18px;font-size:0.84rem;line-height:1.72;color:var(--gov-ink);">
               ${ind.verification.map(v => `<li>${esc(v)}</li>`).join('')}
             </ul>
@@ -577,7 +625,7 @@
         </div>
       `;
 
-      body.scrollTop = 0;
+      body.scrollTop = preserveScroll ? prevScroll : 0;
 
       body.querySelectorAll('[data-ms-i]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -586,7 +634,7 @@
           updateSummary();
           renderExplorer();
           if (state.activeTab === 'simulator') renderSimulator();
-          openModal(indId);
+          openModal(indId, true);
         });
       });
 
@@ -596,7 +644,7 @@
           saveState();
           updateSummary();
           renderExplorer();
-          openModal(indId);
+          openModal(indId, true);
         });
       });
 
@@ -817,11 +865,13 @@
       document.querySelectorAll('.eval-tab-panel').forEach(p => { p.hidden = true; });
       const target = document.getElementById('tab-' + tabName);
       if (target) target.hidden = false;
+      const evalNav = document.getElementById('evalNav');
       document.querySelectorAll('#evalNav [data-tab]').forEach(btn => {
         const active = btn.getAttribute('data-tab') === tabName;
         btn.classList.toggle('active', active);
         btn.setAttribute('aria-selected', String(active));
       });
+      centerActiveSubtab(evalNav);
       if (state.currentModalId === null) {
         try { history.replaceState(null, '', '#' + tabName); } catch (_) {}
       }
@@ -980,13 +1030,21 @@
     });
     renderExplorer();
 
-    const h = (location.hash || '').replace('#', '');
-    if (h.startsWith('indicator-')) {
-      const id = parseInt(h.replace('indicator-', ''), 10);
-      if (id >= 1 && id <= INDICATORS.length) openModal(id);
-    } else if (['explorer', 'simulator', 'calendar', 'interview', 'guide'].includes(h)) {
-      switchTab(h);
+    function applyEvalHash() {
+      const h = (location.hash || '').replace('#', '');
+      if (h.startsWith('indicator-')) {
+        const id = parseInt(h.replace('indicator-', ''), 10);
+        if (id >= 1 && id <= INDICATORS.length) openModal(id);
+      } else if (['explorer', 'simulator', 'calendar', 'interview', 'guide'].includes(h)) {
+        if (state.currentModalId !== null) {
+          document.getElementById('detailModal').hidden = true;
+          state.currentModalId = null;
+        }
+        switchTab(h);
+      }
     }
+    applyEvalHash();
+    window.addEventListener('hashchange', applyEvalHash);
   }
 
   /* =========================================================
@@ -1004,11 +1062,13 @@
       document.querySelectorAll('.ops-tab-panel').forEach(p => { p.hidden = true; });
       const el = document.getElementById('opstab-' + tab);
       if (el) el.hidden = false;
+      const opsNav = document.getElementById('opsNav');
       document.querySelectorAll('#opsNav [data-opstab]').forEach(btn => {
         const active = btn.getAttribute('data-opstab') === tab;
         btn.classList.toggle('active', active);
         btn.setAttribute('aria-selected', String(active));
       });
+      centerActiveSubtab(opsNav);
       try { history.replaceState(null, '', '#' + tab); } catch (_) {}
     }
 
@@ -1134,10 +1194,14 @@
     calcStaffing();
     calcLabor();
 
-    const h = (location.hash || '').replace('#', '');
-    if (['fees', 'staffing', 'sop', 'training', 'audit'].includes(h)) {
-      switchOpsTab(h);
+    function applyOpsHash() {
+      const h = (location.hash || '').replace('#', '');
+      if (['fees', 'staffing', 'sop', 'training', 'audit'].includes(h)) {
+        switchOpsTab(h);
+      }
     }
+    applyOpsHash();
+    window.addEventListener('hashchange', applyOpsHash);
   }
 
   /* =========================================================
@@ -1173,6 +1237,9 @@
         a.href = a.getAttribute('data-base') + suffix;
       });
       if (bundleBtn) bundleBtn.href = '/forms/bundle.zip' + suffix;
+      document.querySelectorAll('#drawer a[href^="/forms/bundle.zip"]').forEach(a => {
+        a.href = '/forms/bundle.zip' + suffix;
+      });
     }
 
     function filterForms() {
@@ -1226,8 +1293,5 @@
   initEvaluation();
   initOperations();
   initForms();
-  const activeSubtab = document.querySelector('.gov-subtabs .gov-subtab-btn.active');
-  if (activeSubtab && typeof activeSubtab.scrollIntoView === 'function') {
-    activeSubtab.scrollIntoView({ inline: 'center', block: 'nearest' });
-  }
+  centerActiveSubtab();
 })();
