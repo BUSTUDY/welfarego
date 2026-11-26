@@ -23,7 +23,7 @@
 
   <nav class="gov-subtabs scrollbar-thin" role="tablist" aria-label="운영매뉴얼 세부 메뉴" id="opsNav">
     <button type="button" data-opstab="fees" class="gov-subtab-btn active" role="tab" aria-selected="true">① 2026 수가·본인부담금 계산기</button>
-    <button type="button" data-opstab="staffing" class="gov-subtab-btn" role="tab" aria-selected="false">② 인력배치·48.6% 인건비·장려금</button>
+    <button type="button" data-opstab="staffing" class="gov-subtab-btn" role="tab" aria-selected="false">② 인력배치·가산 시뮬레이터·인건비</button>
     <button type="button" data-opstab="sop" class="gov-subtab-btn" role="tab" aria-selected="false">③ 운영 SOP·2026 개정고시</button>
     <button type="button" data-opstab="training" class="gov-subtab-btn" role="tab" aria-selected="false">④ 법정·평가 필수교육 (10종)</button>
     <button type="button" data-opstab="audit" class="gov-subtab-btn" role="tab" aria-selected="false">⑤ 현지조사 환수 예방 (8선)</button>
@@ -188,25 +188,101 @@
     <div class="gov-card">
       <div class="gov-card-head">
         <div>
-          <h2>법정 인력배치기준 &amp; 인력추가배치 가산 시뮬레이터</h2>
-          <p class="gov-card-sub">「노인복지법 시행규칙 별표 9」 및 2026년 고시 제11조의6·제55조 기준으로 필수 배치 인원과 추가배치 가산 요건을 계산합니다.</p>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-solid">고시 제2026-189호 제48·55·56·59·62조</span>
+            <span class="tag tag-ok">브라우저 자동 저장</span>
+          </div>
+          <h2>법정 인력배치기준 &amp; 인력추가배치 가산 점수·수령액 시뮬레이터</h2>
+          <p class="gov-card-sub">수급자 수(예: 25명·32명·45명)와 현재(또는 채용 예정) 직원 수를 입력하면 법정 의무인원 충족 여부, 직종별 가산점수·상한, 예상 월 가산금을 즉시 계산합니다.</p>
         </div>
       </div>
+
+      <div class="chip-bar" style="margin-top:0;padding-top:0;border-top:0;margin-bottom:10px;" id="stfPresetBar">
+        <span style="font-size:0.76rem;font-weight:700;color:var(--gov-slate-600);">규모별 빠른 예시:</span>
+        <button type="button" class="chip-btn" data-stf-preset="9">소규모 9명</button>
+        <button type="button" class="chip-btn" data-stf-preset="15">15명</button>
+        <button type="button" class="chip-btn" data-stf-preset="25">25명 (사무원 기준)</button>
+        <button type="button" class="chip-btn" data-stf-preset="32">32명</button>
+        <button type="button" class="chip-btn" data-stf-preset="35">35명 (선임요보)</button>
+        <button type="button" class="chip-btn" data-stf-preset="45">45명 (6.4명 주의구간)</button>
+        <button type="button" class="chip-btn" data-stf-preset="55">55명</button>
+      </div>
+
       <div class="calc-split">
-        <div class="stack-sm" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:3px;">
+        <div class="stack-sm" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:4px;">
+          <div style="font-size:0.8rem;font-weight:800;color:var(--gov-navy);">1. 월평균 일일 수급자 현원 및 청구 기준액</div>
           <div class="grid-2">
             <div class="field">
-              <label for="stfGeneralUsers">일반실 월 평균 일일 이용자 수 (명)</label>
-              <input id="stfGeneralUsers" type="number" min="1" max="300" value="35" class="gov-input">
+              <label for="stfGeneralUsers">일반실 일일 평균 이용자 수 (명)</label>
+              <input id="stfGeneralUsers" type="number" min="0" max="300" value="32" class="gov-input">
             </div>
             <div class="field">
               <label for="stfDementiaUsers">치매전담실 일일 이용자 수 (없으면 0)</label>
               <input id="stfDementiaUsers" type="number" min="0" max="150" value="0" class="gov-input">
             </div>
           </div>
-          <div style="font-size:0.75rem;color:var(--gov-slate-600);background:var(--gov-paper);border:1px solid var(--gov-line);padding:10px;border-radius:2px;line-height:1.6;">
-            <strong>월 기준 근무시간 공식:</strong> (해당 월 토요일·공휴일·근로자의 날 제외 근무가능일수) × 8시간<br>
-            <strong>시설장 상근 기준:</strong> 1일 8시간, 월 20일 이상 근무 · <strong>겸직 금지:</strong> 사회복지사·간호·물리치료·요양보호사 1급 타 직무 겸직 원칙 금지
+          <div class="grid-2" style="align-items:end;">
+            <div class="field">
+              <label for="stfMonthlyBenefit">월 급여비용 총액 (한도 내 청구합계·원)</label>
+              <input id="stfMonthlyBenefit" type="number" min="0" step="500000" value="40000000" class="gov-input">
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+              <button type="button" id="btnStfAutoRev" class="btn btn-xs btn-soft">인원 기준 평균매출 자동입력</button>
+              <label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;color:var(--gov-slate-700);cursor:pointer;">
+                <input id="stfMealOutsourced" type="checkbox"> 급식 위탁 운영
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;padding-top:10px;border-top:1px solid var(--gov-line);">
+            <span style="font-size:0.8rem;font-weight:800;color:var(--gov-navy);">2. 우리 센터 배치(예정) 인원 입력</span>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;">
+              <button type="button" id="btnStfSetMin" class="btn btn-xs">법정 최소인원 맞춤</button>
+              <button type="button" id="btnStfSetRec" class="btn btn-xs btn-primary">추천 가산조합 세팅</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="stfActCareGen">일반실 요양보호사 (추가 1인 +1.2점)</label>
+              <input id="stfActCareGen" type="number" min="0" max="80" value="6" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActCareDem">치매실 요양보호사 (추가 1인 +1.2점)</label>
+              <input id="stfActCareDem" type="number" min="0" max="40" value="0" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActSw">사회복지사 (추가 1인 +1.4점)</label>
+              <input id="stfActSw" type="number" min="0" max="20" value="2" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActPt">물리·작업치료사 (추가 1인 +1.4점)</label>
+              <input id="stfActPt" type="number" min="0" max="20" value="0" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActNurse">간호(조무)사 총원 (추가 +1.2점·19명미만)</label>
+              <input id="stfActNurse" type="number" min="0" max="20" value="1" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActRn">↳ 이 중 정규 간호사 면허자 (1인 +0.6점)</label>
+              <input id="stfActRn" type="number" min="0" max="20" value="0" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfActCook">조리원 (추가 배치 시 별도 +1.2점)</label>
+              <input id="stfActCook" type="number" min="0" max="10" value="1" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfProgramAddon">외부강사 맞춤형 프로그램 가산</label>
+              <select id="stfProgramAddon" class="gov-select">
+                <option value="0">미실시 (0점)</option>
+                <option value="0.25">주 2~3회 · 월 8회 이상 (+0.25점)</option>
+                <option value="0.5">주 4회 · 월 16회 이상 (+0.5점)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="font-size:0.74rem;color:var(--gov-slate-600);background:var(--gov-paper);border:1px solid var(--gov-line);padding:9px 10px;border-radius:3px;line-height:1.58;">
+            <strong>산정 유의:</strong> 월 기준 근무시간 이상 상근(시간제는 합산 후 가산 시 소수점 절사) 인원만 인정되며, 겸직·출산휴가·퇴사특례 인원은 가산 인원에서 제외됩니다(고시 제51·54조).
           </div>
         </div>
         <div id="stfOutput" class="calc-out" aria-live="polite"></div>

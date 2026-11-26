@@ -1404,3 +1404,161 @@ html[data-theme="dark"] .theme-btn .i-moon { display: none; }
 @media (max-width: 440px) {
   .status-pill-check { display: none; }
 }
+
+/* 36개 평가지표 통합 자가점검표 & 홈 진행률 바 */
+.home-chk-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+}
+.home-chk-bar .prog-wrap { flex: 1; min-width: 180px; }
+.home-chk-bar .prog-meta { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; color: var(--gov-ink); margin-bottom: 5px; }
+.chk-prog-track { height: 9px; background: var(--gov-line); border-radius: 999px; overflow: hidden; }
+.chk-prog-fill { height: 100%; background: var(--gov-navy); border-radius: 999px; transition: width 0.2s ease; }
+
+.chk-summary-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.chk-kpi-box {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.chk-kpi {
+  padding: 10px 14px;
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+  background: var(--gov-surface);
+  min-width: 132px;
+}
+.chk-kpi span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); font-weight: 600; }
+.chk-kpi strong { display: block; font-size: 0.98rem; color: var(--gov-ink); margin-top: 2px; }
+.chk-kpi strong em { font-style: normal; font-size: 1.2rem; color: var(--gov-navy); font-weight: 800; }
+
+.chk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gov-line);
+}
+.chk-card {
+  background: var(--gov-paper);
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.chk-card.is-done {
+  border-color: var(--gov-ok-line);
+}
+.chk-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--gov-surface);
+  border-bottom: 1px solid var(--gov-line);
+}
+.chk-card.is-done .chk-card-head {
+  background: var(--gov-ok-soft);
+}
+.chk-master-lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--gov-ink);
+}
+.chk-master-lbl input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gov-navy);
+  cursor: pointer;
+  flex: none;
+}
+.chk-docs-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.chk-docs-list .doc-chk-row {
+  border-right: 1px solid var(--gov-line);
+}
+.chk-docs-list .doc-chk-row:nth-child(2n) {
+  border-right: 0;
+}
+@media (max-width: 780px) {
+  .chk-docs-list { grid-template-columns: 1fr; }
+  .chk-docs-list .doc-chk-row { border-right: 0; }
+}
+
+/* 인력배치·가산 시뮬레이터 결과 테이블 */
+.stf-sim-kpi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--gov-tint);
+  border: 1px solid var(--gov-tint-line);
+  margin-bottom: 10px;
+}
+.stf-sim-kpi .big {
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: var(--gov-navy);
+}
+.stf-alert {
+  padding: 9px 12px;
+  border-radius: 5px;
+  font-size: 0.79rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.stf-alert.warn { background: var(--gov-warn-soft); border: 1px solid var(--gov-warn-line); color: var(--gov-warn-text); }
+.stf-alert.danger { background: var(--gov-danger-soft); border: 1px solid var(--gov-danger-line); color: var(--gov-danger-text); }
+.stf-alert.ok { background: var(--gov-ok-soft); border: 1px solid var(--gov-ok-line); color: var(--gov-ok-text); }
+
+.calc-split > *,
+.grid-2 > *,
+.grid-3 > *,
+.grid-4 > *,
+.stack-md > *,
+.gov-card { min-width: 0; }
+#stfOutput .gov-table th,
+#stfOutput .gov-table td { padding: 8px 8px; }
+@media (max-width: 600px) {
+  .calc-out { padding: 14px; }
+  #stfOutput .gov-table th,
+  #stfOutput .gov-table td { padding: 7px 6px; font-size: 0.75rem; }
+}
+
+@media print {
+  body.print-checklist #dcEvalApp { display: block !important; }
+  body.print-checklist #dcEvalApp > .gov-breadcrumb,
+  body.print-checklist #dcEvalApp > .gov-page-banner,
+  body.print-checklist #evalNav { display: none !important; }
+  body.print-checklist .chk-docs-list { grid-template-columns: 1fr !important; }
+}
+

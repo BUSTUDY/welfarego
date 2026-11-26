@@ -27,6 +27,7 @@
   <!-- Sub-tabs -->
   <nav class="gov-subtabs scrollbar-thin" role="tablist" aria-label="평가매뉴얼 세부 메뉴" id="evalNav">
     <button type="button" data-tab="explorer" class="gov-subtab-btn active" role="tab" aria-selected="true">평가지표 안내 (36)</button>
+    <button type="button" data-tab="checklist" class="gov-subtab-btn" role="tab" aria-selected="false">지표별 자가점검표 (36)</button>
     <button type="button" data-tab="simulator" class="gov-subtab-btn" role="tab" aria-selected="false">모의 자가진단·등급계산</button>
     <button type="button" data-tab="calendar" class="gov-subtab-btn" role="tab" aria-selected="false">주기별 실무 일정 (34)</button>
     <button type="button" data-tab="interview" class="gov-subtab-btn" role="tab" aria-selected="false">면담·시연 대비 (18)</button>
@@ -73,6 +74,50 @@
     </div>
 
     <div id="indicatorGrid" class="grid-3"></div>
+  </section>
+
+  <!-- TAB 1B: 36-INDICATOR SELF-INSPECTION CHECKLIST -->
+  <section id="tab-checklist" class="eval-tab-panel stack-md" hidden>
+    <div class="gov-card">
+      <div class="chk-summary-top">
+        <div>
+          <div class="tag-row" style="margin-bottom:6px;">
+            <span class="tag tag-solid">브라우저 자동 저장</span>
+            <span class="tag tag-ok">로그인·엑셀 불필요</span>
+          </div>
+          <h2 style="font-size:1.12rem;font-weight:800;color:var(--gov-ink);">36개 평가지표 준비완료 통합 자가점검표</h2>
+          <p class="gov-card-sub">지표별 필수 준비 서류(총 95항목)를 한 화면에서 바로 체크하세요. 내 PC·휴대폰 브라우저에 자동 저장되어 평가일까지 이어서 관리할 수 있습니다.</p>
+        </div>
+        <div class="chk-kpi-box">
+          <div class="chk-kpi"><span>준비 완료 지표</span><strong><em id="chkReadyIndCount">0</em> / 36개</strong></div>
+          <div class="chk-kpi"><span>필수 서류 점검</span><strong><em id="chkReadyDocCount">0</em> / <span id="chkTotalDocCount">95</span>건 (<span id="chkReadyPct">0</span>%)</strong></div>
+        </div>
+      </div>
+      <div class="chk-prog-track" aria-hidden="true"><div id="chkProgressBar" class="chk-prog-fill" style="width:0%;"></div></div>
+      <div id="chkDomainSummary" class="grid-4" style="margin-top:12px;"></div>
+      <div class="chk-toolbar no-print">
+        <div class="search-wrap" style="flex:1;min-width:200px;">
+          <label for="chkSearchInput" class="sr-only">점검표 내 검색</label>
+          <input id="chkSearchInput" type="search" class="gov-input" placeholder="지표명 또는 준비서류 검색 (예: 제공대장, 환기, CIST, 욕구사정)">
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button type="button" id="btnChkOnlyPending" class="btn btn-sm btn-warn">미완료 지표만 보기</button>
+          <button type="button" id="btnChkFillAll" class="btn btn-sm btn-soft">전체 완료 체크</button>
+          <button type="button" id="btnChkReset" class="btn btn-sm">점검 초기화</button>
+          <button type="button" id="btnChkPrint" class="btn btn-sm btn-primary">점검표 인쇄</button>
+        </div>
+      </div>
+      <div class="chip-bar no-print" id="chkDomainTabs">
+        <button type="button" data-cdom="ALL" class="chip-btn active">전체 (36)</button>
+        <button type="button" data-cdom="기관운영" class="chip-btn">1. 기관운영 (14)</button>
+        <button type="button" data-cdom="수급자 존중" class="chip-btn">2. 수급자 존중 (5)</button>
+        <button type="button" data-cdom="서비스 제공" class="chip-btn">3. 서비스 제공 (9)</button>
+        <button type="button" data-cdom="서비스 결과" class="chip-btn">4. 서비스 결과 (8)</button>
+        <span class="chip-count" id="chkResultCount">표시 중 36개 지표</span>
+      </div>
+    </div>
+
+    <div id="checklistBoard" class="stack-sm"></div>
   </section>
 
   <!-- TAB 2: SIMULATOR -->

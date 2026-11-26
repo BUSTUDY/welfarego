@@ -48,21 +48,25 @@
   <section class="quick-panel" aria-labelledby="quickTitle">
     <h2 id="quickTitle">자주 찾는 서비스</h2>
     <div class="quick-grid">
-      <a class="quick-item" href="/evaluation"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg><span>평가매뉴얼<em>36개 지표</em></span></a>
-      <a class="quick-item" href="/operations"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg><span>운영매뉴얼<em>수가·인력·SOP</em></span></a>
-      <a class="quick-item" href="/forms"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-forms"/></svg><span>서식자료실<em>표준서식 20종</em></span></a>
-      <a class="quick-item" href="/office"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-office"/></svg><span>무료 오피스<em>MPL-2.0 배포</em></span></a>
+      <a class="quick-item" href="/evaluation#checklist"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg><span>지표 자가점검표<em>36개 준비체크</em></span></a>
+      <a class="quick-item" href="/operations#staffing"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg><span>인력·가산<br>시뮬레이터<em>의무배치·가산금</em></span></a>
       <a class="quick-item" href="/evaluation#simulator"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-sim"/></svg><span>모의 자가진단<em>A등급 계산</em></span></a>
       <a class="quick-item" href="/operations#fees"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-calc"/></svg><span>본인부담금<br>계산기<em>월 한도액</em></span></a>
+      <a class="quick-item" href="/forms"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-forms"/></svg><span>서식자료실<em>표준서식 20종</em></span></a>
+      <a class="quick-item" href="/office"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-office"/></svg><span>무료 오피스<em>MPL-2.0 배포</em></span></a>
     </div>
   </section>
 
   <section class="board" aria-labelledby="statusTitle">
     <div class="board-head">
-      <h2 id="statusTitle">내 기관 정기평가 자가진단 현황</h2>
-      <a class="more-link" href="/evaluation#simulator">등급 계산기 ›</a>
+      <h2 id="statusTitle">내 기관 정기평가 자가점검 · 등급 현황</h2>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <a class="more-link" href="/evaluation#checklist">지표 자가점검표 ›</a>
+        <a class="more-link" href="/evaluation#simulator">등급 계산기 ›</a>
+      </div>
     </div>
-    <p class="board-sub">이 브라우저에 저장된 모의 점수가 영역별로 표시됩니다. 항목을 누르면 바로 진단할 수 있습니다.</p>
+    <p class="board-sub">체크한 준비 서류와 모의 점수가 이 브라우저에 자동 저장되어 평가일까지 이어서 관리됩니다.</p>
+    <div id="homeChecklistBanner" class="home-chk-bar"></div>
     <div id="homeDomainStrip" class="dom-strip"></div>
   </section>
 
