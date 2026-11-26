@@ -1420,9 +1420,8 @@ def build_form_hwpx(form, org_name="", org_code=""):
     return out_buf.getvalue()
 
 
-def build_all_forms_zip(org_name="", org_code=""):
-    """20종 전체 표준서식(.hwpx + .docx + .xlsx)과 법정 별지서식 정부원본(.hwp)을 묶은 ZIP 바이트를 반환한다."""
-    inst_name, _ = _clean_org(org_name, org_code)
+@lru_cache(maxsize=8)
+def _build_all_forms_zip_cached(inst_name, inst_code):
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
         readme_lines = [
@@ -1438,9 +1437,9 @@ def build_all_forms_zip(org_name="", org_code=""):
         for f in DAYCARE_FORMS:
             safe_title = f["title"].replace("/", "_").replace(" ", "_")
             base_path = f"{f['folder']}/{f['no']}_{safe_title}"
-            zf.writestr(f"{base_path}.hwpx", build_form_hwpx(f, org_name, org_code))
-            zf.writestr(f"{base_path}.docx", build_form_docx(f, org_name, org_code))
-            zf.writestr(f"{base_path}.xlsx", build_form_xlsx(f, org_name, org_code))
+            zf.writestr(f"{base_path}.hwpx", build_form_hwpx(f, inst_name, inst_code))
+            zf.writestr(f"{base_path}.docx", build_form_docx(f, inst_name, inst_code))
+            zf.writestr(f"{base_path}.xlsx", build_form_xlsx(f, inst_name, inst_code))
             if f.get("gov_hwp_file"):
                 gov_path = GOV_FORMS_DIR / f["gov_hwp_file"]
                 if gov_path.is_file():
@@ -1451,3 +1450,9 @@ def build_all_forms_zip(org_name="", org_code=""):
             readme_lines.append(f"[{f['no']}] {f['title']} ({f['code_badge']} / {f['eval_badge']})")
         zf.writestr("00_서식목록_및_사용안내.txt", "\n".join(readme_lines))
     return buf.getvalue()
+
+
+def build_all_forms_zip(org_name="", org_code=""):
+    """20종 전체 표준서식(.hwpx + .docx + .xlsx)과 법정 별지서식 정부원본(.hwp)을 묶은 ZIP 바이트를 반환한다."""
+    inst_name, inst_code = _clean_org(org_name, org_code)
+    return _build_all_forms_zip_cached(inst_name, inst_code)
