@@ -622,8 +622,9 @@
           </div>
         </div>
 
-        <div style="font-size:11.5px;color:var(--gov-slate-600);padding-top:10px;border-top:1px solid var(--gov-line);">
-          <strong>관련 법령 및 근거:</strong> ${esc(ind.law)}
+        <div style="font-size:11.5px;color:var(--gov-slate-600);padding-top:10px;border-top:1px solid var(--gov-line);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;">
+          <span><strong>관련 법령 및 근거:</strong> ${esc(ind.law)}</span>
+          <a class="btn btn-xs no-print" href="https://www.longtermcare.or.kr/npbs/d/m/000/moveBoardView?menuId=npe0000002804&amp;bKey=B0153&amp;search_boardId=25" target="_blank" rel="noopener noreferrer">공단 2026 평가매뉴얼 원문 게시글 (p.${ind.manualPage}) &rsaquo;</a>
         </div>
       `;
 

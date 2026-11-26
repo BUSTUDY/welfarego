@@ -59,7 +59,7 @@
     <article class="form-card" data-fcat="{{ f.category }}" data-fsearch="{{ (f.no ~ ' ' ~ f.title ~ ' ' ~ f.summary ~ ' ' ~ f.code_badge ~ ' ' ~ f.eval_badge ~ ' ' ~ (f.checkpoints|join(' ')))|lower }}">
       <div class="tag-row">
         <span class="tag tag-solid">{{ f.code_badge }}</span>
-        <span class="tag tag-navy">{{ f.eval_badge }}</span>
+        <a class="tag tag-navy tag-link" href="{{ f.eval_url }}">{{ f.eval_badge }} &rsaquo;</a>
         {% if f.gov_hwp_file %}<span class="tag tag-warn">법제처 원본 HWP 수록</span>{% else %}<span class="tag tag-slate">{{ f.category }}</span>{% endif %}
       </div>
       <h3>{{ f.no }}. {{ f.title }}</h3>
@@ -75,7 +75,10 @@
         <a class="btn btn-sm btn-soft dc-form-dl" data-base="/forms/{{ f.slug }}.docx" href="/forms/{{ f.slug }}.docx">워드(DOCX)</a>
         <a class="btn btn-sm btn-soft dc-form-dl" data-base="/forms/{{ f.slug }}.xlsx" href="/forms/{{ f.slug }}.xlsx">엑셀(XLSX)</a>
         <a class="btn btn-sm dc-form-dl" data-base="/forms/{{ f.slug }}/print" href="/forms/{{ f.slug }}/print" target="_blank" rel="noopener noreferrer">미리보기·인쇄</a>
-        <a class="btn btn-sm" href="{{ f.gov_url }}" target="_blank" rel="noopener noreferrer">{{ f.gov_label }} &rsaquo;</a>
+      </div>
+      <div class="form-ref-links">
+        <a class="btn btn-xs btn-soft" href="{{ f.eval_url }}">{{ f.eval_label }} &rsaquo;</a>
+        <a class="btn btn-xs" href="{{ f.gov_url }}" target="_blank" rel="noopener noreferrer">{{ f.gov_label }} &rsaquo;</a>
       </div>
     </article>
     {% endfor %}
