@@ -4,6 +4,7 @@
   const EVAL_STORAGE_KEY = 'daycare_eval_2026_state_v1';
   const ORG_STORAGE_KEY = 'welfarego.daycare.org.v1';
   const FONT_STORAGE_KEY = 'welfarego.daycare.font.v1';
+  const THEME_STORAGE_KEY = 'welfarego.daycare.theme.v1';
 
   const DOMAINS = [
     { code: '01', name: '기관운영', max: 27, color: '#2151c8' },
@@ -163,6 +164,29 @@
     else if (path.startsWith('/about')) showPanel('about');
   }
 
+  /* 화면 테마: 기본은 밝은 화면, 사용자가 누르면 어두운 화면(브라우저에 저장) */
+  function initTheme() {
+    const btn = document.getElementById('btnTheme');
+    function paint() {
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (btn) {
+        btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+        const label = dark ? '밝은 화면으로 바꾸기' : '어두운 화면으로 바꾸기';
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+      }
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#121418' : '#2151c8');
+    }
+    paint();
+    btn?.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem(THEME_STORAGE_KEY, next); } catch (_) {}
+      paint();
+    });
+  }
+
   function initHomeSearch() {
     const form = document.getElementById('homeSearchForm');
     if (!form) return;
@@ -199,6 +223,7 @@
 
     initDrawer();
     initHomeSearch();
+    initTheme();
 
     document.getElementById('btnFontSm')?.addEventListener('click', () => applyFont('sm'));
     document.getElementById('btnFontMd')?.addEventListener('click', () => applyFont('md'));
@@ -224,7 +249,7 @@
             return `
               <a href="/evaluation" class="dom-card">
                 <div class="dom-top">
-                  <span class="dom-name"><span style="color:#94a3b8;margin-right:4px;">${d.code}</span>${esc(d.name)}</span>
+                  <span class="dom-name"><span style="color:var(--gov-slate-500);margin-right:4px;">${d.code}</span>${esc(d.name)}</span>
                   <span class="dom-pct ${passA ? '' : 'fail'}">${st.pct.toFixed(0)}%</span>
                 </div>
                 <div class="dom-score-row">
@@ -308,7 +333,7 @@
         return `
           <button type="button" data-pick-dom="${esc(d.name)}" class="dom-card ${selected ? 'selected' : ''}">
             <div class="dom-top">
-              <span class="dom-name"><span style="color:#94a3b8;margin-right:4px;">${d.code}</span>${esc(d.name)}</span>
+              <span class="dom-name"><span style="color:var(--gov-slate-500);margin-right:4px;">${d.code}</span>${esc(d.name)}</span>
               <span class="dom-pct ${passA ? '' : 'fail'}">${st.pct.toFixed(0)}%</span>
             </div>
             <div class="dom-score-row">
@@ -423,7 +448,7 @@
 
       document.getElementById('mBadges').innerHTML = `
         <span class="tag" style="background:rgba(255,255,255,0.16);color:#fff;">${esc(ind.domain)}</span>
-        <span class="tag" style="background:#fff;color:var(--gov-navy);">배점 ${ind.maxScore}점</span>
+        <span class="tag" style="background:var(--gov-paper);color:var(--gov-navy);">배점 ${ind.maxScore}점</span>
         ${ind.isNew ? '<span class="tag" style="background:#dc2626;color:#fff;">2026 신설지표</span>' : ''}
         ${ind.hasLink ? '<span class="tag" style="background:#d97706;color:#fff;">연동 주의</span>' : ''}
         <span class="tag" style="background:rgba(255,255,255,0.16);color:#fff;">매뉴얼 p.${ind.manualPage}</span>
@@ -488,9 +513,9 @@
                   </div>
                   <strong style="font-size:0.82rem;color:var(--gov-navy);">배점 ${c.maxScore}점</strong>
                 </div>
-                <div style="font-size:0.88rem;font-weight:700;color:#0f172a;margin:4px 0;">${esc(c.text)}</div>
+                <div style="font-size:0.88rem;font-weight:700;color:var(--gov-ink);margin:4px 0;">${esc(c.text)}</div>
                 ${res.lockedByLink
-                  ? `<div style="font-size:0.8rem;font-weight:700;color:var(--gov-warn-text);background:#fef3c7;border:1px solid #fde68a;padding:9px 12px;border-radius:10px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
+                  ? `<div style="font-size:0.8rem;font-weight:700;color:var(--gov-warn-text);background:var(--gov-warn-soft);border:1px solid var(--gov-warn-line);padding:9px 12px;border-radius:10px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
                   : `<div class="opt-group no-print">
                       ${c.options.map((opt, oIdx) => {
                         const cls = res.optIdx === oIdx ? (opt.score === c.maxScore || opt.isNA ? 'is-full' : 'is-lost') : '';
@@ -514,7 +539,7 @@
 
         <div class="modal-sec">
           <h3 class="modal-sec-title">3. 필수 준비 서류 및 현장 점검표</h3>
-          <div style="border:1px solid var(--gov-line);border-radius:14px;background:#fff;overflow:hidden;">
+          <div style="border:1px solid var(--gov-line);border-radius:6px;background:var(--gov-paper);overflow:hidden;">
             ${ind.docs.map((doc, idx) => {
               const checked = !!state.docChecks[`${ind.id}_${idx}`];
               return `
@@ -734,7 +759,7 @@
                     <span class="tag ${cls}">${esc(c.type)}</span>
                     <button type="button" data-int-ind="${c.indId}" class="btn btn-xs">지표 ${String(c.indId).padStart(2, '0')} 상세 &rsaquo;</button>
                   </div>
-                  <h4 style="font-size:0.88rem;color:#0f172a;">${esc(c.title)}</h4>
+                  <h4 style="font-size:0.88rem;color:var(--gov-ink);">${esc(c.title)}</h4>
                   <p style="font-size:0.78rem;color:var(--gov-slate-700);margin-top:3px;"><strong>질문:</strong> ${esc(c.q)}</p>
                 </div>
               </div>
