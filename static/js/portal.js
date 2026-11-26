@@ -6,10 +6,10 @@
   const FONT_STORAGE_KEY = 'welfarego.daycare.font.v1';
 
   const DOMAINS = [
-    { code: '01', name: '기관운영', max: 27, color: '#003675' },
-    { code: '02', name: '수급자 존중', max: 18, color: '#1d56bc' },
-    { code: '03', name: '서비스 제공', max: 33, color: '#2b6cb0' },
-    { code: '04', name: '서비스 결과', max: 22, color: '#475569' },
+    { code: '01', name: '기관운영', max: 27, color: '#1b64da' },
+    { code: '02', name: '수급자 존중', max: 18, color: '#2563eb' },
+    { code: '03', name: '서비스 제공', max: 33, color: '#0284c7' },
+    { code: '04', name: '서비스 결과', max: 22, color: '#334155' },
   ];
 
   function esc(str) {
@@ -375,9 +375,9 @@
           <h3 class="modal-sec-title">연계 2026 최신 표준서식 바로 내려받기</h3>
           <div class="stack-sm">
             ${linkedForms.map(f => `
-              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--gov-tint-line);border-radius:2px;background:var(--gov-tint);">
-                <span style="font-size:0.78rem;font-weight:700;color:var(--gov-navy-dark);">[${esc(f.code_badge)}] ${esc(f.no)}. ${esc(f.title)}</span>
-                <span style="display:flex;gap:5px;">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--gov-tint-line);border-radius:12px;background:var(--gov-tint);">
+                <span style="font-size:0.84rem;font-weight:700;color:var(--gov-navy-dark);">[${esc(f.code_badge)}] ${esc(f.no)}. ${esc(f.title)}</span>
+                <span style="display:flex;gap:6px;flex-wrap:wrap;">
                   <a class="btn btn-xs btn-primary" href="/forms/${encodeURIComponent(f.slug)}.docx">DOCX</a>
                   <a class="btn btn-xs btn-soft" href="/forms/${encodeURIComponent(f.slug)}.xlsx">XLSX</a>
                   <a class="btn btn-xs" href="/forms/${encodeURIComponent(f.slug)}/print" target="_blank" rel="noopener noreferrer">인쇄</a>
@@ -394,19 +394,17 @@
           <div class="gov-table-wrap">
             <table class="gov-table">
               <tbody>
-                <tr>
-                  <th style="width:120px;">지표적용기간</th><td>${esc(ind.period)}</td>
-                  <th style="width:95px;">평가방법</th><td>${esc(ind.methods.join(', '))}</td>
-                </tr>
-                <tr><th>2026 주요 변경</th><td colspan="3" style="font-weight:700;color:var(--gov-navy);">${esc(ind.new2026)}</td></tr>
-                <tr><th>평가방향 (원문)</th><td colspan="3">${esc(ind.direction)}</td></tr>
+                <tr><th style="width:112px;">지표적용기간</th><td>${esc(ind.period)}</td></tr>
+                <tr><th>평가방법</th><td>${esc(ind.methods.join(', '))}</td></tr>
+                <tr><th>2026 주요 변경</th><td style="font-weight:700;color:var(--gov-navy);">${esc(ind.new2026)}</td></tr>
+                <tr><th>평가방향 (원문)</th><td>${esc(ind.direction)}</td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <div class="modal-sec" style="background:var(--gov-tint-soft);border-left:4px solid var(--gov-navy);padding:12px 14px;font-size:0.82rem;line-height:1.65;">
-          <div style="font-size:0.75rem;font-weight:700;color:var(--gov-navy);margin-bottom:3px;">실무 핵심 요약</div>
+        <div class="modal-sec" style="background:var(--gov-tint-soft);border:1px solid var(--gov-tint-line);border-radius:14px;padding:14px 16px;font-size:0.88rem;line-height:1.68;">
+          <div style="font-size:0.78rem;font-weight:800;color:var(--gov-navy);margin-bottom:4px;">실무 핵심 요약</div>
           ${esc(ind.summary)}
         </div>
 
@@ -424,11 +422,11 @@
                     ${c.isNew ? '<span class="tag tag-danger">신설</span>' : ''}
                     ${c.linkedTo ? `<span class="tag tag-warn">기준${c.linkedTo} 연동</span>` : ''}
                   </div>
-                  <strong style="font-size:0.78rem;color:var(--gov-navy);">배점 ${c.maxScore}점</strong>
+                  <strong style="font-size:0.82rem;color:var(--gov-navy);">배점 ${c.maxScore}점</strong>
                 </div>
-                <div style="font-size:0.84rem;font-weight:700;color:#0f172a;margin:4px 0;">${esc(c.text)}</div>
+                <div style="font-size:0.88rem;font-weight:700;color:#0f172a;margin:4px 0;">${esc(c.text)}</div>
                 ${res.lockedByLink
-                  ? `<div style="font-size:0.76rem;font-weight:700;color:var(--gov-warn-text);background:#fef3c7;border:1px solid #fcd34d;padding:7px 10px;border-radius:2px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
+                  ? `<div style="font-size:0.8rem;font-weight:700;color:var(--gov-warn-text);background:#fef3c7;border:1px solid #fde68a;padding:9px 12px;border-radius:10px;">[연동 안내] 선행 기준(기준 ${c.linkedTo})이 미충족되어 자동 0점 처리되었습니다.</div>`
                   : `<div class="opt-group no-print">
                       ${c.options.map((opt, oIdx) => {
                         const cls = res.optIdx === oIdx ? (opt.score === c.maxScore || opt.isNA ? 'is-full' : 'is-lost') : '';
@@ -443,8 +441,8 @@
 
         <div class="modal-sec">
           <h3 class="modal-sec-title">2. 현장 확인방법 및 매뉴얼 유의사항</h3>
-          <div style="background:var(--gov-surface);border:1px solid var(--gov-border);border-radius:3px;padding:12px 16px;">
-            <ul style="margin:0;padding-left:18px;font-size:0.78rem;line-height:1.7;color:var(--gov-ink);">
+          <div style="background:var(--gov-surface);border:1px solid var(--gov-line);border-radius:14px;padding:14px 18px;">
+            <ul style="margin:0;padding-left:18px;font-size:0.84rem;line-height:1.72;color:var(--gov-ink);">
               ${ind.verification.map(v => `<li>${esc(v)}</li>`).join('')}
             </ul>
           </div>
@@ -452,7 +450,7 @@
 
         <div class="modal-sec">
           <h3 class="modal-sec-title">3. 필수 준비 서류 및 현장 점검표</h3>
-          <div style="border:1px solid var(--gov-border);border-radius:3px;background:#fff;">
+          <div style="border:1px solid var(--gov-line);border-radius:14px;background:#fff;overflow:hidden;">
             ${ind.docs.map((doc, idx) => {
               const checked = !!state.docChecks[`${ind.id}_${idx}`];
               return `
@@ -1131,11 +1129,11 @@
   }
 
   initGlobalChrome();
-  const activeGnb = document.querySelector('.gov-gnb .gnb-active');
-  if (activeGnb && typeof activeGnb.scrollIntoView === 'function') {
-    activeGnb.scrollIntoView({ inline: 'center', block: 'nearest' });
-  }
   initEvaluation();
   initOperations();
   initForms();
+  const activeSubtab = document.querySelector('.gov-subtabs .gov-subtab-btn.active');
+  if (activeSubtab && typeof activeSubtab.scrollIntoView === 'function') {
+    activeSubtab.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }
 })();

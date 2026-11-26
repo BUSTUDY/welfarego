@@ -19,7 +19,8 @@ class DaycareAndOfficeTests(unittest.TestCase):
         html = resp.get_data(as_text=True)
         for path in ("/evaluation", "/operations", "/forms", "/office", "/about"):
             self.assertIn(f'href="{path}"', html)
-        self.assertIn("gov-util-bar", html)
+        self.assertIn("site-header", html)
+        self.assertIn("mobile-tabbar", html)
         self.assertIn("hdrScore", html)
         self.assertIn("주·야간보호 평가매뉴얼", html)
         self.assertIn("주·야간보호 운영매뉴얼", html)
