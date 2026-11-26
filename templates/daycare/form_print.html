@@ -126,9 +126,11 @@
   <div class="toolbar">
     <a class="btn" href="/forms">&larr; 서식자료실로 돌아가기</a>
     <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <a class="btn primary" href="/forms/{{ form.slug }}.hwpx?org={{ org_name|urlencode }}&amp;code={{ org_code|urlencode }}">한글(HWPX) 다운로드</a>
+      {% if form.gov_hwp_file %}<a class="btn" href="/forms/{{ form.slug }}/gov.hwp">법정원본 HWP</a>{% endif %}
       <a class="btn" href="/forms/{{ form.slug }}.docx?org={{ org_name|urlencode }}&amp;code={{ org_code|urlencode }}">DOCX 다운로드</a>
       <a class="btn" href="/forms/{{ form.slug }}.xlsx?org={{ org_name|urlencode }}&amp;code={{ org_code|urlencode }}">XLSX 다운로드</a>
-      <button type="button" class="btn primary" onclick="window.print()">바로 인쇄 / PDF 저장</button>
+      <button type="button" class="btn" onclick="window.print()">바로 인쇄 / PDF 저장</button>
     </div>
   </div>
 

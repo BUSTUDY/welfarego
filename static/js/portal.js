@@ -139,7 +139,7 @@
       if (a.classList.contains('dc-form-dl') || a.id === 'dcBundleZipBtn') return;
       const raw = a.getAttribute('href') || '';
       const base = raw.split('?')[0];
-      if (base === '/forms/bundle.zip' || /\.(docx|xlsx)$/.test(base) || /\/print$/.test(base)) {
+      if (base === '/forms/bundle.zip' || /\.(hwpx|docx|xlsx)$/.test(base) || /\/print$/.test(base)) {
         a.setAttribute('href', base + suffix);
       }
     });
@@ -514,7 +514,9 @@
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--gov-tint-line);border-radius:6px;background:var(--gov-tint);">
                 <span style="font-size:0.84rem;font-weight:700;color:var(--gov-navy-dark);">[${esc(f.code_badge)}] ${esc(f.no)}. ${esc(f.title)}</span>
                 <span style="display:flex;gap:6px;flex-wrap:wrap;">
-                  <a class="btn btn-xs btn-primary" href="/forms/${encodeURIComponent(f.slug)}.docx${orgSfx}">DOCX</a>
+                  <a class="btn btn-xs btn-primary" href="/forms/${encodeURIComponent(f.slug)}.hwpx${orgSfx}">한글(HWPX)</a>
+                  ${f.has_gov_hwp ? `<a class="btn btn-xs btn-warn" href="/forms/${encodeURIComponent(f.slug)}/gov.hwp">법정원본 HWP</a>` : ''}
+                  <a class="btn btn-xs btn-soft" href="/forms/${encodeURIComponent(f.slug)}.docx${orgSfx}">DOCX</a>
                   <a class="btn btn-xs btn-soft" href="/forms/${encodeURIComponent(f.slug)}.xlsx${orgSfx}">XLSX</a>
                   <a class="btn btn-xs" href="/forms/${encodeURIComponent(f.slug)}/print${orgSfx}" target="_blank" rel="noopener noreferrer">인쇄</a>
                 </span>

@@ -35,8 +35,10 @@ from daycare_forms import (
     DAYCARE_FORMS,
     FORM_CATEGORIES,
     FORM_MAP,
+    GOV_FORMS_DIR,
     build_all_forms_zip,
     build_form_docx,
+    build_form_hwpx,
     build_form_xlsx,
 )
 
@@ -134,7 +136,13 @@ def home():
 def evaluation():
     bundle = load_eval_bundle()
     forms_lite = [
-        {"slug": f["slug"], "no": f["no"], "title": f["title"], "code_badge": f["code_badge"]}
+        {
+            "slug": f["slug"],
+            "no": f["no"],
+            "title": f["title"],
+            "code_badge": f["code_badge"],
+            "has_gov_hwp": bool(f.get("gov_hwp_file")),
+        }
         for f in DAYCARE_FORMS
     ]
     return render_template(
@@ -182,6 +190,30 @@ def form_print(slug):
     org = (request.args.get("org") or "").strip()[:80] or "○○주·야간보호센터"
     code = (request.args.get("code") or "").strip()[:40] or "장기요양기관기호 미입력"
     return render_template("daycare/form_print.html", form=form, org_name=org, org_code=code)
+
+
+@daycare_bp.route("/forms/<slug>.hwpx")
+def download_form_hwpx(slug):
+    form = FORM_MAP.get(slug)
+    if not form:
+        abort(404)
+    org = request.args.get("org", "")
+    code = request.args.get("code", "")
+    data = build_form_hwpx(form, org_name=org, org_code=code)
+    filename = f"2026_주야간보호_서식{form['no']}_{form['slug']}.hwpx"
+    return _attachment_response(data, filename, "application/hwp+zip")
+
+
+@daycare_bp.route("/forms/<slug>/gov.hwp")
+def download_form_gov_hwp(slug):
+    form = FORM_MAP.get(slug)
+    if not form or not form.get("gov_hwp_file"):
+        abort(404)
+    gov_path = GOV_FORMS_DIR / form["gov_hwp_file"]
+    if not gov_path.is_file():
+        abort(404)
+    filename = form.get("gov_hwp_name") or f"{form['slug']}_정부원본.hwp"
+    return _attachment_response(gov_path.read_bytes(), filename, "application/x-hwp")
 
 
 @daycare_bp.route("/forms/<slug>.docx")
