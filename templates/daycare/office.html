@@ -1,0 +1,170 @@
+{% extends 'daycare/base.html' %}
+{% block title %}사회복지시설 무료 오피스 다운로드 (Welfarego OFFICE) | 웰페어고{% endblock %}
+{% block description %}영세 사회복지시설·주야간보호센터가 상용 오피스 구매 비용과 저작권 단속 걱정 없이 무료로 사용할 수 있는 오픈소스 기반 무료 오피스(MPL-2.0) 설치 안내, 리본 UI 체험, 정품 라이선스 확인서 발급.{% endblock %}
+
+{% block content %}
+<div class="stack-md">
+  <div class="gov-breadcrumb"><a href="/">포털 메인</a><span>&rsaquo;</span><strong>사회복지시설 무료 오피스 다운로드</strong></div>
+
+  <section class="gov-banner-navy">
+    <div class="office-hero-grid">
+      <div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(255,255,255,0.18);color:#fff;">영세 사회복지시설 · 주·야간보호센터 무료 배포</span>
+          <span class="tag" style="background:rgba(125,211,252,0.22);color:#e0f2fe;">MPL-2.0 오픈소스 · PC 대수 제한 없음</span>
+        </div>
+        <h1>비용과 저작권 걱정 없는 사회복지시설 무료 오피스</h1>
+        <p>
+          매년 수십만 원씩 드는 상용 오피스 구매·구독 비용이 부담스러운 영세 사회복지시설과 주·야간보호센터를 위해 무료로 배포합니다.
+          <strong>Welfarego OFFICE</strong>(LibreOffice {{ brand.package_version }} MPL-2.0 Subset 기반)는
+          MS Word(<code>.docx</code>), Excel(<code>.xlsx</code>), PowerPoint(<code>.pptx</code>), PDF 문서를 광고·구독·저작권 단속 걱정 없이
+          시설 내 모든 업무 PC에서 평생 무료로 사용할 수 있습니다.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+          <a class="btn btn-white" style="padding:10px 18px;font-size:0.86rem;" href="/office/download/setup?format=exe" target="_blank" rel="noopener noreferrer">
+            {{ 'Welfarego OFFICE Windows 설치파일 (.exe)' if has_custom_exe else '무료 오피스 Windows 64비트 한국어 설치하기' }}
+          </a>
+          <a class="btn btn-ghost-dark" style="padding:10px 16px;font-size:0.84rem;" href="/office/preview">모던 리본 UI 미리 체험하기</a>
+        </div>
+        <p style="font-size:0.74rem;color:#bfdbfe;margin-top:10px;">
+          {% if has_custom_exe %}
+          Windows 10/11 64비트 전용 원클릭 설치파일(.exe) · 한국어/영문 지원 · 오프라인 무텔레메트리
+          {% else %}
+          ※ 현재 Welfarego OFFICE 자체 커스텀 설치파일(.exe)은 최종 Windows 빌드 검수 중입니다. 위 버튼을 누르면 동일한 엔진인 <strong>LibreOffice {{ brand.package_version }} 공식 한국어 64비트 설치 파일</strong>을 지금 즉시 무료로 내려받아 바로 사용하실 수 있으며, 빌드 완료 시 커스텀 설치본으로 자동 전환됩니다.
+          {% endif %}
+        </p>
+      </div>
+
+      <aside class="office-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <strong style="font-size:0.86rem;color:#fff;">포함된 4대 핵심 오피스 앱</strong>
+          <span style="font-size:11px;color:#bfdbfe;">버전 {{ brand.package_version }}</span>
+        </div>
+        <div class="grid-2" style="gap:8px;">
+          <div class="office-app-tile">
+            <img src="/office/assets/writer_app.png" alt="문서 작성기 Writer">
+            <div><strong>문서 작성 (Writer)</strong><span>DOCX·ODT·PDF · 평가서식</span></div>
+          </div>
+          <div class="office-app-tile">
+            <img src="/office/assets/calc_app.png" alt="스프레드시트 Calc">
+            <div><strong>엑셀·회계 (Calc)</strong><span>XLSX·CSV · 급여/식단/인건비</span></div>
+          </div>
+          <div class="office-app-tile">
+            <img src="/office/assets/impress_app.png" alt="프레젠테이션 Impress">
+            <div><strong>발표자료 (Impress)</strong><span>PPTX · 직원교육·운영위 자료</span></div>
+          </div>
+          <div class="office-app-tile">
+            <img src="/office/assets/draw_app.png" alt="드로잉·PDF Draw">
+            <div><strong>PDF·안내문 (Draw)</strong><span>포스터·피난안내도·PDF 편집</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.18);font-size:0.74rem;color:#dbeafe;line-height:1.6;">
+          • 웰페어고 <strong>주·야간보호 표준서식 20종(.docx · .xlsx)</strong>과 100% 호환<br>
+          • 외부 로그인·클라우드 강제 전송 없음 (수급자 개인정보 안전 보호)
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 3 Download & Compliance Cards -->
+  <section class="grid-3">
+    <article class="gov-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div class="tag-row"><span class="tag tag-solid">일반 PC 권장</span><span class="tag tag-ok">Windows 10/11 64bit</span></div>
+      <h2 style="font-size:0.96rem;color:var(--gov-navy-dark);">Windows 한국어 설치 파일</h2>
+      <p style="font-size:0.78rem;color:var(--gov-slate-600);flex:1;line-height:1.6;">사회복지사·요양보호사·사무원 PC에 설치해 <code>.docx</code>, <code>.xlsx</code>, <code>.pptx</code> 문서를 바로 열고 PDF로 저장할 수 있습니다.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:6px;">
+        <a class="btn btn-sm btn-primary" href="/office/download/setup?format=exe" target="_blank" rel="noopener noreferrer">Windows 64비트 다운로드</a>
+        <a class="btn btn-sm" href="{{ brand.release_notes_url }}" target="_blank" rel="noopener noreferrer">GitHub 릴리스</a>
+      </div>
+    </article>
+
+    <article class="gov-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div class="tag-row"><span class="tag tag-navy">한글(HWP) 병행 안내</span><span class="tag tag-slate">무료 공식 뷰어</span></div>
+      <h2 style="font-size:0.96rem;color:var(--gov-navy-dark);">지자체 공문(.hwp / .hwpx) 활용법</h2>
+      <p style="font-size:0.78rem;color:var(--gov-slate-600);flex:1;line-height:1.6;">지자체·공단에서 배포한 <code>.hwp</code> 문서는 무료 공식 한컴 뷰어로 열람하고, 기관 자체 서식 작성은 웰페어고 표준 <code>.docx/.xlsx</code> + 무료 오피스로 해결하세요.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:6px;">
+        <a class="btn btn-sm btn-soft" href="/forms">호환 표준서식 20종 받기</a>
+        <a class="btn btn-sm" href="https://www.hancom.com/cs_center/csDownload.do" target="_blank" rel="noopener noreferrer">한컴 무료 뷰어</a>
+      </div>
+    </article>
+
+    <article class="gov-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div class="tag-row"><span class="tag tag-warn">MPL-2.0 제3.2조 준수</span><span class="tag tag-slate">소스코드 공개</span></div>
+      <h2 style="font-size:0.96rem;color:var(--gov-navy-dark);">브랜딩·리본 UI 패치 및 법무 문서</h2>
+      <p style="font-size:0.78rem;color:var(--gov-slate-600);flex:1;line-height:1.6;">Welfarego OFFICE의 모던 플루언트 리본 UI 패치(C++ VCL), 상표 분리 검증 스크립트, 한국어 MPL-2.0 라이선스 가이드를 ZIP으로 투명 공개합니다.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:6px;">
+        <a class="btn btn-sm" href="/office/download/mpl2-source.zip">MPL-2.0 소스·패치 (.ZIP)</a>
+        <a class="btn btn-sm" href="/office/preview">리본 UI 체험</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- 정품 라이선스 확인서 발급 -->
+  <section class="gov-card">
+    <div class="gov-card-head">
+      <div>
+        <span class="tag tag-ok" style="margin-bottom:4px;">저작권 점검 · 지자체 지도점검 대비</span>
+        <h2>기관 비치용 「무료 오픈소스 오피스 정품 라이선스 확인서」 즉시 발급</h2>
+        <p class="gov-card-sub">소프트웨어 저작권 점검 공문에 대비해 MPL-2.0 오픈소스 라이선스 근거와 무제한 합법 사용 고지가 담긴 기관 비치용 확인서를 인쇄해 보관하세요.</p>
+      </div>
+    </div>
+    <form class="cert-grid" action="/office/license-certificate" method="get" target="_blank">
+      <div class="field">
+        <label for="certOrg">사회복지시설(기관)명</label>
+        <input id="certOrg" name="org" type="text" class="gov-input" maxlength="80" placeholder="예: 행복나눔 주·야간보호센터" required>
+      </div>
+      <div class="field">
+        <label for="certRep">시설장(대표자) 성명</label>
+        <input id="certRep" name="rep" type="text" class="gov-input" maxlength="40" placeholder="예: 홍길동">
+      </div>
+      <div class="field">
+        <label for="certPcs">설치 PC 범위</label>
+        <input id="certPcs" name="pcs" type="text" class="gov-input" maxlength="20" value="기관 내 업무용 PC 전체">
+      </div>
+      <button type="submit" class="btn btn-primary">확인서 발급 · 인쇄</button>
+    </form>
+  </section>
+
+  <!-- 1분 설정 & FAQ -->
+  <section class="grid-2">
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>설치 후 1분 추천 설정 (MS 오피스처럼 쓰기)</h2>
+          <p class="gov-card-sub">처음 사용하는 종사자도 1분 만에 친숙한 리본 메뉴와 DOCX/XLSX 기본 저장으로 맞출 수 있습니다.</p>
+        </div>
+      </div>
+      <ol style="margin:0;padding-left:20px;font-size:0.8rem;color:var(--gov-slate-700);line-height:1.75;">
+        <li><strong>리본 탭 메뉴 켜기:</strong> 상단 <code>보기 → 사용자 인터페이스 → 탭형(Tabbed) → 모두에 적용</code>을 누르면 MS 오피스와 동일한 상단 리본 메뉴로 바뀝니다.</li>
+        <li><strong>기본 저장을 DOCX·XLSX로 고정:</strong> <code>도구 → 옵션 → 불러오기/저장 → 일반</code>에서 문서 기본 저장을 <code>Word 2010–365 (.docx)</code>, 스프레드시트를 <code>Excel 2010–365 (.xlsx)</code>로 설정하세요.</li>
+        <li><strong>웰페어고 표준서식 바로 열기:</strong> <a href="/forms" style="color:var(--gov-navy);font-weight:700;text-decoration:underline;">서식자료실</a>에서 내려받은 20종 <code>.docx/.xlsx</code> 파일을 더블클릭해 바로 수정·인쇄·PDF 저장할 수 있습니다.</li>
+      </ol>
+    </div>
+
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>영세 사회복지시설 무료 오피스 자주 묻는 질문</h2>
+          <p class="gov-card-sub">저작권·비용·개인정보 보안 관련 핵심 확인사항</p>
+        </div>
+      </div>
+      <details class="faq-item" open>
+        <summary>정말 평생 무료인가요? 민간 영리 장기요양기관도 합법인가요?</summary>
+        <p>네, 100% 합법이며 평생 무료입니다. MPL-2.0 오픈소스 라이선스는 비영리법인·민간 영리 장기요양기관 구분 없이 무료 설치와 업무·상업적 사용을 공식 허용합니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>센터 내 PC가 여러 대인데 모두 설치해도 되나요?</summary>
+        <p>PC 대수 제한이 전혀 없습니다. 사무실·간호사실·프로그램실·시설장실 등 기관 내 모든 업무용 PC에 자유롭게 설치해 사용하실 수 있습니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>어르신 개인정보가 외부 클라우드로 전송되지 않나요?</summary>
+        <p>전송되지 않습니다. 100% 로컬 PC에서만 동작하는 오프라인 오피스이므로 수급자 개인정보나 평가 기록지가 외부 서버로 유출될 우려가 없습니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Welfarego OFFICE와 LibreOffice의 관계는 무엇인가요?</summary>
+        <p>Welfarego OFFICE는 오픈소스 LibreOffice {{ brand.package_version }}(MPL-2.0 Subset)을 기반으로 복지 현장에 맞게 모던 리본 UI와 브랜딩을 적용한 독립 파생 배포판입니다. The Document Foundation과 제휴하거나 보증을 받지 않으며, 모든 수정 소스는 MPL-2.0 규정에 따라 공개합니다.</p>
+      </details>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,15 +1,10 @@
-# Build & temporary files
 __pycache__/
 *.py[cod]
 .venv/
-venv/
-build/
-dist/
-lo-core/
-lo-externaltar/
-*.msi
-*.exe
-*.cab
+.env
+.env.*
+!.env.example
 *.log
-*.tmp
-.DS_Store
+data/*.tmp
+data/welfare_check.csv
+test-output/

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>무료 오픈소스 오피스 정품 라이선스 확인서 | 웰페어고</title>
+  <meta name="robots" content="noindex,follow">
+  <link rel="icon" href="{{ url_for('static', filename='portal/favicon.svg') }}" type="image/svg+xml">
+  <style>
+    @page { size: A4 portrait; margin: 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+      color: #1e293b;
+      background: #f4f6f9;
+    }
+    .bar {
+      max-width: 780px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #cbd7d2;
+      background: #fff;
+      color: #1d242b;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn.primary { background: #003675; border-color: #003675; color: #fff; }
+    .cert {
+      max-width: 780px;
+      margin: 0 auto;
+      background: #fff;
+      border: 2px solid #003675;
+      padding: 40px 44px;
+      box-shadow: 0 10px 30px rgba(15, 42, 37, 0.08);
+    }
+    .kicker { font-size: 12px; font-weight: 800; color: #003675; letter-spacing: 0.08em; text-align: center; }
+    h1 { font-size: 25px; text-align: center; margin: 10px 0 26px; letter-spacing: -0.02em; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13.5px; }
+    th, td { border: 1px solid #cbd5e1; padding: 11px 14px; text-align: left; }
+    th { background: #eef4fb; width: 28%; font-weight: 700; }
+    .box {
+      background: #f4f7fb;
+      border: 1px solid #b6cde8;
+      padding: 18px 20px;
+      font-size: 13px;
+      line-height: 1.75;
+      margin-bottom: 26px;
+    }
+    .sign {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .bar { display: none !important; }
+      .cert { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <a class="btn" href="/office">&larr; 무료 오피스 페이지로 돌아가기</a>
+    <button type="button" class="btn primary" onclick="window.print()">확인서 인쇄 / PDF 저장</button>
+  </div>
+
+  <article class="cert">
+    <div class="kicker">OPEN SOURCE SOFTWARE LICENSE STATEMENT</div>
+    <h1>무료 오픈소스 오피스 정품 라이선스 비치 확인서</h1>
+
+    <table>
+      <tbody>
+        <tr><th>사용 기관명</th><td><strong>{{ org_name }}</strong></td></tr>
+        <tr><th>시설장(대표자)</th><td>{{ rep_name }}</td></tr>
+        <tr><th>사용 소프트웨어</th><td>{{ brand.product_name }} / LibreOffice {{ brand.package_version }} (Windows 64-bit)</td></tr>
+        <tr><th>적용 라이선스</th><td><strong>Mozilla Public License Version 2.0 (MPL-2.0)</strong></td></tr>
+        <tr><th>설치 및 사용 범위</th><td>{{ pc_scope }} (PC 대수 제한 없음 · 영구 무료)</td></tr>
+        <tr><th>발급(확인)일자</th><td>{{ today.strftime('%Y년 %m월 %d일') }}</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box">
+      <strong>1. 합법적 무료 사용 근거</strong><br>
+      본 기관이 업무용으로 설치·사용하는 상기 오피스 소프트웨어는 <strong>Mozilla Public License 2.0 (MPL-2.0)</strong> 오픈소스 라이선스로 배포되는 정품 무료 소프트웨어입니다. 해당 라이선스는 영리·비영리 사회복지시설 및 장기요양기관에서의 무상 설치, 복제, 업무 활용을 대수 제한 없이 합법적으로 허가합니다.<br><br>
+      <strong>2. 상용 소프트웨어 저작권 준수 및 개인정보 보호</strong><br>
+      본 소프트웨어는 별도 크랙·불법 복제 없이 공식 오픈소스 배포판으로 설치되었으며, 외부 클라우드 강제 전송이나 텔레메트리 수집 없이 오프라인 PC 내에서 안전하게 문서를 처리합니다. 소스코드 및 서드파티 라이선스 전문은 <code>welfarego.co.kr/office</code>에서 상시 확인할 수 있습니다.
+    </div>
+
+    <div class="sign">
+      위와 같이 정품 오픈소스 무료 오피스 소프트웨어를 적법하게 설치·운영하고 있음을 확인합니다.<br>
+      <strong>{{ org_name }} 시설장 {{ rep_name }} (서명 / 직인)</strong>
+    </div>
+  </article>
+</body>
+</html>
