@@ -6,10 +6,10 @@
   const FONT_STORAGE_KEY = 'welfarego.daycare.font.v1';
 
   const DOMAINS = [
-    { code: '01', name: '기관운영', max: 27, color: '#1b64da' },
-    { code: '02', name: '수급자 존중', max: 18, color: '#2563eb' },
-    { code: '03', name: '서비스 제공', max: 33, color: '#0284c7' },
-    { code: '04', name: '서비스 결과', max: 22, color: '#334155' },
+    { code: '01', name: '기관운영', max: 27, color: '#2151c8' },
+    { code: '02', name: '수급자 존중', max: 18, color: '#1a8fd8' },
+    { code: '03', name: '서비스 제공', max: 33, color: '#1f8a4c' },
+    { code: '04', name: '서비스 결과', max: 22, color: '#d9770a' },
   ];
 
   function esc(str) {
@@ -120,6 +120,67 @@
   }
 
   /* =========================================================
+     전체메뉴(드로어) · 메인 통합검색
+     ========================================================= */
+  function initDrawer() {
+    const drawer = document.getElementById('drawer');
+    const openBtn = document.getElementById('btnMenu');
+    if (!drawer || !openBtn) return;
+    const closeBtn = document.getElementById('btnMenuClose');
+
+    function setOpen(open) {
+      drawer.hidden = !open;
+      openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('drawer-open', open);
+      if (open) closeBtn?.focus(); else openBtn.focus();
+    }
+
+    function showPanel(key) {
+      drawer.querySelectorAll('[data-dmenu]').forEach(b => b.classList.toggle('is-on', b.getAttribute('data-dmenu') === key));
+      drawer.querySelectorAll('[data-dpanel]').forEach(p => { p.hidden = p.getAttribute('data-dpanel') !== key; });
+    }
+
+    openBtn.addEventListener('click', () => setOpen(true));
+    closeBtn?.addEventListener('click', () => setOpen(false));
+    drawer.querySelectorAll('[data-dmenu]').forEach(b => b.addEventListener('click', () => showPanel(b.getAttribute('data-dmenu'))));
+    drawer.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', () => {
+      // 같은 페이지 내 해시 이동이면 메뉴만 닫는다.
+      const url = new URL(a.href, location.href);
+      if (url.pathname === location.pathname) {
+        setOpen(false);
+        if (url.hash) { location.hash = url.hash; location.reload(); }
+        else if (a.getAttribute('target') !== '_blank') location.reload();
+      }
+    }));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !drawer.hidden) setOpen(false); });
+    window.matchMedia('(min-width: 901px)').addEventListener?.('change', e => { if (e.matches && !drawer.hidden) setOpen(false); });
+
+    // 현재 페이지에 맞는 대분류를 먼저 보여준다.
+    const path = location.pathname;
+    if (path.startsWith('/operations')) showPanel('ops');
+    else if (path.startsWith('/forms')) showPanel('forms');
+    else if (path.startsWith('/office')) showPanel('office');
+    else if (path.startsWith('/about')) showPanel('about');
+  }
+
+  function initHomeSearch() {
+    const form = document.getElementById('homeSearchForm');
+    if (!form) return;
+    const kind = document.getElementById('homeSearchKind');
+    form.addEventListener('submit', () => {
+      if (kind && kind.offsetParent !== null) form.setAttribute('action', kind.value);
+    });
+  }
+
+  function applyQueryParam(inputId, handler) {
+    const q = new URLSearchParams(location.search).get('q');
+    const el = document.getElementById(inputId);
+    if (!q || !el) return;
+    el.value = q.slice(0, 60);
+    handler();
+  }
+
+  /* =========================================================
      0. GLOBAL FONT SIZE & HEADER STATUS BAR (All Pages)
      ========================================================= */
   function initGlobalChrome() {
@@ -135,6 +196,9 @@
       document.getElementById(activeId)?.classList.add('active');
       try { localStorage.setItem(FONT_STORAGE_KEY, size); } catch (_) {}
     }
+
+    initDrawer();
+    initHomeSearch();
 
     document.getElementById('btnFontSm')?.addEventListener('click', () => applyFont('sm'));
     document.getElementById('btnFontMd')?.addEventListener('click', () => applyFont('md'));
@@ -885,6 +949,10 @@
     document.getElementById('calcClientInput').addEventListener('input', updateSampleCalc);
 
     updateSummary();
+    applyQueryParam('searchInput', () => {
+      state.search = searchEl.value;
+      clearBtn.hidden = !state.search;
+    });
     renderExplorer();
 
     const h = (location.hash || '').replace('#', '');
@@ -1125,6 +1193,7 @@
 
     loadOrg();
     syncFormLinks();
+    applyQueryParam('formsSearch', () => {});
     filterForms();
   }
 

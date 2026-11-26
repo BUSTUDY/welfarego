@@ -2,248 +2,151 @@
 {% block title %}웰페어고 | 2026 주·야간보호시설 평가·운영매뉴얼·서식자료·무료오피스{% endblock %}
 {% block description %}주·야간보호시설 운영자를 위한 2026년 공단 정기평가 36개 지표 자가진단, 보건복지부 최신 고시 수가·인력배치 운영매뉴얼, 법정 별지 및 평가 표준서식 20종, 영세 사회복지시설 무료 오피스 포털입니다.{% endblock %}
 
+{% block fullbleed %}
+<section class="home-search" id="search" aria-label="통합검색">
+  <div class="wrap">
+    <h1>주·야간보호시설 <em>평가·운영·서식</em>,<br>필요한 자료를 바로 찾아보세요</h1>
+    <form class="search-form" id="homeSearchForm" action="/evaluation" method="get" role="search">
+      <label class="sr-only" for="homeSearchKind">검색 대상</label>
+      <select id="homeSearchKind" class="gov-select">
+        <option value="/evaluation">평가지표</option>
+        <option value="/forms">서식자료</option>
+      </select>
+      <label class="sr-only" for="homeSearchQ">검색어</label>
+      <input id="homeSearchQ" name="q" type="search" placeholder="예) 낙상, 인권교육, 급여제공계획서" autocomplete="off" enterkeyhint="search">
+      <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+    </form>
+    <p class="hot-words"><b>자주 찾는 검색어</b>
+      <a href="/evaluation?q=낙상">낙상</a>
+      <a href="/evaluation?q=욕창">욕창</a>
+      <a href="/evaluation?q=인권">인권교육</a>
+      <a href="/forms?q=급여제공계획서">급여제공계획서</a>
+      <a href="/forms?q=위험도">위험도평가</a>
+    </p>
+  </div>
+</section>
+{% endblock %}
+
 {% block content %}
-<div class="stack-lg">
+<div class="stack-lg home-wrap">
 
-  <!-- Modern Clean Hero -->
-  <section class="hero-card">
-    <div class="hero-copy">
-      <div class="hero-eyebrow">2026 공단 평가매뉴얼 · 보건복지부 고시 제2026-189호 기준</div>
-      <h1>주·야간보호시설 운영과 정기평가,<br>최신 기준으로 한곳에서 해결하세요</h1>
-      <p>회원가입이나 이용료 없이 36개 평가지표 자가진단, 2026 수가·인력·48.6% 인건비 운영매뉴얼, 기관명 자동 기입 표준서식 20종과 무료 오피스까지 바로 이용할 수 있습니다.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary btn-lg" href="/evaluation">36개 지표 자가진단 시작</a>
-        <a class="btn btn-soft btn-lg" href="/forms/bundle.zip">최신 표준서식 20종 (.ZIP)</a>
-      </div>
-    </div>
-    <div class="hero-metrics" aria-label="2026 핵심 요약 수치">
-      <div class="metric-tile">
-        <span>2026 정기평가</span>
-        <strong>36개 지표</strong>
-        <small>4개 영역 · 총 100점</small>
-      </div>
-      <div class="metric-tile">
-        <span>의무 인건비 비율</span>
-        <strong>48.6%</strong>
-        <small>장기요양요원 4직종</small>
-      </div>
-      <div class="metric-tile">
-        <span>무료 표준서식</span>
-        <strong>20종</strong>
-        <small>DOCX · XLSX · 인쇄</small>
-      </div>
-      <div class="metric-tile">
-        <span>장기근속장려금</span>
-        <strong>12개월+</strong>
-        <small>월 5만~18만 원 확대</small>
-      </div>
+  <section class="banner-row" aria-label="주요 안내">
+    <a class="banner banner-a" href="/evaluation#guide">
+      <div><small>2026 정기평가 개편</small><strong>48개 → 36개 지표,<br>A등급 기준이 달라졌어요</strong><span class="more">개편 내용 보기 ›</span></div>
+      <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg>
+    </a>
+    <a class="banner banner-b" href="/operations#fees">
+      <div><small>보건복지부 고시 제2026-189호</small><strong>10월 1일부터 적용되는<br>수가·본인부담금 확인</strong><span class="more">수가표 보기 ›</span></div>
+      <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg>
+    </a>
+    <a class="banner banner-c" href="/forms">
+      <div><small>기관명 자동 기입</small><strong>평가 필수서식 20종<br>한 번에 내려받기</strong><span class="more">서식자료실 가기 ›</span></div>
+      <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-forms"/></svg>
+    </a>
+  </section>
+
+  <section class="quick-panel" aria-labelledby="quickTitle">
+    <h2 id="quickTitle">자주 찾는 서비스</h2>
+    <div class="quick-grid">
+      <a class="quick-item" href="/evaluation"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg><span>평가매뉴얼<em>36개 지표</em></span></a>
+      <a class="quick-item" href="/operations"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg><span>운영매뉴얼<em>수가·인력·SOP</em></span></a>
+      <a class="quick-item" href="/forms"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-forms"/></svg><span>서식자료실<em>표준서식 20종</em></span></a>
+      <a class="quick-item" href="/office"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-office"/></svg><span>무료 오피스<em>MPL-2.0 배포</em></span></a>
+      <a class="quick-item" href="/evaluation#simulator"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-sim"/></svg><span>모의 자가진단<em>A등급 계산</em></span></a>
+      <a class="quick-item" href="/operations#fees"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-calc"/></svg><span>본인부담금<br>계산기<em>월 한도액</em></span></a>
     </div>
   </section>
 
-  <!-- 4 Primary Sub-Site Entry Cards -->
-  <section aria-label="주·야간보호 실무 하위 사이트 바로가기">
-    <div class="sec-head">
-      <div>
-        <h2>실무 포털 바로가기</h2>
-        <p>필요한 업무를 선택하면 전용 하위 사이트로 바로 이동합니다.</p>
-      </div>
+  <section class="board" aria-labelledby="statusTitle">
+    <div class="board-head">
+      <h2 id="statusTitle">내 기관 정기평가 자가진단 현황</h2>
+      <a class="more-link" href="/evaluation#simulator">등급 계산기 ›</a>
     </div>
-    <div class="grid-4">
-      <a class="portal-entry-card" href="/evaluation">
-        <div class="stack-sm">
-          <div class="portal-entry-head">
-            <span class="entry-icon icon-blue" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m-6 0a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
-              </svg>
-            </span>
-            <span class="tag tag-navy">36개 지표 · 100점</span>
-          </div>
-          <h3>주·야간보호 평가매뉴얼</h3>
-          <p>2026 정기평가 4개 영역 전체 해설, A등급 자가진단, 연동 감점 자동잠금, 주기별 일정과 면담·시연 대비를 제공합니다.</p>
-          <ul class="portal-entry-list">
-            <li>신설 5개 · 연동 8개 · 고배점 14개</li>
-            <li>면담·시연 18문항 공식 기준답안</li>
-            <li>정원별 표본 수·합격기준 계산기</li>
-          </ul>
-        </div>
-        <div class="portal-entry-foot"><span>평가매뉴얼 열기</span><span class="arrow">&rarr;</span></div>
-      </a>
-
-      <a class="portal-entry-card" href="/operations">
-        <div class="stack-sm">
-          <div class="portal-entry-head">
-            <span class="entry-icon icon-teal" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h6m-6 4h4M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/>
-              </svg>
-            </span>
-            <span class="tag tag-navy">2026.10.1. 고시</span>
-          </div>
-          <h3>주·야간보호 운영매뉴얼</h3>
-          <p>최신 고시 수가표, 본인부담금·월한도액 계산기, 인력배치·48.6% 인건비 점검기, 행정 SOP와 현지조사 예방을 정리했습니다.</p>
-          <ul class="portal-entry-list">
-            <li>일반(라-1~5)·치매전담실(사-1~5)</li>
-            <li>본인부담금·인력배치·48.6% 계산기</li>
-            <li>2026 현지조사 부당청구 예방 8선</li>
-          </ul>
-        </div>
-        <div class="portal-entry-foot"><span>운영매뉴얼 열기</span><span class="arrow">&rarr;</span></div>
-      </a>
-
-      <a class="portal-entry-card" href="/forms">
-        <div class="stack-sm">
-          <div class="portal-entry-head">
-            <span class="entry-icon icon-amber" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm0 0v5h5M9 13h6M9 17h4"/>
-              </svg>
-            </span>
-            <span class="tag tag-warn">최신 20종 무료</span>
-          </div>
-          <h3>최신 서식자료실</h3>
-          <p>시행규칙 별지서식 4종과 2026 평가 필수서식 16종을 기관명·기관기호 자동 기입 상태로 즉시 내려받을 수 있습니다.</p>
-          <ul class="portal-entry-list">
-            <li>별지 제11호·11호의4·15호·25호의2</li>
-            <li>기능회복훈련·위험도3종·결과평가</li>
-            <li>DOCX · XLSX · 바로 인쇄 · ZIP</li>
-          </ul>
-        </div>
-        <div class="portal-entry-foot"><span>서식자료실 열기</span><span class="arrow">&rarr;</span></div>
-      </a>
-
-      <a class="portal-entry-card" href="/office">
-        <div class="stack-sm">
-          <div class="portal-entry-head">
-            <span class="entry-icon icon-green" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4-4m4 4 4-4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/>
-              </svg>
-            </span>
-            <span class="tag tag-ok">복지시설 무료배포</span>
-          </div>
-          <h3>무료 오피스 다운받기</h3>
-          <p>상용 오피스 비용이 부담스러운 영세 사회복지시설·주야간보호센터가 저작권 걱정 없이 쓰는 무료 오피스(MPL-2.0)입니다.</p>
-          <ul class="portal-entry-list">
-            <li>DOCX·XLSX·PPTX·PDF 완벽 편집</li>
-            <li>모던 플루언트 리본 UI 웹 체험</li>
-            <li>기관 비치용 정품 확인서 발급</li>
-          </ul>
-        </div>
-        <div class="portal-entry-foot"><span>무료 오피스 열기</span><span class="arrow">&rarr;</span></div>
-      </a>
-    </div>
+    <p class="board-sub">이 브라우저에 저장된 모의 점수가 영역별로 표시됩니다. 항목을 누르면 바로 진단할 수 있습니다.</p>
+    <div id="homeDomainStrip" class="dom-strip"></div>
   </section>
 
-  <!-- Live 4-Domain Evaluation Status Strip -->
-  <section class="gov-card">
-    <div class="gov-card-head">
-      <div>
-        <h2>내 기관 2026 정기평가 자가진단 현황</h2>
-        <p class="gov-card-sub">브라우저에 저장된 4개 영역 모의 점수가 실시간 반영됩니다. 카드를 눌러 바로 진단하세요.</p>
-      </div>
-      <a class="btn btn-sm btn-soft" href="/evaluation#simulator">등급 계산기 열기 &rarr;</a>
+  <section class="board" aria-labelledby="policyTitle">
+    <div class="board-head">
+      <h2 id="policyTitle">2026년 주요 변경·고시 안내</h2>
+      <a class="more-link" href="/operations">운영매뉴얼 전체 ›</a>
     </div>
-    <div id="homeDomainStrip" class="grid-4"></div>
+    <ul class="board-list">
+      <li>
+        <span class="board-cat">정기평가 개편</span>
+        <span class="board-title">기존 48개 → <strong>4개 영역 36개 지표(100점)</strong>. A등급은 총점 90점 이상이면서 4개 영역 모두 70% 이상 충족해야 합니다.</span>
+        <span class="board-act"><a href="/evaluation">평가매뉴얼</a></span>
+      </li>
+      <li>
+        <span class="board-cat">평가 주기 강화</span>
+        <span class="board-title">위험도평가 3종(낙상·욕창·인지 CIST 그림보관), 노인인권교육, 급여제공 결과평가 <strong>반기 1회</strong> / 사회적응 프로그램 <strong>월 1회</strong>로 강화되었습니다.</span>
+        <span class="board-act"><a href="/evaluation#calendar">주기별 일정</a></span>
+      </li>
+      <li>
+        <span class="board-cat">1식 4찬·기능회복</span>
+        <span class="board-title">영양사 작성 <strong>1식 4찬 이상</strong> 식단표 + 월 1회 욕구반영 특식 / 모든 수급자 급여제공계획서에 <strong>기본동작훈련</strong> 필수 기재(지표 27 신설 3점).</span>
+        <span class="board-act"><a href="/forms">관련 서식</a></span>
+      </li>
+      <li>
+        <span class="board-cat">인건비·장려금</span>
+        <span class="board-title">장기요양요원 4직종 의무 인건비 지출비율 <strong>48.6%</strong> / 장기근속장려금 <strong>만 12개월부터 월 5만~18만 원</strong> / 선임요양보호사 35명+ 확대.</span>
+        <span class="board-act"><a href="/operations#staffing">인건비 점검</a></span>
+      </li>
+      <li>
+        <span class="board-cat">2026.10.1. 개정</span>
+        <span class="board-title">인지지원등급 수급자 <strong>치매안심센터 쉼터 중복제한 폐지</strong>(병행 이용 허용) / 농어촌 인력수급취약지역 지원금(월 5만 원) <strong>58개 시군구 확대</strong>.</span>
+        <span class="board-act"><a href="/operations#sop">개정 요약</a></span>
+      </li>
+    </ul>
   </section>
 
-  <!-- 2026 Latest Policy & Standard Highlights (Responsive Card List) -->
-  <section class="gov-card">
-    <div class="gov-card-head">
-      <div>
-        <h2>2026년 주·야간보호시설 핵심 변경·필수 기준</h2>
-        <p class="gov-card-sub">보건복지부 고시 제2025-247호(2026.1.1.) · 제2026-189호(2026.10.1.) 및 공단 2026 평가매뉴얼</p>
+  <div class="home-cols">
+    <section class="board" aria-labelledby="formTitle">
+      <div class="board-head">
+        <h2 id="formTitle">자주 찾는 표준서식</h2>
+        <a class="more-link" href="/forms">20종 전체 ›</a>
       </div>
-      <a class="btn btn-sm" href="/operations">운영매뉴얼 전체 &rarr;</a>
-    </div>
-    <div class="policy-list">
-      <div class="policy-row">
-        <div class="policy-key"><span class="tag tag-navy">정기평가 개편</span></div>
-        <div class="policy-desc">기존 48개 &rarr; <strong>4개 영역 36개 지표(100점)</strong>. A등급은 총점 90점 이상이면서 4개 영역 모두 70% 이상 충족해야 합니다.</div>
-        <div class="policy-act"><a class="btn btn-xs btn-soft" href="/evaluation">평가매뉴얼</a></div>
-      </div>
-      <div class="policy-row">
-        <div class="policy-key"><span class="tag tag-warn">평가 주기 강화</span></div>
-        <div class="policy-desc">위험도평가 3종(낙상·욕창·인지 CIST 그림보관), 노인인권교육, 급여제공 결과평가 <strong>반기 1회</strong> / 사회적응 프로그램 <strong>월 1회</strong>로 강화되었습니다.</div>
-        <div class="policy-act"><a class="btn btn-xs btn-soft" href="/evaluation#calendar">주기별 일정</a></div>
-      </div>
-      <div class="policy-row">
-        <div class="policy-key"><span class="tag tag-navy">1식 4찬 · 기능회복</span></div>
-        <div class="policy-desc">영양사 작성 <strong>1식 4찬 이상</strong> 식단표 + 월 1회 욕구반영 특식 / 모든 수급자 급여제공계획서에 <strong>기본동작훈련</strong> 필수 기재(지표 27 신설 3점).</div>
-        <div class="policy-act"><a class="btn btn-xs btn-soft" href="/forms">관련 서식</a></div>
-      </div>
-      <div class="policy-row">
-        <div class="policy-key"><span class="tag tag-ok">인건비 · 장려금</span></div>
-        <div class="policy-desc">장기요양요원 4직종 의무 인건비 지출비율 <strong>48.6%</strong> / 장기근속장려금 <strong>만 12개월부터 월 5만~18만 원</strong> / 선임요양보호사 35명+ 확대.</div>
-        <div class="policy-act"><a class="btn btn-xs btn-soft" href="/operations#staffing">인건비 점검</a></div>
-      </div>
-      <div class="policy-row">
-        <div class="policy-key"><span class="tag tag-solid">2026.10.1. 개정</span></div>
-        <div class="policy-desc">인지지원등급 수급자 <strong>치매안심센터 쉼터 중복제한 폐지</strong>(병행 이용 허용) / 농어촌 인력수급취약지역 지원금(월 5만 원) <strong>58개 시군구 확대</strong>.</div>
-        <div class="policy-act"><a class="btn btn-xs btn-soft" href="/operations#sop">개정 요약</a></div>
-      </div>
-    </div>
-  </section>
+      <ul class="file-list">
+        {% for f in featured_forms %}
+        <li>
+          <span class="file-name"><span class="no">{{ f.no }}</span><span>{{ f.title }}</span></span>
+          <span class="file-act">
+            <a class="btn btn-xs btn-soft" href="/forms/{{ f.slug }}.docx">DOCX</a>
+            <a class="btn btn-xs btn-soft" href="/forms/{{ f.slug }}.xlsx">XLSX</a>
+            <a class="btn btn-xs" href="/forms/{{ f.slug }}/print" target="_blank" rel="noopener noreferrer">인쇄</a>
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="btn-row" style="margin-top:14px;"><a class="btn btn-sm btn-primary" href="/forms/bundle.zip">20종 전체 ZIP 받기</a></p>
+    </section>
 
-  <!-- Quick Access Top 6 Forms (Responsive Mobile-First Grid) -->
-  <section class="gov-card">
-    <div class="gov-card-head">
-      <div>
-        <h2>자주 찾는 필수 표준서식 바로 받기</h2>
-        <p class="gov-card-sub">기관명·장기요양기관기호 자동 기입 및 전체 20종 검색은 서식자료실에서 이용할 수 있습니다.</p>
+    <section class="board" aria-labelledby="agencyTitle">
+      <div class="board-head">
+        <h2 id="agencyTitle">관련 공공기관 누리집</h2>
       </div>
-      <div class="btn-row">
-        <a class="btn btn-sm btn-primary" href="/forms/bundle.zip">20종 전체 ZIP</a>
-        <a class="btn btn-sm" href="/forms">20종 전체 보기 &rarr;</a>
+      <div class="agency-grid" style="grid-template-columns:1fr;">
+        <a class="agency-link" href="https://www.longtermcare.or.kr" target="_blank" rel="noopener noreferrer">
+          <div><strong>국민건강보험공단 노인장기요양보험</strong><span>공식 평가매뉴얼·법정서식·기관정보</span></div><span class="go">›</span>
+        </a>
+        <a class="agency-link" href="href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EA%B8%89%EC%97%AC%20%EC%A0%9C%EA%B3%B5%EA%B8%B0%EC%A4%80%20%EB%B0%8F%20%EA%B8%89%EC%97%AC%EB%B9%84%EC%9A%A9%20%EC%82%B0%EC%A0%95%EB%B0%A9%EB%B2%95%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EA%B3%A0%EC%8B%9C" target="_blank" rel="noopener noreferrer">
+          <div><strong>국가법령정보센터 (장기요양 고시)</strong><span>보건복지부 고시 제2026-189호 전문</span></div><span class="go">›</span>
+        </a>
+        <a class="agency-link" href="https://si4n.nhis.or.kr" target="_blank" rel="noopener noreferrer">
+          <div><strong>사회보험통합징수포털</strong><span>5대 보험 완납증명서(조달청 제출용)</span></div><span class="go">›</span>
+        </a>
+        <a class="agency-link" href="https://www.4insure.or.kr" target="_blank" rel="noopener noreferrer">
+          <div><strong>4대사회보험 정보연계센터</strong><span>4대 보험 사업장 가입증명서 발급</span></div><span class="go">›</span>
+        </a>
+        <a class="agency-link" href="https://www.nid.or.kr" target="_blank" rel="noopener noreferrer">
+          <div><strong>중앙치매센터</strong><span>CIST(인지선별검사) 온라인 교육</span></div><span class="go">›</span>
+        </a>
+        <a class="agency-link" href="https://lst.go.kr" target="_blank" rel="noopener noreferrer">
+          <div><strong>국립연명의료관리기관</strong><span>지표 35 연명의료결정제도 안내</span></div><span class="go">›</span>
+        </a>
       </div>
-    </div>
-    <div class="quick-forms-grid">
-      {% for f in featured_forms %}
-      <article class="qform-item">
-        <div class="qform-top">
-          <span class="tag tag-navy">{{ f.code_badge }}</span>
-          <span class="tag tag-slate">{{ f.eval_badge }}</span>
-        </div>
-        <h3>{{ f.no }}. {{ f.title }}</h3>
-        <div class="qform-actions">
-          <a class="btn btn-xs btn-primary" href="/forms/{{ f.slug }}.docx">DOCX</a>
-          <a class="btn btn-xs btn-soft" href="/forms/{{ f.slug }}.xlsx">XLSX</a>
-          <a class="btn btn-xs" href="/forms/{{ f.slug }}/print" target="_blank" rel="noopener noreferrer">인쇄</a>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </section>
-
-  <!-- Official Government Agency Reference Links -->
-  <section class="gov-card">
-    <div class="gov-card-head">
-      <div>
-        <h2>관련 정부·공공기관 공식 누리집</h2>
-        <p class="gov-card-sub">최신 법령·고시 원문, 5대 보험 완납증명서, CIST 교육, 연명의료결정제도 안내를 바로 확인하세요.</p>
-      </div>
-    </div>
-    <div class="grid-3">
-      <a class="agency-link" href="https://www.longtermcare.or.kr" target="_blank" rel="noopener noreferrer">
-        <div><strong>국민건강보험공단 노인장기요양보험</strong><span>공식 평가매뉴얼·법정서식·기관정보</span></div><span class="go">&rarr;</span>
-      </a>
-      <a class="agency-link" href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EA%B8%89%EC%97%AC%20%EC%A0%9C%EA%B3%B5%EA%B8%B0%EC%A4%80%20%EB%B0%8F%20%EA%B8%89%EC%97%AC%EB%B9%84%EC%9A%A9%20%EC%82%B0%EC%A0%95%EB%B0%A9%EB%B2%95%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EA%B3%A0%EC%8B%9C" target="_blank" rel="noopener noreferrer">
-        <div><strong>국가법령정보센터 (장기요양 고시)</strong><span>보건복지부 고시 제2026-189호 전문</span></div><span class="go">&rarr;</span>
-      </a>
-      <a class="agency-link" href="https://si4n.nhis.or.kr" target="_blank" rel="noopener noreferrer">
-        <div><strong>사회보험통합징수포털</strong><span>5대 보험 완납증명서(조달청 제출용)</span></div><span class="go">&rarr;</span>
-      </a>
-      <a class="agency-link" href="https://www.4insure.or.kr" target="_blank" rel="noopener noreferrer">
-        <div><strong>4대사회보험 정보연계센터</strong><span>4대 보험 사업장 가입증명서 발급</span></div><span class="go">&rarr;</span>
-      </a>
-      <a class="agency-link" href="https://www.nid.or.kr" target="_blank" rel="noopener noreferrer">
-        <div><strong>중앙치매센터</strong><span>CIST(인지선별검사) 온라인 교육</span></div><span class="go">&rarr;</span>
-      </a>
-      <a class="agency-link" href="https://lst.go.kr" target="_blank" rel="noopener noreferrer">
-        <div><strong>국립연명의료관리기관</strong><span>지표 35 연명의료결정제도 안내</span></div><span class="go">&rarr;</span>
-      </a>
-    </div>
-  </section>
+    </section>
+  </div>
 
 </div>
 {% endblock %}
