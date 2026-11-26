@@ -15,7 +15,7 @@
   <meta property="og:description" content="{% block og_description %}2026 주·야간보호 정기평가 36개 지표 자가진단, 최신 고시 운영매뉴얼, 20종 표준서식 무료 다운로드와 사회복지시설 무료 오피스.{% endblock %}">
   <meta property="og:url" content="{{ site_base }}{{ request.path }}">
   <meta property="og:image" content="{{ site_base }}/static/og/welfare.png">
-  <meta name="theme-color" content="#1B64DA">
+  <meta name="theme-color" content="#2151C8">
   <link rel="icon" href="{{ url_for('static', filename='portal/favicon.svg') }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
   {% block extra_head %}{% endblock %}
@@ -23,28 +23,37 @@
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
+  {% include 'daycare/_sprite.html' %}
 
-  <!-- Modern Sleek Single-Row Glass Header -->
+  <div class="util-bar no-print">
+    <div class="wrap util-bar-inner">
+      <div class="util-agency"><strong>웰페어고</strong><span>2026 주·야간보호시설 실무 지원 포털</span></div>
+      <div class="util-right">
+        <a class="status-pill" href="/evaluation#simulator" aria-label="내 기관 모의 자가진단 현황 바로가기">
+          <span class="status-pill-score"><span class="status-pill-lbl">모의점수</span><strong id="hdrScore">100.0</strong></span>
+          <span id="hdrGradeBadge" class="grade-badge">A등급</span>
+          <span class="status-pill-check" title="서류 점검률">서류 <strong id="hdrCheckProgress">0%</strong></span>
+        </a>
+        <div class="font-switcher" role="group" aria-label="글자 크기 조절">
+          <button type="button" id="btnFontSm" title="글자 작게">가-</button>
+          <button type="button" id="btnFontMd" class="active" title="글자 보통">가</button>
+          <button type="button" id="btnFontLg" title="글자 크게">가+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <header class="site-header no-print">
     <div class="wrap site-header-inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand-mark" aria-hidden="true">
-          <svg fill="none" stroke="currentColor" stroke-width="2.1" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
-          </svg>
-        </span>
-        <span class="site-brand-text">
-          <strong>웰페어고</strong>
-          <small>2026 주·야간보호 실무</small>
-        </span>
+      <a class="site-brand" href="/" aria-label="웰페어고 홈">
+        <span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36"><use href="#logo-mark"/></svg></span>
+        <span class="site-brand-text"><strong>웰페어고</strong><small>주·야간보호 실무포털</small></span>
       </a>
 
-      <!-- Desktop Inline Navigation -->
-      <nav class="desktop-nav" aria-label="주·야간보호 포털 주요 메뉴">
-        {% for item in nav_items %}
+      <nav class="desktop-nav" aria-label="주요 메뉴">
+        {% for item in nav_items if item.key != 'home' %}
         <a href="{{ item.path }}" class="{{ 'is-active' if active == item.key else '' }}"{% if active == item.key %} aria-current="page"{% endif %}>
-          {% if item.key == 'home' %}홈
-          {% elif item.key == 'evaluation' %}평가매뉴얼
+          {% if item.key == 'evaluation' %}평가매뉴얼
           {% elif item.key == 'operations' %}운영매뉴얼
           {% elif item.key == 'forms' %}서식자료실
           {% elif item.key == 'office' %}무료 오피스
@@ -53,27 +62,83 @@
         {% endfor %}
       </nav>
 
-      <!-- Live Self-Eval Pill & Compact Font Control -->
-      <div class="header-actions">
-        <a class="status-pill" href="/evaluation#simulator" aria-label="내 기관 모의 자가진단 현황 바로가기">
-          <span class="status-pill-score">
-            <span class="status-pill-lbl">모의</span>
-            <strong id="hdrScore">100.0</strong>
-          </span>
-          <span id="hdrGradeBadge" class="grade-badge">A등급</span>
-          <span class="status-pill-check" title="서류 점검률">서류 <strong id="hdrCheckProgress">0%</strong></span>
-        </a>
-
-        <div class="font-switcher" role="group" aria-label="글자 크기 조절">
-          <button type="button" id="btnFontSm" title="글자 작게">가-</button>
-          <button type="button" id="btnFontMd" class="active" title="글자 보통">가</button>
-          <button type="button" id="btnFontLg" title="글자 크게">가+</button>
-        </div>
+      <div class="header-tools">
+        <a class="icon-btn" href="/#search" aria-label="통합검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></a>
+        <button type="button" class="icon-btn menu-btn" id="btnMenu" aria-label="전체메뉴 열기" aria-expanded="false" aria-controls="drawer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       </div>
     </div>
   </header>
 
+  <!-- 전체메뉴 -->
+  <div class="drawer no-print" id="drawer" role="dialog" aria-modal="true" aria-label="전체메뉴" hidden>
+    <div class="drawer-top">
+      <div class="drawer-close"><button type="button" class="icon-btn" id="btnMenuClose" aria-label="전체메뉴 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button></div>
+      <div class="drawer-msg">
+        <p>우리 기관의 <strong>2026 정기평가</strong><br>모의 점수를 확인하세요</p>
+        <a class="pill-btn" href="/evaluation#simulator">자가진단</a>
+      </div>
+      <div class="drawer-pills">
+        <a class="pill-btn" href="/forms">서식 받기</a>
+        <a class="pill-btn" href="/operations#fees">수가·본인부담금 계산</a>
+      </div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-main" role="tablist" aria-label="대분류">
+        <button type="button" class="is-on" data-dmenu="eval">평가매뉴얼</button>
+        <button type="button" data-dmenu="ops">운영매뉴얼</button>
+        <button type="button" data-dmenu="forms">서식자료실</button>
+        <button type="button" data-dmenu="office">무료 오피스</button>
+        <button type="button" data-dmenu="about">포털 안내</button>
+      </div>
+      <div class="drawer-subs">
+        <div class="drawer-sub" data-dpanel="eval">
+          <h3>평가매뉴얼</h3>
+          <ul>
+            <li><a href="/evaluation#explorer">평가지표 안내 (36개)</a></li>
+            <li><a href="/evaluation#simulator">모의 자가진단·등급계산</a></li>
+            <li><a href="/evaluation#calendar">주기별 실무 일정</a></li>
+            <li><a href="/evaluation#interview">면담·시연 대비</a></li>
+            <li><a href="/evaluation#guide">2026 개편·표본기준</a></li>
+          </ul>
+        </div>
+        <div class="drawer-sub" data-dpanel="ops" hidden>
+          <h3>운영매뉴얼</h3>
+          <ul>
+            <li><a href="/operations#fees">2026 수가·본인부담금</a></li>
+            <li><a href="/operations#staffing">인력배치·48.6% 인건비</a></li>
+            <li><a href="/operations#sop">운영 SOP·개정고시</a></li>
+            <li><a href="/operations#training">법정·평가 필수교육</a></li>
+            <li><a href="/operations#audit">현지조사 환수 예방</a></li>
+          </ul>
+        </div>
+        <div class="drawer-sub" data-dpanel="forms" hidden>
+          <h3>서식자료실</h3>
+          <ul>
+            <li><a href="/forms">서식 20종 전체 보기</a></li>
+            <li><a href="/forms/bundle.zip">전체 ZIP 한 번에 받기</a></li>
+          </ul>
+        </div>
+        <div class="drawer-sub" data-dpanel="office" hidden>
+          <h3>무료 오피스</h3>
+          <ul>
+            <li><a href="/office">설치파일 받기</a></li>
+            <li><a href="/office/preview">웹에서 미리 체험</a></li>
+            <li><a href="/office/license-certificate">정품 확인서 발급</a></li>
+          </ul>
+        </div>
+        <div class="drawer-sub" data-dpanel="about" hidden>
+          <h3>포털 안내</h3>
+          <ul>
+            <li><a href="/about">공식 출처·개인정보</a></li>
+            <li><a href="https://www.longtermcare.or.kr" target="_blank" rel="noopener noreferrer">노인장기요양보험(공단)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <main id="main" class="gov-main">
+    {% block fullbleed %}{% endblock %}
     <div class="wrap">
       {% block content %}{% endblock %}
     </div>
@@ -85,7 +150,7 @@
     <div class="wrap">
       <div class="gov-footer-row">
         <div class="footer-brand">
-          <strong>웰페어고 (WELFAREGO)</strong>
+          <strong>웰페어고</strong>
           <span>2026 주·야간보호시설 실무 지원 포털</span>
         </div>
         <nav class="gov-footer-links" aria-label="하단 바로가기">
@@ -99,40 +164,6 @@
       <p class="footer-note">본 포털은 국민건강보험공단 「2026년 장기요양기관 재가급여(주야간보호) 평가 매뉴얼」(2025.12.), 보건복지부 고시(제2025-247호·제2026-189호) 및 노인장기요양보험법 시행규칙을 참고하여 제작된 민간 실무 지원 도구입니다. 최종 평가 및 청구 적용 시 공단 최신 공고 및 시행세칙을 함께 확인하시기 바랍니다. (© {{ today.year }} WELFAREGO)</p>
     </div>
   </footer>
-
-  <!-- Mobile App-Style Fixed Bottom Tab Bar -->
-  <nav class="mobile-tabbar no-print" aria-label="모바일 하단 메뉴">
-    <a href="/" class="mtab {{ 'is-active' if active == 'home' else '' }}"{% if active == 'home' %} aria-current="page"{% endif %}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m3 10.5 9-7 9 7V20a1 1 0 0 1-1 1h-5.5v-6.5h-5V21H4a1 1 0 0 1-1-1v-9.5Z"/>
-      </svg>
-      <span>홈</span>
-    </a>
-    <a href="/evaluation" class="mtab {{ 'is-active' if active == 'evaluation' else '' }}"{% if active == 'evaluation' %} aria-current="page"{% endif %}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m-6 0a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
-      </svg>
-      <span>평가</span>
-    </a>
-    <a href="/operations" class="mtab {{ 'is-active' if active == 'operations' else '' }}"{% if active == 'operations' %} aria-current="page"{% endif %}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/>
-      </svg>
-      <span>운영</span>
-    </a>
-    <a href="/forms" class="mtab {{ 'is-active' if active == 'forms' else '' }}"{% if active == 'forms' %} aria-current="page"{% endif %}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm0 0v5h5M9 13h6M9 17h4"/>
-      </svg>
-      <span>서식</span>
-    </a>
-    <a href="/office" class="mtab {{ 'is-active' if active == 'office' else '' }}"{% if active == 'office' %} aria-current="page"{% endif %}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4-4m4 4 4-4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/>
-      </svg>
-      <span>오피스</span>
-    </a>
-  </nav>
 
   <script id="global-eval-summary" type="application/json">{{ global_eval_summary_indicators | tojson }}</script>
   <script src="{{ url_for('static', filename='js/portal.js') }}" defer></script>
