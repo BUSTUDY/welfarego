@@ -40,6 +40,8 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("급여제공 결과평가", ev_html)
         self.assertIn("기능회복훈련", ev_html)
         self.assertIn("dc-eval-data", ev_html)
+        self.assertIn('id="tab-checklist"', ev_html)
+        self.assertIn("36개 평가지표 준비완료 통합 자가점검표", ev_html)
 
         ops = self.client.get("/operations")
         self.assertEqual(ops.status_code, 200)
@@ -49,6 +51,8 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("81,270", ops_html)
         self.assertIn("제2026-189호", ops_html)
         self.assertIn("48.6%", ops_html)
+        self.assertIn('id="stfActCareGen"', ops_html)
+        self.assertIn('id="stfPresetBar"', ops_html)
 
         forms = self.client.get("/forms")
         self.assertEqual(forms.status_code, 200)

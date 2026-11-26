@@ -5,6 +5,7 @@
   const ORG_STORAGE_KEY = 'welfarego.daycare.org.v1';
   const FONT_STORAGE_KEY = 'welfarego.daycare.font.v1';
   const THEME_STORAGE_KEY = 'welfarego.daycare.theme.v1';
+  const STAFF_SIM_STORAGE_KEY = 'welfarego.daycare.staffsim.v1';
 
   const DOMAINS = [
     { code: '01', name: '기관운영', max: 27, color: '#2151c8' },
@@ -66,12 +67,14 @@
     let totalObtained = 0;
     let totalValidMax = 0;
     const domainStats = {};
-    DOMAINS.forEach(d => { domainStats[d.name] = { obtained: 0, validMax: 0, pct: 0 }; });
+    DOMAINS.forEach(d => { domainStats[d.name] = { obtained: 0, validMax: 0, pct: 0, indTotal: 0, indReady: 0 }; });
 
     let totalDocs = 0;
     let checkedDocs = 0;
+    let readyIndicators = 0;
 
     indicators.forEach(ind => {
+      domainStats[ind.domain].indTotal++;
       ind.criteria.forEach(c => {
         const res = evalCriterionResult(ind, c, scores);
         if (!res.isNA) {
@@ -82,9 +85,17 @@
         }
       });
       const dCount = ind.docs ? ind.docs.length : (ind.docsCount || 0);
+      let indChecked = 0;
       for (let i = 0; i < dCount; i++) {
         totalDocs++;
-        if (docChecks[`${ind.id}_${i}`]) checkedDocs++;
+        if (docChecks[`${ind.id}_${i}`]) {
+          checkedDocs++;
+          indChecked++;
+        }
+      }
+      if (dCount > 0 && indChecked === dCount) {
+        readyIndicators++;
+        domainStats[ind.domain].indReady++;
       }
     });
 
@@ -105,7 +116,7 @@
     else if (normalizedTotal >= 60 && minDomainPct >= 40) { grade = 'D'; gradeLabel = 'D등급 (보통)'; }
 
     const docPct = totalDocs > 0 ? Math.round((checkedDocs / totalDocs) * 100) : 0;
-    return { totalObtained, totalValidMax, normalizedTotal, domainStats, grade, gradeLabel, weakDomainsA, totalDocs, checkedDocs, docPct };
+    return { totalObtained, totalValidMax, normalizedTotal, domainStats, grade, gradeLabel, weakDomainsA, totalDocs, checkedDocs, docPct, readyIndicators };
   }
 
   function paintHeaderStatus(ev) {
@@ -287,6 +298,20 @@
         const ev = computeEvalSummary(inds, saved.scores || {}, saved.docChecks || {});
         paintHeaderStatus(ev);
 
+        const homeChkBar = document.getElementById('homeChecklistBanner');
+        if (homeChkBar) {
+          homeChkBar.innerHTML = `
+            <div class="prog-wrap">
+              <div class="prog-meta">
+                <span>평가 지표별 준비완료 <strong>${ev.readyIndicators} / ${inds.length}개</strong></span>
+                <span style="color:var(--gov-navy);">필수서류 ${ev.checkedDocs} / ${ev.totalDocs}건 (${ev.docPct}%)</span>
+              </div>
+              <div class="chk-prog-track"><div class="chk-prog-fill" style="width:${ev.docPct}%;"></div></div>
+            </div>
+            <a class="btn btn-sm btn-primary" href="/evaluation#checklist">자가점검 이어하기 &rsaquo;</a>
+          `;
+        }
+
         const homeStrip = document.getElementById('homeDomainStrip');
         if (homeStrip) {
           homeStrip.innerHTML = DOMAINS.map(d => {
@@ -300,7 +325,7 @@
                 </div>
                 <div class="dom-score-row">
                   <strong>${fmtNum(st.obtained)}<small> / ${fmtNum(st.validMax)}점</small></strong>
-                  <small>A기준 70%</small>
+                  <small>준비 ${st.indReady}/${st.indTotal}개</small>
                 </div>
                 <div class="dom-bar">
                   <div class="dom-bar-fill ${passA ? '' : 'fail'}" style="width:${Math.min(100, st.pct)}%;background:${passA ? d.color : '#b91c1c'};"></div>
@@ -342,6 +367,9 @@
       domainFilter: 'ALL',
       methodFilter: 'ALL',
       quickChip: 'ALL',
+      chkDomain: 'ALL',
+      chkOnlyPending: false,
+      chkSearch: '',
       simDomain: 'ALL',
       simOnlyLost: false,
       calCycle: 'ALL',
@@ -647,6 +675,7 @@
           saveState();
           updateSummary();
           renderExplorer();
+          if (state.activeTab === 'checklist') renderChecklist();
           openModal(indId, true);
         });
       });
@@ -659,6 +688,122 @@
       document.getElementById('detailModal').hidden = true;
       state.currentModalId = null;
       try { history.replaceState(null, '', '#' + state.activeTab); } catch (_) {}
+    }
+
+    function renderChecklist() {
+      const ev = computeEvalSummary(INDICATORS, state.scores, state.docChecks);
+      const indCntEl = document.getElementById('chkReadyIndCount');
+      if (!indCntEl) return;
+      indCntEl.textContent = String(ev.readyIndicators);
+      document.getElementById('chkReadyDocCount').textContent = String(ev.checkedDocs);
+      document.getElementById('chkTotalDocCount').textContent = String(ev.totalDocs);
+      document.getElementById('chkReadyPct').textContent = String(ev.docPct);
+      document.getElementById('chkProgressBar').style.width = `${ev.docPct}%`;
+
+      document.getElementById('chkDomainSummary').innerHTML = DOMAINS.map(d => {
+        const st = ev.domainStats[d.name];
+        const doneAll = st.indReady === st.indTotal;
+        return `
+          <div style="padding:10px 12px;border:1px solid var(--gov-line);border-radius:6px;background:var(--gov-surface);">
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:700;color:var(--gov-slate-700);">
+              <span>${d.code} ${esc(d.name)}</span>
+              <span style="color:${doneAll ? 'var(--gov-ok)' : 'var(--gov-navy)'};">${st.indReady}/${st.indTotal}개 완료</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const q = state.chkSearch.trim().toLowerCase();
+      const orgSfx = readSavedOrgSuffix();
+      const items = INDICATORS.filter(ind => {
+        if (state.chkDomain !== 'ALL' && ind.domain !== state.chkDomain) return false;
+        const doneCnt = ind.docs.filter((_, idx) => state.docChecks[`${ind.id}_${idx}`]).length;
+        const isDone = ind.docs.length > 0 && doneCnt === ind.docs.length;
+        if (state.chkOnlyPending && isDone) return false;
+        if (q) {
+          const hay = [String(ind.id), ind.name, ind.domain, ind.summary, ...ind.docs].join(' ').toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('chkResultCount').textContent = `표시 중 ${items.length}개 지표`;
+      const board = document.getElementById('checklistBoard');
+      if (!items.length) {
+        board.innerHTML = `<div class="gov-card plain" style="text-align:center;color:var(--gov-slate-600);padding:32px;">${state.chkOnlyPending ? '모든 평가지표 서류 점검이 완료되었습니다!' : '검색 조건에 맞는 지표가 없습니다.'}</div>`;
+        return;
+      }
+
+      board.innerHTML = items.map(ind => {
+        const doneCnt = ind.docs.filter((_, idx) => state.docChecks[`${ind.id}_${idx}`]).length;
+        const totalCnt = ind.docs.length;
+        const isDone = totalCnt > 0 && doneCnt === totalCnt;
+        const statusTag = isDone
+          ? `<span class="tag tag-ok">준비완료 (${doneCnt}/${totalCnt})</span>`
+          : (doneCnt > 0
+            ? `<span class="tag tag-warn">진행중 (${doneCnt}/${totalCnt})</span>`
+            : `<span class="tag tag-slate">미점검 (0/${totalCnt})</span>`);
+        const firstForm = (ind.form_slugs || []).map(s => FORMS_MAP[s]).find(Boolean);
+        return `
+          <article class="chk-card ${isDone ? 'is-done' : ''}">
+            <div class="chk-card-head">
+              <label class="chk-master-lbl">
+                <input type="checkbox" data-chk-master="${ind.id}" ${isDone ? 'checked' : ''}>
+                <span>[${String(ind.id).padStart(2, '0')}] ${esc(ind.name)}</span>
+              </label>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                <span class="tag tag-slate">${esc(ind.domain)}</span>
+                <span class="tag tag-navy">${ind.maxScore}점</span>
+                ${ind.isNew ? '<span class="tag tag-danger">신설</span>' : ''}
+                ${ind.hasLink ? '<span class="tag tag-warn">연동</span>' : ''}
+                ${statusTag}
+                ${firstForm ? `<a class="btn btn-xs btn-soft no-print" href="/forms/${encodeURIComponent(firstForm.slug)}.hwpx${orgSfx}">서식(한글)</a>` : ''}
+                <button type="button" data-chk-open="${ind.id}" class="btn btn-xs no-print">기준 상세</button>
+              </div>
+            </div>
+            <div class="chk-docs-list">
+              ${ind.docs.map((doc, idx) => {
+                const checked = !!state.docChecks[`${ind.id}_${idx}`];
+                return `
+                  <label class="doc-chk-row ${checked ? 'checked' : ''}">
+                    <input type="checkbox" data-chk-doc="${ind.id}_${idx}" ${checked ? 'checked' : ''}>
+                    <span>${esc(doc)}</span>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      board.querySelectorAll('[data-chk-master]').forEach(master => {
+        master.addEventListener('change', () => {
+          const id = Number(master.getAttribute('data-chk-master'));
+          const ind = INDICATORS.find(x => x.id === id);
+          if (!ind) return;
+          ind.docs.forEach((_, idx) => {
+            state.docChecks[`${ind.id}_${idx}`] = master.checked;
+          });
+          saveState();
+          updateSummary();
+          renderExplorer();
+          renderChecklist();
+        });
+      });
+
+      board.querySelectorAll('[data-chk-doc]').forEach(chk => {
+        chk.addEventListener('change', () => {
+          state.docChecks[chk.getAttribute('data-chk-doc')] = chk.checked;
+          saveState();
+          updateSummary();
+          renderExplorer();
+          renderChecklist();
+        });
+      });
+
+      board.querySelectorAll('[data-chk-open]').forEach(btn => {
+        btn.addEventListener('click', () => openModal(Number(btn.getAttribute('data-chk-open'))));
+      });
     }
 
     function renderSimulator() {
@@ -878,6 +1023,7 @@
       if (state.currentModalId === null) {
         try { history.replaceState(null, '', '#' + tabName); } catch (_) {}
       }
+      if (tabName === 'checklist') renderChecklist();
       if (tabName === 'simulator') renderSimulator();
       if (tabName === 'calendar') renderCalendar();
       if (tabName === 'interview') renderInterview();
@@ -886,6 +1032,39 @@
 
     document.querySelectorAll('#evalNav [data-tab]').forEach(btn => {
       btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+
+    document.getElementById('chkSearchInput')?.addEventListener('input', e => {
+      state.chkSearch = e.target.value || '';
+      renderChecklist();
+    });
+    document.querySelectorAll('#chkDomainTabs [data-cdom]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.chkDomain = btn.getAttribute('data-cdom');
+        document.querySelectorAll('#chkDomainTabs [data-cdom]').forEach(b => b.classList.toggle('active', b === btn));
+        renderChecklist();
+      });
+    });
+    document.getElementById('btnChkOnlyPending')?.addEventListener('click', e => {
+      state.chkOnlyPending = !state.chkOnlyPending;
+      e.currentTarget.classList.toggle('active', state.chkOnlyPending);
+      e.currentTarget.textContent = state.chkOnlyPending ? '전체 지표 보기' : '미완료 지표만 보기';
+      renderChecklist();
+    });
+    document.getElementById('btnChkFillAll')?.addEventListener('click', () => {
+      INDICATORS.forEach(ind => ind.docs.forEach((_, idx) => { state.docChecks[`${ind.id}_${idx}`] = true; }));
+      saveState(); updateSummary(); renderExplorer(); renderChecklist();
+      showToast('36개 전체 평가지표 서류를 점검 완료로 표시했습니다.');
+    });
+    document.getElementById('btnChkReset')?.addEventListener('click', () => {
+      state.docChecks = {};
+      saveState(); updateSummary(); renderExplorer(); renderChecklist();
+      showToast('서류 자가점검 체크를 초기화했습니다.');
+    });
+    document.getElementById('btnChkPrint')?.addEventListener('click', () => {
+      document.body.classList.add('print-checklist');
+      window.print();
+      setTimeout(() => document.body.classList.remove('print-checklist'), 300);
     });
 
     const searchEl = document.getElementById('searchInput');
@@ -997,6 +1176,7 @@
           saveState();
           updateSummary();
           renderExplorer();
+          renderChecklist();
           renderSimulator();
           showToast('저장된 자가진단 결과(JSON)를 불러왔습니다.');
         } catch (_) {
@@ -1038,7 +1218,7 @@
       if (h.startsWith('indicator-')) {
         const id = parseInt(h.replace('indicator-', ''), 10);
         if (id >= 1 && id <= INDICATORS.length) openModal(id);
-      } else if (['explorer', 'simulator', 'calendar', 'interview', 'guide'].includes(h)) {
+      } else if (['explorer', 'checklist', 'simulator', 'calendar', 'interview', 'guide'].includes(h)) {
         if (state.currentModalId !== null) {
           document.getElementById('detailModal').hidden = true;
           state.currentModalId = null;
@@ -1138,36 +1318,310 @@
       document.getElementById(id)?.addEventListener('change', calcFee);
     });
 
+    function trunc2(users, staff) {
+      return staff > 0 ? Math.floor((users * 100) / staff) / 100 : Infinity;
+    }
+
+    function minCareForAddon(users, reqCount, limitRatio) {
+      if (users <= 0) return 0;
+      let n = reqCount + 1;
+      while (trunc2(users, n) >= limitRatio && n < 200) n++;
+      return n;
+    }
+
+    function getBasePointCap(total) {
+      if (total < 5) return 1.4;
+      if (total < 10) return 2.6;
+      if (total < 30) return 4.0;
+      if (total < 50) return 6.4;
+      if (total < 70) return 8.8;
+      if (total < 80) return 10.0;
+      if (total < 90) return 11.2;
+      if (total < 120) return 13.6;
+      return 14.8;
+    }
+
+    function getExtraCareCapBonus(total, extraCare) {
+      if (total < 10 || extraCare <= 0) return 0;
+      if (total < 30) return extraCare >= 4 ? 2.4 : (extraCare === 3 ? 1.2 : 0);
+      if (total < 50) return extraCare >= 5 ? 2.4 : (extraCare === 4 ? 1.2 : 0);
+      if (total < 70) return extraCare >= 6 ? 2.4 : (extraCare === 5 ? 1.2 : 0);
+      if (total < 90) return extraCare >= 7 ? 2.4 : (extraCare === 6 ? 1.2 : 0);
+      if (total < 120) return extraCare >= 9 ? 3.6 : (extraCare === 8 ? 2.4 : (extraCare === 7 ? 1.2 : 0));
+      return extraCare >= 10 ? 3.6 : (extraCare === 9 ? 2.4 : (extraCare === 8 ? 1.2 : 0));
+    }
+
+    const STF_INPUT_IDS = [
+      'stfGeneralUsers', 'stfDementiaUsers', 'stfMonthlyBenefit',
+      'stfActCareGen', 'stfActCareDem', 'stfActSw', 'stfActPt',
+      'stfActNurse', 'stfActRn', 'stfActCook', 'stfProgramAddon',
+    ];
+
+    function saveStaffSim() {
+      try {
+        const data = { outsourced: !!document.getElementById('stfMealOutsourced')?.checked };
+        STF_INPUT_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) data[id] = el.value;
+        });
+        localStorage.setItem(STAFF_SIM_STORAGE_KEY, JSON.stringify(data));
+      } catch (_) {}
+    }
+
+    function loadStaffSim() {
+      try {
+        const raw = localStorage.getItem(STAFF_SIM_STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        STF_INPUT_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && data[id] !== undefined) el.value = data[id];
+        });
+        const outChk = document.getElementById('stfMealOutsourced');
+        if (outChk && typeof data.outsourced === 'boolean') outChk.checked = data.outsourced;
+      } catch (_) {}
+    }
+
+    function applyStaffPresetMode(mode) {
+      const gen = Math.max(0, parseInt(document.getElementById('stfGeneralUsers').value || '0', 10));
+      const dem = Math.max(0, parseInt(document.getElementById('stfDementiaUsers').value || '0', 10));
+      const total = gen + dem;
+      const outsourced = !!document.getElementById('stfMealOutsourced')?.checked;
+      const careGenReq = gen > 0 ? Math.max(1, Math.round(gen / 7)) : 0;
+      const careDemReq = dem > 0 ? Math.max(1, Math.round(dem / 4)) : 0;
+      const swReq = total >= 10 ? 1 : 0;
+      const cookReq = outsourced ? 0 : (total >= 1 ? 1 : 0);
+
+      if (mode === 'min') {
+        document.getElementById('stfActCareGen').value = String(careGenReq);
+        document.getElementById('stfActCareDem').value = String(careDemReq);
+        document.getElementById('stfActSw').value = String(swReq);
+        document.getElementById('stfActPt').value = '0';
+        document.getElementById('stfActNurse').value = total >= 1 ? '1' : '0';
+        document.getElementById('stfActRn').value = '0';
+        document.getElementById('stfActCook').value = String(cookReq);
+        document.getElementById('stfProgramAddon').value = '0';
+      } else {
+        document.getElementById('stfActCareGen').value = String(minCareForAddon(gen, careGenReq, 6.4));
+        document.getElementById('stfActCareDem').value = String(minCareForAddon(dem, careDemReq, 3.9));
+        document.getElementById('stfActSw').value = String(total >= 10 ? swReq + 1 : 1);
+        document.getElementById('stfActPt').value = total >= 30 ? '1' : '0';
+        document.getElementById('stfActNurse').value = total >= 1 ? '1' : '0';
+        document.getElementById('stfActRn').value = '0';
+        document.getElementById('stfActCook').value = String(cookReq);
+      }
+      saveStaffSim();
+      calcStaffing();
+    }
+
     function calcStaffing() {
       const gen = Math.max(0, parseInt(document.getElementById('stfGeneralUsers').value || '0', 10));
       const dem = Math.max(0, parseInt(document.getElementById('stfDementiaUsers').value || '0', 10));
       const total = gen + dem;
+      const outsourced = !!document.getElementById('stfMealOutsourced')?.checked;
+      const monthlyBenefit = Math.max(0, parseFloat(document.getElementById('stfMonthlyBenefit')?.value || '0'));
+
+      const actCareGen = Math.max(0, parseInt(document.getElementById('stfActCareGen')?.value || '0', 10));
+      const actCareDem = Math.max(0, parseInt(document.getElementById('stfActCareDem')?.value || '0', 10));
+      const actSw = Math.max(0, parseInt(document.getElementById('stfActSw')?.value || '0', 10));
+      const actPt = Math.max(0, parseInt(document.getElementById('stfActPt')?.value || '0', 10));
+      const actNurse = Math.max(0, parseInt(document.getElementById('stfActNurse')?.value || '0', 10));
+      const rawRn = Math.max(0, parseInt(document.getElementById('stfActRn')?.value || '0', 10));
+      const actRn = Math.min(actNurse, rawRn);
+      const actCook = Math.max(0, parseInt(document.getElementById('stfActCook')?.value || '0', 10));
+      const progVal = Number(document.getElementById('stfProgramAddon')?.value || '0');
 
       const swReq = total >= 10 ? 1 : 0;
-      const nurseOrPtReq = total >= 10 ? 1 : 0;
+      const nurseOrPtReq = total >= 1 ? 1 : 0;
       const clerkReq = total >= 25 ? 1 : 0;
+      const helperReq = total >= 10 ? 1 : 0;
+      const cookReq = outsourced ? 0 : (total >= 1 ? 1 : 0);
       const careGenMin = gen > 0 ? Math.max(1, Math.round(gen / 7)) : 0;
       const careDemMin = dem > 0 ? Math.max(1, Math.round(dem / 4)) : 0;
-      const careGenAddon = gen > 0 ? Math.floor(gen / 6.4) + 1 : 0;
-      const careDemAddon = dem > 0 ? Math.floor(dem / 3.9) + 1 : 0;
+      const careGenAddon = minCareForAddon(gen, careGenMin, 6.4);
+      const careDemAddon = minCareForAddon(dem, careDemMin, 3.9);
       const seniorCap = total >= 35 ? Math.floor(total / 35) : 0;
+
+      // 법정 기준 미달 직종 점검
+      const shortages = [];
+      let violationCount = 0;
+      if (actCareGen < careGenMin) { shortages.push(`일반실 요양보호사 ${careGenMin - actCareGen}명 부족`); violationCount++; }
+      if (actCareDem < careDemMin) { shortages.push(`치매전담실 요양보호사 ${careDemMin - actCareDem}명 부족`); violationCount++; }
+      if (actSw < swReq) { shortages.push(`사회복지사 ${swReq - actSw}명 부족`); violationCount++; }
+      if ((actNurse + actPt) < nurseOrPtReq) { shortages.push('간호(조무)사·물리(작업)치료사 필수 1명 미배치'); violationCount++; }
+      if (!outsourced && actCook < cookReq) { shortages.push('조리원 필수 1명 미배치'); violationCount++; }
+
+      // 간호·물리치료 기본 1명 배분 (기관에 유리하도록 간호인력 우선 기본배정 후 물리치료 추가산정)
+      let baseNurseUsed = 0, basePtUsed = 0;
+      if (nurseOrPtReq === 1 && (actNurse + actPt) >= 1) {
+        if (actNurse >= 1) baseNurseUsed = 1;
+        else basePtUsed = 1;
+      }
+
+      const ratioGen = gen > 0 ? trunc2(gen, actCareGen) : 0;
+      const ratioDem = dem > 0 ? trunc2(dem, actCareDem) : 0;
+      const ratioNurse = total > 0 ? trunc2(total, actNurse) : 0;
+
+      const extraCareGen = (gen > 0 && actCareGen > careGenMin && ratioGen < 6.4) ? (actCareGen - careGenMin) : 0;
+      const extraCareDem = (dem > 0 && actCareDem > careDemMin && ratioDem < 3.9) ? (actCareDem - careDemMin) : 0;
+      const extraSw = actSw > swReq ? (actSw - swReq) : 0;
+      const extraPt = (actNurse + actPt) >= nurseOrPtReq ? Math.max(0, actPt - basePtUsed) : 0;
+      const rawExtraNurse = (actNurse + actPt) >= nurseOrPtReq ? Math.max(0, actNurse - baseNurseUsed) : 0;
+      const extraNurse = (rawExtraNurse > 0 && ratioNurse < 19.0) ? rawExtraNurse : 0;
+
+      // 3개 직종 이상 인력기준 위반 시 전 직종 인력추가배치 가산 미적용(고시 제54조제3항)
+      const blockAllByViolation = violationCount >= 3;
+      const ptsCareGen = blockAllByViolation ? 0 : Math.round(extraCareGen * 120) / 100;
+      const ptsCareDem = blockAllByViolation ? 0 : Math.round(extraCareDem * 120) / 100;
+      const ptsSw = blockAllByViolation ? 0 : Math.round(extraSw * 140) / 100;
+      const ptsPt = blockAllByViolation ? 0 : Math.round(extraPt * 140) / 100;
+      const ptsNurse = blockAllByViolation ? 0 : Math.round(extraNurse * 120) / 100;
+
+      const rawCappedPool = Math.round((ptsCareGen + ptsCareDem + ptsSw + ptsPt + ptsNurse) * 100) / 100;
+      const baseCap = total > 0 ? getBasePointCap(total) : 0;
+      const extraCapBonus = total > 0 ? getExtraCareCapBonus(total, extraCareGen + extraCareDem) : 0;
+      const effectiveCap = Math.round((baseCap + extraCapBonus) * 100) / 100;
+      const recognizedPool = Math.min(rawCappedPool, effectiveCap);
+      const clippedPts = Math.round(Math.max(0, rawCappedPool - effectiveCap) * 100) / 100;
+
+      const ptsCook = (!blockAllByViolation && !outsourced && total >= 1 && actCook > cookReq) ? 1.2 : 0;
+      const ptsRn = total > 0 ? Math.round(actRn * 60) / 100 : 0;
+      const ptsProg = gen > 0 ? progVal : 0;
+      const totalPts = Math.round((recognizedPool + ptsCook + ptsRn + ptsProg) * 100) / 100;
+
+      const serviceScore = (gen === 0 && dem > 0) ? 1.3 : 1.5;
+      const denomUsers = gen > 0 ? gen : dem;
+      const estPayout = (denomUsers > 0 && monthlyBenefit > 0 && totalPts > 0)
+        ? Math.round(((monthlyBenefit * 0.85) * (totalPts / denomUsers) * serviceScore) / 10) * 10
+        : 0;
+
+      const trapGenWarn = (gen > 0 && actCareGen > careGenMin && ratioGen >= 6.4)
+        ? `<div class="stf-alert warn">[6.4명 미만 미달 주의] 일반실 ${gen}명에 요양보호사 ${actCareGen}명 배치 시 1인당 <strong>${ratioGen.toFixed(2)}명</strong>(소수 셋째자리 절사)으로 6.4명 미만 요건에 미달하여 가산 0점입니다. 최소 <strong>${careGenAddon}명</strong>부터 가산(${((careGenAddon - careGenMin) * 1.2).toFixed(1)}점)됩니다.</div>`
+        : '';
+      const trapNurseWarn = (rawExtraNurse > 0 && ratioNurse >= 19.0)
+        ? `<div class="stf-alert warn">[간호인력 19.0명 미만 미달] 간호(조무)사 추가 인원이 있으나 1인당 <strong>${ratioNurse.toFixed(2)}명</strong>으로 19.0명 미만 요건 미달(0점)입니다.</div>`
+        : '';
+      const capWarn = clippedPts > 0
+        ? `<div class="stf-alert warn">[인정범위 상한 초과] 직종별 합계 ${rawCappedPool.toFixed(1)}점 중 구간 상한(<strong>${effectiveCap.toFixed(1)}점</strong>) 초과분 <strong>${clippedPts.toFixed(1)}점</strong>은 미인정됩니다(고시 제56조제2·4항).</div>`
+        : '';
 
       document.getElementById('stfOutput').innerHTML = `
         <div>
-          <div class="out-line"><span>총 일일 이용자 (일반 ${gen} + 치매 ${dem})</span><strong>${total}명</strong></div>
-          <div class="out-line"><span>시설장 / 사회복지사 / 간호·물리치료(택1)</span><strong>1명 / ${swReq ? '1명 이상 필수' : '10인 미만 선택'} / ${nurseOrPtReq ? '1명 이상 필수' : '10인 미만 선택'}</strong></div>
-          <div class="out-line"><span>요양보호사 법정 최소 (7:1 / 치매 4:1)</span><strong>일반 ${careGenMin}명${dem ? ` + 치매 ${careDemMin}명` : ''}</strong></div>
-          <div class="out-line"><span>인력추가배치 가산 요건 (6.4미만 / 치매 3.9미만)</span><strong style="color:var(--gov-navy);">일반 ${careGenAddon}명+${dem ? ` / 치매 ${careDemAddon}명+` : ''}</strong></div>
-          <div class="out-line"><span>사무원(25인+) / 조리원 / 보조원(운전원)</span><strong>${clerkReq ? '1명 필수' : '선택'} / 1명 / 1명</strong></div>
-          <div class="out-line"><span>2026 확대 선임 요양보호사 (35명당 1명)</span><strong>${seniorCap ? `최대 ${seniorCap}명 지정 가능` : '이용자 35명 미만 해당없음'}</strong></div>
+          ${shortages.length
+            ? `<div class="stf-alert danger">[법정 인력기준 미달 · 감액 주의] ${esc(shortages.join(' / '))}${blockAllByViolation ? ' (3개 직종 이상 위반으로 전 직종 인력추가배치 가산 제외)' : ''}</div>`
+            : `<div class="stf-alert ok">[법정 인력배치기준 충족] 총 일일 이용자 ${total}명(일반 ${gen}${dem ? ` + 치매 ${dem}` : ''}) 필수 인력 요건을 모두 충족했습니다.</div>`
+          }
+          ${trapGenWarn}${trapNurseWarn}${capWarn}
+
+          <div class="stf-sim-kpi">
+            <div>
+              <div style="font-size:0.76rem;font-weight:700;color:var(--gov-navy-dark);">인정 가산점수 총합 (상한 ${effectiveCap.toFixed(1)}점${extraCapBonus ? ` · 요보추가 +${extraCapBonus.toFixed(1)} 반영` : ''})</div>
+              <div style="font-size:0.84rem;font-weight:800;color:var(--gov-ink);margin-top:2px;">
+                인력추가 ${recognizedPool.toFixed(1)}점${ptsCook ? ` + 조리원 1.2점` : ''}${ptsRn ? ` + 간호사 ${ptsRn.toFixed(1)}점` : ''}${ptsProg ? ` + 프로그램 ${ptsProg}점` : ''} = <span style="color:var(--gov-navy);">${totalPts.toFixed(2)}점</span>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.74rem;color:var(--gov-slate-600);font-weight:700;">예상 월 가산 수령액 (공단 100% 지급)</div>
+              <div class="big">+${fmtWon(estPayout)}</div>
+            </div>
+          </div>
+
+          <div class="gov-table-wrap" style="margin-bottom:8px;">
+            <table class="gov-table" style="font-size:0.79rem;">
+              <thead>
+                <tr><th>직종</th><th>법정 의무</th><th>현재 배치</th><th>가산 판정 · 인정점수</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>요양보호사(일반)</strong></td>
+                  <td>${careGenMin}명 <small style="color:var(--gov-slate-500);">(가산 ${careGenAddon}명+)</small></td>
+                  <td><strong>${actCareGen}명</strong>${gen && actCareGen ? ` <small>(1인당 ${ratioGen.toFixed(2)}명)</small>` : ''}</td>
+                  <td style="font-weight:700;color:${ptsCareGen ? 'var(--gov-ok)' : 'var(--gov-slate-600)'};">${ptsCareGen ? `+${extraCareGen}명 인정 (+${ptsCareGen.toFixed(1)}점)` : '해당없음 (0점)'}</td>
+                </tr>
+                ${dem > 0 ? `
+                <tr>
+                  <td><strong>요양보호사(치매)</strong></td>
+                  <td>${careDemMin}명 <small style="color:var(--gov-slate-500);">(가산 ${careDemAddon}명+)</small></td>
+                  <td><strong>${actCareDem}명</strong> <small>(1인당 ${ratioDem.toFixed(2)}명)</small></td>
+                  <td style="font-weight:700;color:${ptsCareDem ? 'var(--gov-ok)' : 'var(--gov-slate-600)'};">${ptsCareDem ? `+${extraCareDem}명 인정 (+${ptsCareDem.toFixed(1)}점)` : '해당없음 (0점)'}</td>
+                </tr>` : ''}
+                <tr>
+                  <td><strong>사회복지사</strong></td>
+                  <td>${swReq ? '1명 필수' : '의무없음(10인미만)'}</td>
+                  <td><strong>${actSw}명</strong></td>
+                  <td style="font-weight:700;color:${ptsSw ? 'var(--gov-ok)' : 'var(--gov-slate-600)'};">${ptsSw ? `+${extraSw}명 추가 (+${ptsSw.toFixed(1)}점)` : '기본배치 (0점)'}</td>
+                </tr>
+                <tr>
+                  <td><strong>간호(조무)·물리치료</strong></td>
+                  <td>합산 ${nurseOrPtReq}명 필수</td>
+                  <td>간호 <strong>${actNurse}</strong>(RN ${actRn}) · 물리 <strong>${actPt}</strong></td>
+                  <td style="font-weight:700;color:${(ptsPt + ptsNurse + ptsRn) ? 'var(--gov-ok)' : 'var(--gov-slate-600)'};">
+                    ${(ptsPt || ptsNurse || ptsRn)
+                      ? [ptsPt ? `물리 +${ptsPt.toFixed(1)}점` : '', ptsNurse ? `간호추가 +${ptsNurse.toFixed(1)}점` : '', ptsRn ? `RN면허 +${ptsRn.toFixed(1)}점` : ''].filter(Boolean).join(' · ')
+                      : '기본 1명 충당 (0점)'}
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>조리원</strong></td>
+                  <td>${outsourced ? '위탁 면제' : `${cookReq}명 필수`}</td>
+                  <td><strong>${actCook}명</strong></td>
+                  <td style="font-weight:700;color:${ptsCook ? 'var(--gov-ok)' : 'var(--gov-slate-600)'};">${ptsCook ? '상한 외 별도 +1.2점' : (outsourced ? '위탁 제외' : '기본배치 (0점)')}</td>
+                </tr>
+                <tr>
+                  <td><strong>시설장·사무원·보조원</strong></td>
+                  <td colspan="3">시설장 <strong>1명</strong> 필수 / 사무원(25인+) <strong>${clerkReq ? '1명 필수' : '선택'}</strong> / 보조원·운전원(10인+) <strong>${helperReq ? '1명 필수(월50%+)' : '선택'}</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>선임 요양보호사(35인+)</strong></td>
+                  <td colspan="3"><strong>${seniorCap ? `최대 ${seniorCap}명 지정 가능 (월 15만 원 장려수당)` : '이용자 35명 미만 해당없음'}</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:11.5px;color:var(--gov-slate-600);margin:0;">※ 가산금 산식(고시 제56조): (월 급여비용 합계 × 85%) × (인정 가산점수 ÷ 기준 이용자 ${denomUsers}명) × 서비스유형점수(${serviceScore}점), 10원 미만 반올림.</p>
         </div>
-        <p style="font-size:11.5px;color:var(--gov-slate-600);">※ 실제 공단 가·감산 심사에서는 월 기준 근무시간 대비 직종별 소수점 규정이 엄격히 적용되므로 여유 인력을 두고 운영하시기 바랍니다.</p>
       `;
     }
 
-    ['stfGeneralUsers', 'stfDementiaUsers'].forEach(id => {
-      document.getElementById(id)?.addEventListener('input', calcStaffing);
+    STF_INPUT_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      el?.addEventListener('input', () => { saveStaffSim(); calcStaffing(); });
+      el?.addEventListener('change', () => { saveStaffSim(); calcStaffing(); });
     });
+    document.getElementById('stfMealOutsourced')?.addEventListener('change', () => {
+      saveStaffSim();
+      calcStaffing();
+    });
+    document.getElementById('btnStfAutoRev')?.addEventListener('click', () => {
+      const g = Math.max(0, parseInt(document.getElementById('stfGeneralUsers').value || '0', 10));
+      const d = Math.max(0, parseInt(document.getElementById('stfDementiaUsers').value || '0', 10));
+      const baseUsers = g > 0 ? g : d;
+      const unitAvg = (g === 0 && d > 0) ? 1500000 : 1250000;
+      document.getElementById('stfMonthlyBenefit').value = String(baseUsers * unitAvg);
+      saveStaffSim();
+      calcStaffing();
+      showToast(`${baseUsers}명 기준 월 예상 급여비용을 자동 입력했습니다.`);
+    });
+    document.getElementById('btnStfSetMin')?.addEventListener('click', () => {
+      applyStaffPresetMode('min');
+      showToast('현재 수급자 수 기준 법정 최소 인원으로 설정했습니다.');
+    });
+    document.getElementById('btnStfSetRec')?.addEventListener('click', () => {
+      applyStaffPresetMode('rec');
+      showToast('수급자 수에 맞는 추천 가산 인력 조합을 적용했습니다.');
+    });
+    document.querySelectorAll('#stfPresetBar [data-stf-preset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const n = parseInt(btn.getAttribute('data-stf-preset'), 10);
+        document.getElementById('stfGeneralUsers').value = String(n);
+        document.getElementById('stfDementiaUsers').value = '0';
+        document.getElementById('stfMonthlyBenefit').value = String(n * 1250000);
+        document.querySelectorAll('#stfPresetBar [data-stf-preset]').forEach(b => b.classList.toggle('active', b === btn));
+        applyStaffPresetMode('rec');
+      });
+    });
+
+    loadStaffSim();
 
     function calcLabor() {
       const rev = Math.max(0, parseFloat(document.getElementById('lbrRevenue').value || '0'));
