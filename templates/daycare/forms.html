@@ -1,0 +1,92 @@
+{% extends 'daycare/base.html' %}
+{% block title %}2026 주·야간보호 최신 표준 서식자료실 (20종 무료 다운로드) | 웰페어고{% endblock %}
+{% block description %}노인장기요양보험법 시행규칙 별지서식(제11호·11호의4·15호·25호의2)과 2026년 주·야간보호 정기평가 필수 표준서식 20종을 기관명 자동 기입 후 DOCX, XLSX, 전체 ZIP으로 무료 다운로드하세요.{% endblock %}
+
+{% block content %}
+<div class="stack-md" id="dcFormsApp">
+  <div class="gov-breadcrumb"><a href="/">포털 메인</a><span>&rsaquo;</span><strong>최신 서식자료실 (20종)</strong></div>
+
+  <section class="gov-page-banner">
+    <div>
+      <div class="tag-row" style="margin-bottom:5px;">
+        <span class="tag tag-solid">2026 공단 평가매뉴얼 완벽 연계</span>
+        <span class="tag tag-navy">DOCX · XLSX · 바로 인쇄 · 전체 ZIP</span>
+        <span class="tag tag-ok">회원가입 없이 100% 무료</span>
+      </div>
+      <h1>2026 주·야간보호 최신 표준 서식자료실 (20종)</h1>
+      <p>법정 별지서식 4종과 2026년 개편 평가 필수서식(맞춤형 기능회복훈련, 반기별 위험도 3종, 결과평가·교부대장, 다직종 사례관리, 1식 4찬·욕구반영식, 환기·소방·직원복지 제공대장 등)을 우리 기관명이 인쇄된 상태로 바로 내려받아 사용하세요.</p>
+    </div>
+    <a id="dcBundleZipBtn" class="btn btn-primary" href="/forms/bundle.zip">20종 전체 한 번에 받기 (.ZIP / 40개 파일)</a>
+  </section>
+
+  <!-- 기관명 자동 기입 바 -->
+  <section class="gov-card">
+    <div class="org-bar">
+      <div class="field">
+        <label for="formsOrgName">우리 기관명 (입력하면 모든 다운로드 서식 상단·하단에 자동 기입됩니다)</label>
+        <input id="formsOrgName" type="text" class="gov-input" maxlength="80" placeholder="예: 웰페어고 어르신 주·야간보호센터">
+      </div>
+      <div class="field">
+        <label for="formsOrgCode">장기요양기관기호 (선택)</label>
+        <input id="formsOrgCode" type="text" class="gov-input" maxlength="40" placeholder="예: 2-11234-00012">
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button type="button" id="btnApplyOrg" class="btn btn-primary">서식에 반영</button>
+        <button type="button" id="btnClearOrg" class="btn">초기화</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 검색 및 카테고리 필터 -->
+  <section class="gov-card plain">
+    <div class="search-wrap">
+      <label for="formsSearch" class="sr-only">서식 검색</label>
+      <input id="formsSearch" type="search" class="gov-input" placeholder="서식명, 별지번호, 평가지표 번호 검색 (예: 별지 제15호, CIST, 기능회복훈련, 1식 4찬, 사례관리, 환기)">
+    </div>
+    <div class="chip-bar" id="formsCatTabs">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--gov-slate-600);margin-right:4px;">분류:</span>
+      <button type="button" data-fcat="ALL" class="chip-btn active">전체 ({{ forms|length }})</button>
+      {% for cat in categories %}
+      <button type="button" data-fcat="{{ cat }}" class="chip-btn">{{ cat }}</button>
+      {% endfor %}
+      <span class="chip-count" id="formsResultCount">표시 중 {{ forms|length }}종</span>
+    </div>
+  </section>
+
+  <!-- 서식 카드 그리드 -->
+  <section id="formsGrid" class="grid-2">
+    {% for f in forms %}
+    <article class="form-card" data-fcat="{{ f.category }}" data-fsearch="{{ (f.no ~ ' ' ~ f.title ~ ' ' ~ f.summary ~ ' ' ~ f.code_badge ~ ' ' ~ f.eval_badge ~ ' ' ~ (f.checkpoints|join(' ')))|lower }}">
+      <div class="tag-row">
+        <span class="tag tag-solid">{{ f.code_badge }}</span>
+        <span class="tag tag-navy">{{ f.eval_badge }}</span>
+        <span class="tag tag-slate">{{ f.category }}</span>
+      </div>
+      <h3>{{ f.no }}. {{ f.title }}</h3>
+      <p class="summary">{{ f.summary }}</p>
+      <ul class="form-checks">
+        {% for cp in f.checkpoints %}
+        <li>{{ cp }}</li>
+        {% endfor %}
+      </ul>
+      <div class="form-actions">
+        <a class="btn btn-sm btn-primary dc-form-dl" data-base="/forms/{{ f.slug }}.docx" href="/forms/{{ f.slug }}.docx">DOCX 다운</a>
+        <a class="btn btn-sm btn-soft dc-form-dl" data-base="/forms/{{ f.slug }}.xlsx" href="/forms/{{ f.slug }}.xlsx">XLSX 다운</a>
+        <a class="btn btn-sm dc-form-dl" data-base="/forms/{{ f.slug }}/print" href="/forms/{{ f.slug }}/print" target="_blank" rel="noopener noreferrer">미리보기·인쇄</a>
+        <a class="btn btn-sm" href="{{ f.gov_url }}" target="_blank" rel="noopener noreferrer">{{ f.gov_label }} &rsaquo;</a>
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+
+  <!-- 무료 오피스 연계 안내 배너 -->
+  <section class="gov-banner-navy" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;">
+    <div>
+      <span class="tag" style="background:rgba(255,255,255,0.16);color:#fff;">DOCX · XLSX 100% 호환 · 영세 복지시설 지원</span>
+      <h2 style="font-size:1.1rem;color:#fff;margin-top:6px;">MS 오피스나 한컴오피스가 없으신가요? 무료 오피스로 바로 편집하세요!</h2>
+      <p style="margin-top:4px;">영세 사회복지시설·주야간보호센터가 비용과 저작권 단속 걱정 없이 위 20종 서식을 편집·인쇄할 수 있도록 무료 오피스(Welfarego OFFICE)를 배포하고 있습니다.</p>
+    </div>
+    <a class="btn btn-white" href="/office">무료 오피스 다운받기 &rsaquo;</a>
+  </section>
+</div>
+{% endblock %}

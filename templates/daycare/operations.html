@@ -1,0 +1,371 @@
+{% extends 'daycare/base.html' %}
+{% block title %}2026 주·야간보호 운영매뉴얼 · 수가표·인력배치·인건비·현지조사 예방 | 웰페어고{% endblock %}
+{% block description %}보건복지부 2026년 최신 고시(제2025-247호·제2026-189호) 기준 주·야간보호 등급별 수가표, 본인부담금·월한도액 계산기, 인력배치·48.6% 인건비 지출비율 진단기, 장기근속장려금, 법정의무교육 10종 및 공단 현지조사 부당청구 예방 8선.{% endblock %}
+
+{% block content %}
+<div class="stack-md" id="dcOpsApp">
+  <div class="gov-breadcrumb"><a href="/">포털 메인</a><span>&rsaquo;</span><strong>주·야간보호 운영매뉴얼 (2026)</strong></div>
+
+  <section class="gov-page-banner">
+    <div>
+      <div class="tag-row" style="margin-bottom:5px;">
+        <span class="tag tag-solid">보건복지부 고시 제2025-247호 (2026.1.1. 시행)</span>
+        <span class="tag tag-navy">제2026-189호 (2026.10.1. 최신 개정)</span>
+      </div>
+      <h1>2026 주·야간보호시설 운영매뉴얼</h1>
+      <p>등급·시간별 수가표, 본인부담금·월 한도액 계산기, 법정 인력배치·추가배치 가산·48.6% 인건비 비율 점검기, 입소~30일 행정 SOP, 종사자 법정교육, 2026 공단 현지조사 다빈도 부당청구 예방을 제공합니다.</p>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <a class="btn btn-primary" href="/forms">연계 서식 20종</a>
+      <a class="btn" href="/evaluation">평가매뉴얼 보기</a>
+    </div>
+  </section>
+
+  <nav class="gov-subtabs scrollbar-thin" role="tablist" aria-label="운영매뉴얼 세부 메뉴" id="opsNav">
+    <button type="button" data-opstab="fees" class="gov-subtab-btn active" role="tab" aria-selected="true">① 2026 수가·본인부담금 계산기</button>
+    <button type="button" data-opstab="staffing" class="gov-subtab-btn" role="tab" aria-selected="false">② 인력배치·48.6% 인건비·장려금</button>
+    <button type="button" data-opstab="sop" class="gov-subtab-btn" role="tab" aria-selected="false">③ 운영 SOP·2026 개정고시</button>
+    <button type="button" data-opstab="training" class="gov-subtab-btn" role="tab" aria-selected="false">④ 법정·평가 필수교육 (10종)</button>
+    <button type="button" data-opstab="audit" class="gov-subtab-btn" role="tab" aria-selected="false">⑤ 현지조사 환수 예방 (8선)</button>
+  </nav>
+
+  <!-- OPS TAB 1: FEES & CALCULATOR -->
+  <section id="opstab-fees" class="ops-tab-panel stack-md">
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>2026년 주·야간보호 월 본인부담금 · 월 한도액 자동 계산기</h2>
+          <p class="gov-card-sub">월 15일(1일 8시간 이상) 이용 시 1·2등급 +10%, 3~5등급 +20%, 치매전담실 +50% 월 한도액 추가산정 기준(고시 제13조제7항)을 자동 반영합니다.</p>
+        </div>
+        <span class="tag tag-navy">2026. 1. 1. ~ 12. 31. 고시 단가</span>
+      </div>
+
+      <div class="calc-split">
+        <div class="grid-2" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:3px;">
+          <div class="field">
+            <label for="opsRoomType">이용 시설 구분</label>
+            <select id="opsRoomType" class="gov-select">
+              <option value="general">일반 주·야간보호 (라-1 ~ 라-5)</option>
+              <option value="dementia">치매전담실 주·야간보호 (사-1 ~ 사-5)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="opsGrade">수급자 장기요양등급</label>
+            <select id="opsGrade" class="gov-select">
+              <option value="g1">1등급 (월 한도 2,512,900원)</option>
+              <option value="g2">2등급 (월 한도 2,331,200원)</option>
+              <option value="g3" selected>3등급 (월 한도 1,528,200원)</option>
+              <option value="g4">4등급 (월 한도 1,409,700원)</option>
+              <option value="g5">5등급 (월 한도 1,208,900원)</option>
+              <option value="gc">인지지원등급 (월 한도 676,320원)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="opsBand">1일 이용시간 구간</label>
+            <select id="opsBand" class="gov-select">
+              <option value="0">3시간 이상 ~ 6시간 미만</option>
+              <option value="1">6시간 이상 ~ 8시간 미만</option>
+              <option value="2" selected>8시간 이상 ~ 10시간 미만 (표준)</option>
+              <option value="3">10시간 이상 ~ 13시간 이하</option>
+              <option value="4">13시간 초과</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="opsCopay">수급자 본인부담률</label>
+            <select id="opsCopay" class="gov-select">
+              <option value="0.15" selected>일반 수급자 (15%)</option>
+              <option value="0.09">감경 대상자 40% 감경 (9%)</option>
+              <option value="0.06">감경 대상자 60% 감경 (6%)</option>
+              <option value="0">기초생활 의료급여 수급자 (0%)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="opsDays">월 평일(토요일 포함) 이용일수</label>
+            <input id="opsDays" type="number" min="0" max="31" value="22" class="gov-input">
+          </div>
+          <div class="field">
+            <label for="opsHolidays">월 공휴일 이용일수 (+30% 가산)</label>
+            <input id="opsHolidays" type="number" min="0" max="15" value="0" class="gov-input">
+          </div>
+          <div class="field" style="grid-column:1/-1;">
+            <label for="opsMealDaily">1일 비급여 식사·간식 재료비 합계 (원, 실비 기준)</label>
+            <input id="opsMealDaily" type="number" min="0" max="30000" step="500" value="4500" class="gov-input">
+          </div>
+        </div>
+
+        <div id="opsFeeOutput" class="calc-out" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>2026년 재가급여 등급별 월 한도액 (고시 제13조제1항)</h2>
+          <p class="gov-card-sub">송영(이동서비스) 비용, 주 1회 목욕 가산금(3,000원), 인력추가배치·맞춤형 프로그램 가산금은 월 한도액에 포함되지 않으며 본인부담도 없습니다.</p>
+        </div>
+      </div>
+      <div class="gov-table-wrap">
+        <table class="gov-table">
+          <thead>
+            <tr><th>장기요양등급</th><th class="num">2026년 월 한도액</th><th>월 15일(일 8시간+) 추가산정</th><th>실무 안내</th></tr>
+          </thead>
+          <tbody>
+            {% for row in monthly_limits %}
+            <tr>
+              <td><strong>{{ row.grade }}</strong></td>
+              <td class="num"><strong>{{ '{:,}'.format(row.limit) }}원</strong></td>
+              <td>{% if row.extra_pct %}일반 +{{ row.extra_pct }}%{% else %}일반 없음{% endif %}{% if row.dementia_extra_pct %} / 치매전담실 +{{ row.dementia_extra_pct }}%{% endif %}</td>
+              <td>{{ row.note }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>2026년 일반 주·야간보호 1일 급여비용표 (고시 제31조제1항 · 라-1~라-5)</h2>
+          <p class="gov-card-sub">단위: 원(1일당). 야간(18~22시) +20%, 공휴일 +30%(중복 불가), 3시간 미만 이용 시 라-1의 80% 산정.</p>
+        </div>
+      </div>
+      <div class="gov-table-wrap">
+        <table class="gov-table">
+          <thead>
+            <tr><th>분류</th><th>1일 이용시간 구간</th><th class="num">1등급</th><th class="num">2등급</th><th class="num">3등급</th><th class="num">4등급</th><th class="num">5등급</th><th class="num">인지지원등급</th></tr>
+          </thead>
+          <tbody>
+            {% for f in general_fees %}
+            <tr{% if f.code == '라-3' %} class="row-hl"{% endif %}>
+              <td><strong>{{ f.code }}</strong></td>
+              <td>{{ f.band }}</td>
+              <td class="num">{{ '{:,}'.format(f.g1) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g2) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g3) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g4) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g5) }}</td>
+              <td class="num">{{ '{:,}'.format(f.gc) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>2026년 치매전담실 주·야간보호 1일 급여비용표 (고시 제74조제1항 · 사-1~사-5)</h2>
+          <p class="gov-card-sub">단위: 원(1일당). 치매전담실은 2~5등급 및 인지지원등급 치매수급자 대상이며, 고시 표에 1등급 금액은 없습니다.</p>
+        </div>
+      </div>
+      <div class="gov-table-wrap">
+        <table class="gov-table">
+          <thead>
+            <tr><th>분류</th><th>1일 이용시간 구간</th><th class="num">2등급</th><th class="num">3등급</th><th class="num">4등급</th><th class="num">5등급</th><th class="num">인지지원등급</th></tr>
+          </thead>
+          <tbody>
+            {% for f in dementia_fees %}
+            <tr{% if f.code == '사-3' %} class="row-hl"{% endif %}>
+              <td><strong>{{ f.code }}</strong></td>
+              <td>{{ f.band }}</td>
+              <td class="num">{{ '{:,}'.format(f.g2) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g3) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g4) }}</td>
+              <td class="num">{{ '{:,}'.format(f.g5) }}</td>
+              <td class="num">{{ '{:,}'.format(f.gc) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPS TAB 2: STAFFING & LABOR RATIO & ALLOWANCES -->
+  <section id="opstab-staffing" class="ops-tab-panel stack-md" hidden>
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>법정 인력배치기준 &amp; 인력추가배치 가산 시뮬레이터</h2>
+          <p class="gov-card-sub">「노인복지법 시행규칙 별표 9」 및 2026년 고시 제11조의6·제55조 기준으로 필수 배치 인원과 추가배치 가산 요건을 계산합니다.</p>
+        </div>
+      </div>
+      <div class="calc-split">
+        <div class="stack-sm" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:3px;">
+          <div class="grid-2">
+            <div class="field">
+              <label for="stfGeneralUsers">일반실 월 평균 일일 이용자 수 (명)</label>
+              <input id="stfGeneralUsers" type="number" min="1" max="300" value="35" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="stfDementiaUsers">치매전담실 일일 이용자 수 (없으면 0)</label>
+              <input id="stfDementiaUsers" type="number" min="0" max="150" value="0" class="gov-input">
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--gov-slate-600);background:#fff;border:1px solid var(--gov-line);padding:10px;border-radius:2px;line-height:1.6;">
+            <strong>월 기준 근무시간 공식:</strong> (해당 월 토요일·공휴일·근로자의 날 제외 근무가능일수) × 8시간<br>
+            <strong>시설장 상근 기준:</strong> 1일 8시간, 월 20일 이상 근무 · <strong>겸직 금지:</strong> 사회복지사·간호·물리치료·요양보호사 1급 타 직무 겸직 원칙 금지
+          </div>
+        </div>
+        <div id="stfOutput" class="calc-out" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>2026년 의무 인건비 지출비율(48.6%) 자가 점검기</h2>
+          <p class="gov-card-sub">분자에는 <strong>요양보호사·사회복지사·간호(조무)사·물리(작업)치료사</strong> 4개 직종의 임금·수당·장기근속장려금·퇴직적립금·사회보험 기관부담금만 포함됩니다(시설장·사무원·조리원·운전원 제외).</p>
+        </div>
+        <span class="tag tag-navy">평가 지표 14 (0.4점) 연계</span>
+      </div>
+      <div class="calc-split">
+        <div class="grid-2" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:3px;">
+          <div class="field">
+            <label for="lbrRevenue">월(또는 연간) 장기요양급여수입 (원)</label>
+            <input id="lbrRevenue" type="number" min="0" step="100000" value="45000000" class="gov-input">
+          </div>
+          <div class="field">
+            <label for="lbrExpense">장기요양요원 4직종 인건비 지출액 (원)</label>
+            <input id="lbrExpense" type="number" min="0" step="100000" value="22500000" class="gov-input">
+          </div>
+        </div>
+        <div id="lbrOutput" class="calc-out" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="gov-card">
+        <div class="gov-card-head">
+          <div>
+            <h3>2026년 급여유형별 의무 인건비 지출비율</h3>
+            <p class="gov-card-sub">보건복지부 고시 제2025-247호 제11조의2제1항</p>
+          </div>
+        </div>
+        <div class="gov-table-wrap">
+          <table class="gov-table">
+            <thead><tr><th>급여 유형</th><th>포함 장기요양요원 직종</th><th class="num">2026 비율</th></tr></thead>
+            <tbody>
+              {% for row in labor_ratios %}
+              <tr{% if row.highlight %} class="row-hl"{% endif %}>
+                <td><strong>{{ row.type }}</strong></td>
+                <td>{{ row.workers }}</td>
+                <td class="num"><strong>{{ row.ratio }}</strong></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-card-head">
+          <div>
+            <h3>2026년 확대 개편 장기근속장려금 (고시 제11조의4)</h3>
+            <p class="gov-card-sub">주·야간보호 월 120시간 이상 근무 종사자(전량 직접조리 기관 영양사·조리원 포함). 전월 지급내역 매월 EDI 제출 의무화!</p>
+          </div>
+        </div>
+        <div class="gov-table-wrap">
+          <table class="gov-table">
+            <thead><tr><th>계속근무기간</th><th class="num">월 지급액</th><th>주요 내용</th></tr></thead>
+            <tbody>
+              {% for row in long_term_allowance %}
+              <tr>
+                <td><strong>{{ row.tenure }}</strong> <span class="tag tag-navy">{{ row.badge }}</span></td>
+                <td class="num"><strong>{{ row.amount }}</strong></td>
+                <td>{{ row.detail }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.75rem;color:var(--gov-slate-600);margin-top:10px;line-height:1.6;">
+          <strong>2026 신설·확대 수당:</strong> ① <strong>선임 요양보호사</strong>(이용자 35명 이상 주·야간보호기관, 35명당 1명, 60개월 경력+승급교육) ② <strong>농·어촌 인력수급취약지역 지원금</strong>(월 최대 5만 원, 2026.10.1.부터 58개 시군구 및 섬 지역 확대).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPS TAB 3: SOP & 2026 REVISIONS -->
+  <section id="opstab-sop" class="ops-tab-panel stack-md" hidden>
+    {% for ch in ops_chapters %}
+    <article class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <span class="tag tag-solid" style="margin-bottom:4px;">{{ ch.step }}</span>
+          <h2>{{ ch.title }}</h2>
+          <p class="gov-card-sub">{{ ch.subtitle }}</p>
+        </div>
+      </div>
+      {% for item in ch['items'] %}
+      <div class="sop-row">
+        <div class="sop-when">{{ item.when }}</div>
+        <div class="sop-act">{{ item.action }}</div>
+        <div><span class="tag tag-navy">{{ item.ref }}</span></div>
+      </div>
+      {% endfor %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <!-- OPS TAB 4: MANDATORY TRAINING -->
+  <section id="opstab-training" class="ops-tab-panel stack-md" hidden>
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <h2>주·야간보호 종사자 법정의무교육 · 공단 평가 필수교육 총괄표 (10종)</h2>
+          <p class="gov-card-sub">지자체 지도점검 주기와 2026 공단 정기평가 주기가 다른 항목(예: 노인인권교육 법령 연 1회 vs 공단 평가 반기 1회)을 반드시 구분해 관리하세요.</p>
+        </div>
+        <a class="btn btn-sm btn-soft" href="/forms/staff-training-human-rights-log.docx">통합 교육일지 서식(.DOCX)</a>
+      </div>
+      <div class="gov-table-wrap">
+        <table class="gov-table">
+          <thead>
+            <tr><th>교육 과목</th><th>이수 대상</th><th>법정 기준 주기</th><th>2026 공단 평가 기준</th><th>실무 누락 주의사항</th></tr>
+          </thead>
+          <tbody>
+            {% for tr in training_matrix %}
+            <tr>
+              <td><strong>{{ tr.name }}</strong></td>
+              <td>{{ tr.target }}</td>
+              <td>{{ tr.law_cycle }}</td>
+              <td><span class="tag tag-navy">{{ tr.eval_cycle }}</span></td>
+              <td>{{ tr.note }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPS TAB 5: AUDIT / CLAWBACK CASES -->
+  <section id="opstab-audit" class="ops-tab-panel stack-md" hidden>
+    <div class="gov-card">
+      <div class="gov-card-head" style="margin-bottom:0;border-bottom:0;padding-bottom:0;">
+        <div>
+          <h2>국민건강보험공단 현지조사 다빈도 부당청구 · 감액 예방 8선</h2>
+          <p class="gov-card-sub">2026년 1~3분기 공단 현지조사 다빈도 부당청구 사례(주·야간보호)를 중심으로, 억울한 환수·행정처분을 막기 위한 핵심 점검포인트를 정리했습니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      {% for c in audit_cases %}
+      <article class="gov-card plain stack-sm">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+          <span class="tag tag-navy">사례 {{ c.no }} · {{ c.category }}</span>
+          <span class="tag tag-danger">{{ c.risk }}</span>
+        </div>
+        <h3 style="font-size:0.92rem;color:var(--gov-navy-dark);line-height:1.4;">{{ c.title }}</h3>
+        <div class="audit-trap"><strong>현지조사 적발 핵심:</strong> {{ c.trap }}</div>
+        <div class="audit-fix"><strong>센터 예방 수칙:</strong> {{ c.prevention }}</div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script id="dc-ops-fees-json" type="application/json">{{ {"limits": monthly_limits, "general": general_fees, "dementia": dementia_fees} | tojson }}</script>
+{% endblock %}

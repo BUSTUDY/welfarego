@@ -1,0 +1,44 @@
+{% extends 'daycare/base.html' %}
+{% block title %}포털 안내 · 공식 출처 · 개인정보 | 웰페어고{% endblock %}
+{% block description %}웰페어고 주·야간보호 실무 포털의 공식 근거 법령·고시 출처, 무료 오피스 라이선스 정책 및 브라우저 로컬 저장 개인정보 안내입니다.{% endblock %}
+
+{% block content %}
+<div class="stack-md">
+  <div class="gov-breadcrumb"><a href="/">포털 메인</a><span>&rsaquo;</span><strong>포털·출처·개인정보 안내</strong></div>
+
+  <section class="gov-page-banner">
+    <div>
+      <h1>웰페어고 주·야간보호 실무 포털 안내</h1>
+      <p>주·야간보호시설 운영자·사회복지사·요양보호사가 최신 공단 평가매뉴얼, 보건복지부 고시, 표준서식, 무료 오피스를 한곳에서 무료로 이용할 수 있도록 정리한 민간 실무 지원 포털입니다.</p>
+    </div>
+  </section>
+
+  <section class="gov-card">
+    <div class="gov-card-head">
+      <h2>1. 수록 자료의 공식 정부·공공 근거</h2>
+    </div>
+    <div class="gov-table-wrap">
+      <table class="gov-table">
+        <thead><tr><th style="width:24%;">메뉴</th><th style="width:46%;">공식 근거 자료</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td><strong><a href="/evaluation" style="color:var(--gov-navy);text-decoration:underline;">주·야간보호 평가매뉴얼</a></strong></td><td>국민건강보험공단 「2026년 장기요양기관 재가급여(주야간보호) 평가 매뉴얼」(2025.12., 요양심사실-2025-제3호)</td><td>36개 지표(100점) · A~E 절대평가</td></tr>
+          <tr><td><strong><a href="/operations" style="color:var(--gov-navy);text-decoration:underline;">주·야간보호 운영매뉴얼</a></strong></td><td>보건복지부 고시 제2025-247호(2026.1.1. 시행) 및 제2026-189호(2026.10.1. 시행) 「장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시」, 「노인복지법 시행규칙」 별표 9</td><td>수가·월한도액·48.6% 인건비·현지조사 사례</td></tr>
+          <tr><td><strong><a href="/forms" style="color:var(--gov-navy);text-decoration:underline;">최신 서식자료실 (20종)</a></strong></td><td>「노인장기요양보험법 시행규칙」 별지 제11호·11호의4·15호·25호의2 및 2026 공단 평가 필수기록 기준</td><td>DOCX · XLSX · ZIP · 바로 인쇄</td></tr>
+          <tr><td><strong><a href="/office" style="color:var(--gov-navy);text-decoration:underline;">무료 오피스 다운로드</a></strong></td><td>LibreOffice 26.2 (MPL-2.0 Subset) 및 Welfarego OFFICE 오픈소스 패치</td><td>영세 사회복지시설 평생 무료</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="gov-card" id="privacy">
+    <div class="gov-card-head">
+      <h2>2. 개인정보 보호 및 무광고 정책</h2>
+    </div>
+    <ul style="margin:0;padding-left:20px;font-size:0.82rem;color:var(--gov-slate-700);line-height:1.8;">
+      <li>본 포털은 <strong>회원가입·로그인·결제를 요구하지 않으며, 어떠한 광고 스크립트나 외부 방문 추적 코드도 포함하지 않습니다.</strong></li>
+      <li>평가매뉴얼 자가진단 점수, 서류 점검 체크, 주기별 일정, 면담 체크, 서식자료실에 입력한 기관명·기관기호는 사용자의 <strong>브라우저 로컬 저장소(localStorage)에만 저장</strong>되며 외부 서버에 보관되지 않습니다.</li>
+      <li>본 포털은 정부기관·국민건강보험공단이 직접 운영하는 공식 누리집이 아닌 민간 실무 지원 도구입니다. 실제 정기평가·현지조사·수가 청구 시에는 반드시 국민건강보험공단(longtermcare.or.kr) 및 국가법령정보센터 최신 공고를 최종 확인하시기 바랍니다.</li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ form.title }} | 웰페어고 2026 주·야간보호 표준서식</title>
+  <meta name="robots" content="noindex,follow">
+  <link rel="icon" href="{{ url_for('static', filename='portal/favicon.svg') }}" type="image/svg+xml">
+  <style>
+    @page { size: A4 portrait; margin: 14mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+      color: #1e293b;
+      background: #f4f6f9;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .toolbar {
+      max-width: 820px;
+      margin: 0 auto 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #d5e0dc;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd7d2;
+      background: #fff;
+      color: #1d242b;
+      cursor: pointer;
+    }
+    .btn.primary { background: #003675; border-color: #003675; color: #fff; }
+    .sheet {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px 32px;
+      border: 1px solid #d0dcd7;
+      box-shadow: 0 6px 24px rgba(15, 42, 37, 0.08);
+    }
+    .meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: #003675;
+      font-weight: 700;
+      border-bottom: 2px solid #003675;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 20px;
+      text-align: center;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .desc {
+      text-align: center;
+      font-size: 12px;
+      color: #52645f;
+      margin: 0 0 18px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 9px;
+      vertical-align: middle;
+      text-align: left;
+    }
+    th {
+      background: #eef4fb;
+      font-weight: 700;
+      color: #002552;
+    }
+    .sec-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #002552;
+      margin: 14px 0 6px;
+    }
+    .checkpoints {
+      background: #f4f7fb;
+      border: 1px solid #b6cde8;
+      padding: 10px 14px 10px 28px;
+      margin: 12px 0 18px;
+      font-size: 11.5px;
+    }
+    .sig-table th { text-align: center; background: #f2f6f4; }
+    .sig-table td { height: 54px; text-align: center; color: #7a8c86; }
+    .footer-note {
+      font-size: 10.5px;
+      color: #6b7d77;
+      text-align: right;
+      margin-top: 8px;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .toolbar { display: none !important; }
+      .sheet { border: 0; box-shadow: none; padding: 0; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="btn" href="/forms">&larr; 서식자료실로 돌아가기</a>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <a class="btn" href="/forms/{{ form.slug }}.docx?org={{ org_name|urlencode }}&amp;code={{ org_code|urlencode }}">DOCX 다운로드</a>
+      <a class="btn" href="/forms/{{ form.slug }}.xlsx?org={{ org_name|urlencode }}&amp;code={{ org_code|urlencode }}">XLSX 다운로드</a>
+      <button type="button" class="btn primary" onclick="window.print()">바로 인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+  <article class="sheet">
+    <div class="meta-top">
+      <span>[{{ form.code_badge }} · 2026 평가 {{ form.eval_badge }}]</span>
+      <span>{{ org_name }} ({{ org_code }})</span>
+    </div>
+    <h1>{{ form.title }}</h1>
+    <p class="desc">{{ form.summary }}</p>
+
+    {% if form.info_rows %}
+    <table>
+      <tbody>
+        {% for row in form.info_rows %}
+        <tr>
+          {% for lbl, val in row %}
+          <th style="width:15%;">{{ lbl }}</th>
+          <td>{{ val }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    {% for tbl in form.tables %}
+    <div class="sec-title">■ {{ tbl.caption }}</div>
+    <table>
+      <thead>
+        <tr>
+          {% for h in tbl.headers %}
+          <th style="text-align:center;">{{ h }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in tbl.rows %}
+        <tr>
+          {% for cell in r %}
+          <td style="white-space:pre-line;{% if loop.first %}font-weight:700;background:#fafcfb;{% endif %}">{{ cell }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+
+    <div class="sec-title">■ 2026년 공단 평가 및 법령 필수 확인사항</div>
+    <ul class="checkpoints">
+      {% for cp in form.checkpoints %}
+      <li>{{ cp }}</li>
+      {% endfor %}
+    </ul>
+
+    <table class="sig-table">
+      <thead>
+        <tr>
+          {% for sig in form.signatures %}
+          <th>{{ sig }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for sig in form.signatures %}
+          <td>(서명 / 인)</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer-note">작성기관: {{ org_name }} | 웰페어고(welfarego.co.kr) 2026 주·야간보호 최신 표준서식</div>
+  </article>
+</body>
+</html>

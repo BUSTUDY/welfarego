@@ -1,120 +1,55 @@
-# Welfarego OFFICE
+# welfarego
 
-**Welfarego OFFICE**는 오픈소스 **LibreOffice 26.2.7.3 (MPL-2.0 Subset)** 을 기반으로 자체 브랜드 디자인과 **요즘 스타일의 모던 플루언트(Fluent) 리본 메뉴 UI** 를 적용한 **Windows x64 설치형 오피스(.msi)** 제작 저장소입니다.
+[welfarego.co.kr](https://welfarego.co.kr) — **2026 주·야간보호시설 실무 안내 포털** 저장소입니다.
+국민건강보험공단 「2026년 재가급여(주야간보호) 평가 매뉴얼」과 보건복지부 최신 고시(제2025-247호·제2026-189호), 노인장기요양보험법 시행규칙 별지 서식을 기준으로 주·야간보호시설 운영에 필요한 평가·운영·서식·무료 오피스 기능을 하나의 포털로 제공합니다.
+광고, 회원가입, 방문 추적 코드 및 외부 CDN은 포함하지 않습니다.
 
-상업적 이용(사내 배포, 고객사 납품, 유료 판매·유지보수 포함) 시 저작권 및 상표권 분쟁이 발생하지 않도록 **MPL-2.0 전용 서브셋 빌드(`--enable-mpl-subset`)** 와 **The Document Foundation(TDF) 상표·시각 자산 100% 분리** 규정을 설계 단계부터 반영했습니다.
+## 주요 서비스 및 경로
 
----
+| 서비스 | 경로 | 제공 내용 |
+| --- | --- | --- |
+| 포털 메인 | `/` | 4대 핵심 실무 포털 안내, 실시간 4대 영역 모의 점수·서류 점검률, 주요 서식 바로받기 |
+| 주·야간보호 평가매뉴얼 | `/evaluation` | 2026 공단 36개 평가지표(100점) 전체 해설, A등급 자가진단·연동 감점 자동잠금, 주기별 실무 일정 34건, 면담·시연 대비 18건, 표본 수 계산기 |
+| 주·야간보호 운영매뉴얼 | `/operations` | 2026 최신 고시 수가표·본인부담금/월한도액 계산기, 법정 인력배치·48.6% 의무 인건비 진단기, 장기근속장려금, 입소~30일 SOP, 법정교육 10종, 현지조사 예방 8선 |
+| 최신 서식자료실 | `/forms` | 법정 별지 4종 + 2026 평가 필수 표준서식 16종 (총 20종, 기관명·기관기호 자동 기입 후 `DOCX`·`XLSX`·일괄 `ZIP`·A4 인쇄 제공) |
+| 무료 오피스 다운로드 | `/office` | 영세 사회복지시설용 무료 오피스(`Welfarego OFFICE`, MPL-2.0) 설치 안내, 웹 리본 UI 체험(`/office/preview`), 기관 비치용 정품 확인서 발급(`/office/license-certificate`), 소스·패치 ZIP |
+| 포털·출처·개인정보 안내 | `/about` | 공식 법령·고시 출처 목록, 로컬 저장 안내, 저작권·면책 안내 |
 
-## 주요 특징
+- 기존 `/daycare`, `/daycare/evaluation`, `/daycare/operations`, `/daycare/forms` 경로는 각각 `/`, `/evaluation`, `/operations`, `/forms`로 `301` 영구 리다이렉트합니다.
+- **Welfarego OFFICE** (LibreOffice 26.2 MPL-2.0 Subset) 브랜딩·패치·인스톨러·법무 문서 원본은 [`office/`](office/README.md) 디렉터리에 보존되어 있습니다.
 
-### 1. 모던 플루언트(Fluent) 리본 메뉴 UI (`patches/0002`, `patches/0003`)
-- **기본 리본 UI 자동 활성화**: Writer(문서), Calc(스프레드시트), Impress(프레젠테이션), Draw(드로잉) 첫 실행 시 구형 2줄 툴바 대신 **탭형 리본 메뉴(`Tabbed`)** 로 즉시 실행됩니다.
-- **C++ VCL 리본 렌더링 개선 (`tabctrl.cxx`, `tabpage.cxx`, `toolbox.cxx`)**:
-  - 구형 Windows 98/XP식 3D 탭 테두리(`TABP_PANE` / `TABP_TABITEM`)를 제거하고 플랫 헤더 스트립(`#F3F6F5`) + 화이트 리본 카드(`#FFFFFF`) 구조로 개선
-  - 선택된 탭 하단에 **3px Welfarego Teal(`#08776A`) 액센트 인디케이터** 및 세미볼드 타이포그래피 적용
-  - 마우스 오버·토글·클릭 버튼에 안티앨리어싱 **둥근 필(6px Radius) 플루언트 스타일** 적용
-  - **Windows 다크 모드** 및 **HiDPI(125%/150%/200%) 배율** 자동 대응
-- **모던 벡터 아이콘 & 한국어 타이포그래피**:
-  - MPL-2.0 라이선스의 깔끔한 **Sukapura SVG** 벡터 아이콘 테마를 기본 적용 (GPL 아이콘 테마 제외)
-  - 한국어 UI(`ko`) 및 영문 UI(`en-US`) 기본 포함, `Pretendard → Noto Sans CJK KR → 나눔고딕 → 맑은 고딕` 순의 모던 한글 폰트 우선순위 적용
-  - 첫 실행 시 불필요한 팁 팝업, TDF 기부 버튼, 외부 크래시 리포트/업데이트 통신 비활성화
+## 로컬 실행
 
-### 2. 자체 브랜드 정체성 & 상표권 완전 분리 (`patches/0001`, `branding/`)
-- **제품명 / 공급자**: `Welfarego OFFICE` / `Welfarego`
-- **독립 설치 경로 및 고유 MSI GUID**: `C:\Program Files\Welfarego OFFICE` 및 신규 발급된 `UPGRADECODE`/`PRODUCTCODE`를 사용하여, 기존에 공식 LibreOffice가 설치된 PC에서도 충돌·덮어쓰기 없이 나란히 설치됩니다.
-- **100% 독자 제작 시각 자산 (`scripts/generate_branding.py`)**:
-  - 스플래시 화면 (`intro.png`, `intro-highres.png`, `progress.conf`)
-  - 시작 센터 / 정보 대화상자 SVG 로고 (`logo.svg`, `logo_inverted.svg`, `logo-sc.svg`, `logo-sc_inverted.svg`, `about.svg`)
-  - Windows 실행파일·문서 확장자용 다중 해상도 `.ico` 아이콘 **31종 전체** (16px~256px 13개 레이어)
-  - Windows Installer(`.msi`) 설치 마법사 배너 (`Banner.bmp`, `Image.bmp`, `Image_2.bmp`)
+별도 DB나 외부 API 키 없이 실행됩니다.
 
-### 3. 상업적 오픈소스 라이선스 규정 준수 (`legal/`, `LICENSE`, `NOTICE`)
-- **`--enable-mpl-subset`**: GPL/LGPL 전용 구성요소(`breeze`/`elementary`/`karasa_jaga` 아이콘, `poppler`, `lpsolve`, `postgresql-sdbc`, `lotuswordpro`, `report-builder`, `mariadb-sdbc`, `gpgmepp`)를 컴파일에서 완전히 제외하여 **순수 MPL-2.0 + 허용적 라이선스(Apache-2.0, MIT, BSD, CC0)** 로만 빌드됩니다.
-- **MPL-2.0 제3.2조 소스 공개 자동화**: Windows MSI 빌드 시 수정 패치 및 라이선스 고지가 담긴 `WelfaregoOFFICE_*_MPL2_Source_Patches.zip`과 `SHA256SUMS.txt`를 자동으로 함께 패키징합니다.
-- **상세 법무 체크리스트**: [`legal/COMPLIANCE-GUIDE.md`](legal/COMPLIANCE-GUIDE.md), [`legal/THIRD-PARTY-LICENSES.md`](legal/THIRD-PARTY-LICENSES.md), [`legal/SOURCE-OFFER.md`](legal/SOURCE-OFFER.md) 참고.
-
----
-
-## 디렉터리 구조
-
-```text
-.
-├── .github/workflows/
-│   ├── verify.yml                       # 푸시/PR마다 라이선스·자산·업스트림 패치 적용 자동 검증
-│   ├── build-windows-msi.yml            # Windows x64 MSI + Setup .exe + MPL-2.0 소스 자동 빌드
-│   └── package-exe.yml                  # MSI 빌드 완료 시 원클릭 Setup .exe 패키징 & GitHub Release 자동 발행
-├── branding/
-│   ├── brand.json                       # 제품명·버전·색상·URL 단일 설정 파일
-│   ├── images/                          # 스플래시 PNG, SVG 로고, 앱 아이콘 프리뷰
-│   ├── icons/                           # 31종 Windows 다중 해상도 .ico 아이콘
-│   └── msi/                             # MSI/EXE 설치 마법사 비트맵 (Banner/Image/Wizard*)
-├── config/
-│   └── windows-x64.autogen.input        # Windows x64 MPL-2.0 Subset 릴리스 빌드 설정
-├── installer/
-│   ├── WelfaregoOFFICE.iss              # Inno Setup 6 원클릭 Windows Setup .exe 스크립트
-│   └── Korean.isl                       # 한국어 설치 마법사 언어 리소스
-├── legal/
-│   ├── COMPLIANCE-GUIDE.md              # 상업적 배포 오픈소스 규정 준수 체크리스트 (한국어)
-│   ├── INSTALLER-LICENSE-KO.txt         # .exe 설치 마법사 표시용 MPL-2.0 라이선스 고지
-│   ├── THIRD-PARTY-LICENSES.md          # 포함/제외 서드파티 오픈소스 라이선스 목록
-│   ├── SOURCE-OFFER.md                  # MPL-2.0 제3.2조 소스코드 제공 안내
-│   └── PRIVACY.md                       # 오프라인·무텔레메트리 개인정보 정책
-├── patches/
-│   ├── 0001-rebrand-welfarego-office.patch
-│   ├── 0002-default-modern-ribbon-ui.patch
-│   └── 0003-fluent-ribbon-rendering.patch
-├── preview/
-│   └── ribbon-design-preview.html       # 브라우저에서 열어보는 모던 리본 UI 디자인 미리보기
-├── scripts/
-│   ├── generate_branding.py             # 독자 브랜딩 이미지 및 31종 .ico 재생성기
-│   ├── apply_patches.py                 # LibreOffice 소스에 패치·브랜딩·autogen.input 적용
-│   ├── verify_compliance.py             # 자동 라이선스·상표·패치 무결성 검증 스크립트
-│   ├── build-windows.ps1                # Windows x64 MSI + Setup .exe 원커맨드 빌드 스크립트
-│   └── build-exe.ps1                    # 기존 MSI를 Inno Setup 6 원클릭 Setup .exe로 패키징
-├── LICENSE                              # Mozilla Public License 2.0 전문
-└── NOTICE                               # 업스트림 저작권·상표 고지
+```sh
+pip install -r requirements.txt
+gunicorn welfare_app:app
 ```
 
----
+개발 환경에서는 `python welfare_app.py`로 실행합니다(기본 포트 `5001`, 환경변수 `PORT`로 변경 가능).
 
-## 빌드 및 설치 파일(`.exe` / `.msi`) 생성 방법
+## Render 배포 설정
 
-### 방법 A. GitHub Actions에서 자동 빌드 및 다운로드
-1. 저장소 상단 **Actions → Build Welfarego OFFICE Windows x64 MSI → Run workflow** 클릭
-2. 빌드가 완료되면 `package-exe.yml`이 자동 실행되어 **GitHub Releases (`v26.2.7.3`)** 와 Artifacts에 아래 4개 파일을 발행합니다:
-   - **`WelfaregoOFFICE_26.2.7.3_Setup_x64.exe`** (원클릭 한국어/영문 Windows 설치 파일 — 더블클릭으로 설치)
-   - `WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi` (기업/IT 무인 배포용 MSI)
-   - `WelfaregoOFFICE_26.2.7.3_MPL2_Source_Patches.zip` (MPL-2.0 제3.2조 준수용 수정 소스 아카이브)
-   - `SHA256SUMS.txt`
+- Repository: `https://github.com/BUSTUDY/welfarego`
+- Branch: `main`
+- Root Directory: 비워 둠
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `gunicorn welfare_app:app`
+- Health Check Path: `/healthz`
 
-### 방법 B. 로컬 Windows PC에서 직접 빌드 (가장 빠르고 안정적)
-**권장 사양:** Windows 10/11 64-bit, RAM 16GB 이상(32GB 권장), NVMe SSD 여유 공간 80GB 이상, Visual Studio 2022 (Desktop development with C++ + ATL + Windows 11 SDK), Inno Setup 6
+선택 환경변수:
+- `WELFARE_SITE_BASE`: 기본값 `https://welfarego.co.kr`
+- `WELFAREGO_OFFICE_EXE_URL` / `WELFAREGO_OFFICE_MSI_URL`: 자체 빌드한 Welfarego OFFICE 설치 파일 직접 URL이 준비되면 설정합니다(미설정 시 LibreOffice 26.2 한국어 공식 다운로드 페이지로 안내).
 
-1. Cygwin64 (`C:\cygwin64`) 설치 및 LibreOffice 빌드 필수 패키지 설치 (`autoconf, automake, bison, cabextract, flex, gettext, gettext-devel, gperf, nasm, ninja, patch, perl, perl-Archive-Zip, perl-Font-TTF, perl-Digest-MD5, pkg-config, unzip, wget, which, zip`)
-2. PowerShell에서 실행:
-   ```powershell
-   .\scripts\build-windows.ps1 -WorkDir C:\lo -CygwinRoot C:\cygwin64
-   ```
-3. 완료되면 `dist\` 폴더에 **`WelfaregoOFFICE_26.2.7.3_Setup_x64.exe`** 와 `.msi`, MPL-2.0 소스 패치 아카이브가 모두 생성됩니다.
-4. 이미 빌드된 `.msi`만 `.exe`로 다시 묶고 싶다면 `.\scripts\build-exe.ps1 -MsiPath dist\WelfaregoOFFICE_26.2.7.3_Win_x86-64.msi`를 실행하세요.
+## 광고 차단 및 검색 설정
 
----
+- `/ads.txt`는 `410 Gone`으로 응답합니다.
+- canonical, Open Graph 및 JSON-LD 구조화 데이터는 `SITE_BASE` 도메인을 사용합니다.
+- `robots_welfare.txt`, `llms_welfare.txt`, `/sitemap.xml`을 독립 제공합니다.
 
-## 검증 및 브랜딩 커스터마이징
+## 검증
 
-```bash
-# 1. 브랜딩 이미지·31종 Windows 아이콘 재생성
-python3 scripts/generate_branding.py
-
-# 2. 오픈소스 규정 준수 및 자산 무결성 자동 검사
-python3 scripts/verify_compliance.py
+```sh
+python -m unittest discover -s tests -v
 ```
-
----
-
-## 라이선스
-
-본 저장소의 Welfarego OFFICE 패치 및 빌드 스크립트는 **Mozilla Public License Version 2.0 (MPL-2.0)** 으로 배포됩니다. 자세한 내용은 [`LICENSE`](LICENSE), [`NOTICE`](NOTICE), [`legal/COMPLIANCE-GUIDE.md`](legal/COMPLIANCE-GUIDE.md)를 확인하세요.
-
-*"LibreOffice"와 "The Document Foundation"은 The Document Foundation의 등록상표입니다. Welfarego OFFICE는 독립적인 파생 배포판이며 The Document Foundation과 제휴하거나 보증을 받지 않았습니다.*
