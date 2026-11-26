@@ -560,10 +560,10 @@ body.drawer-open { overflow: hidden; }
 
 /* 서식 목록 */
 .file-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--gov-border); }
-.file-list li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--gov-line); }
+.file-list li { display: flex; flex-direction: column; align-items: stretch; gap: 7px; padding: 12px 4px; border-bottom: 1px solid var(--gov-line); }
 .file-name { display: flex; align-items: flex-start; gap: 8px; font-size: 0.92rem; line-height: 1.5; min-width: 0; }
 .file-name .no { color: var(--gov-navy); font-weight: 800; min-width: 22px; }
-.file-act { display: flex; gap: 4px; flex: none; }
+.file-act { display: flex; flex-wrap: wrap; gap: 5px; padding-left: 30px; }
 
 /* 자가진단 현황 */
 .dom-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--gov-border); border-top: 2px solid var(--gov-ink); }

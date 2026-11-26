@@ -106,11 +106,14 @@
         <h2 id="formTitle">자주 찾는 표준서식</h2>
         <a class="more-link" href="/forms">20종 전체 ›</a>
       </div>
+      <p class="board-sub">한컴오피스 한글(HWPX)·법제처 정부원본(HWP)·워드·엑셀 중 편한 파일로 바로 받으세요.</p>
       <ul class="file-list">
         {% for f in featured_forms %}
         <li>
           <span class="file-name"><span class="no">{{ f.no }}</span><span>{{ f.title }}</span></span>
           <span class="file-act">
+            <a class="btn btn-xs btn-primary" href="/forms/{{ f.slug }}.hwpx" title="한컴오피스 한글 문서(.hwpx)">한글</a>
+            {% if f.gov_hwp_file %}<a class="btn btn-xs btn-warn" href="/forms/{{ f.slug }}/gov.hwp" title="국가법령정보센터 법정 별지서식 정부원본(.hwp)">원본HWP</a>{% endif %}
             <a class="btn btn-xs btn-soft" href="/forms/{{ f.slug }}.docx">DOCX</a>
             <a class="btn btn-xs btn-soft" href="/forms/{{ f.slug }}.xlsx">XLSX</a>
             <a class="btn btn-xs" href="/forms/{{ f.slug }}/print" target="_blank" rel="noopener noreferrer">인쇄</a>
@@ -118,7 +121,7 @@
         </li>
         {% endfor %}
       </ul>
-      <p class="btn-row" style="margin-top:14px;"><a class="btn btn-sm btn-primary" href="/forms/bundle.zip">20종 전체 ZIP 받기</a></p>
+      <p class="btn-row" style="margin-top:14px;"><a class="btn btn-sm btn-primary" href="/forms/bundle.zip">20종 전체 ZIP 받기 (한글·워드·엑셀·정부원본 포함)</a></p>
     </section>
 
     <section class="board" aria-labelledby="agencyTitle">
@@ -129,7 +132,7 @@
         <a class="agency-link" href="https://www.longtermcare.or.kr" target="_blank" rel="noopener noreferrer">
           <div><strong>국민건강보험공단 노인장기요양보험</strong><span>공식 평가매뉴얼·법정서식·기관정보</span></div><span class="go">›</span>
         </a>
-        <a class="agency-link" href="href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EA%B8%89%EC%97%AC%20%EC%A0%9C%EA%B3%B5%EA%B8%B0%EC%A4%80%20%EB%B0%8F%20%EA%B8%89%EC%97%AC%EB%B9%84%EC%9A%A9%20%EC%82%B0%EC%A0%95%EB%B0%A9%EB%B2%95%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EA%B3%A0%EC%8B%9C" target="_blank" rel="noopener noreferrer">
+        <a class="agency-link" href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EA%B8%89%EC%97%AC%20%EC%A0%9C%EA%B3%B5%EA%B8%B0%EC%A4%80%20%EB%B0%8F%20%EA%B8%89%EC%97%AC%EB%B9%84%EC%9A%A9%20%EC%82%B0%EC%A0%95%EB%B0%A9%EB%B2%95%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EA%B3%A0%EC%8B%9C" target="_blank" rel="noopener noreferrer">
           <div><strong>국가법령정보센터 (장기요양 고시)</strong><span>보건복지부 고시 제2026-189호 전문</span></div><span class="go">›</span>
         </a>
         <a class="agency-link" href="https://si4n.nhis.or.kr" target="_blank" rel="noopener noreferrer">

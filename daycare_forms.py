@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 """2026년 최신 기준 주·야간보호 법정 별지서식 및 평가 필수 표준서식 20종 정의·파일 생성기.
 
-외부 패키지 의존성 없이 표준 라이브러리(zipfile, xml.sax.saxutils)만으로
-Welfarego OFFICE(LibreOffice), MS Word/Excel, 한컴오피스에서 바로 열리는
-표준 OOXML(.docx / .xlsx) 및 전체 패키지(.zip)를 생성한다.
+한컴오피스 한글 국가표준 포맷(.hwpx, KS X 6101 OWPML), 법제처 국가법령정보센터 정부 원본(.hwp, 법정 별지서식 4종),
+Welfarego OFFICE(LibreOffice)·MS Word/Excel(.docx / .xlsx) 및 전체 패키지(.zip)를 생성·제공한다.
 """
 
 import io
 import zipfile
+from pathlib import Path
 from xml.sax.saxutils import escape as xe
+
+from hwpx import HwpxDocument
+
+GOV_FORMS_DIR = Path(__file__).resolve().parent / "data" / "gov_forms"
 
 FORM_CATEGORIES = [
     "법정 필수서식",
@@ -18,18 +22,20 @@ FORM_CATEGORIES = [
 ]
 
 DAYCARE_FORMS = [
-    # 1. 법정 필수서식 (4종)
+    # 1. 법정 필수서식 (4종 — 정부 원본 .hwp + 2026 평가기준 반영 .hwpx/.docx/.xlsx 모두 제공)
     {
         "slug": "contract-notice-form11",
         "no": "01",
         "folder": "01_법정필수서식",
         "category": "법정 필수서식",
-        "code_badge": "시행규칙 별지 제11호서식",
+        "code_badge": "시행규칙 별지 제11호의2서식",
         "eval_badge": "지표 18·22 연계",
         "title": "장기요양급여 이용계약서 및 계약통보서 (주·야간보호)",
         "summary": "수급자 입소·변경 시 5대 필수 계약사항(계약당사자·계약기간·급여종류 및 비용·비급여 항목·배상책임)을 명시하고 급여 시작일까지 공단에 통보하는 기본 법정 서식입니다.",
-        "gov_url": "https://www.law.go.kr/LSW/lsLawLinkInfo.do?lsJoLnkSeq=1000797889",
-        "gov_label": "국가법령정보센터 별지 제11호 원문",
+        "gov_hwp_file": "form11_2_contract_notice.hwp",
+        "gov_hwp_name": "[별지 제11호의2서식] 장기요양급여 계약통보서(시설급여, 주ㆍ야간보호, 단기보호).hwp",
+        "gov_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280315",
+        "gov_label": "국가법령정보센터 원문",
         "checkpoints": [
             "계약서 2부 작성 후 수급자(보호자) 자필 서명 및 1부 교부 확인란 필수",
             "급여개시일 전(늦어도 급여제공 시작일 당일)까지 공단 장기요양정보시스템에 계약통보 완료",
@@ -67,12 +73,14 @@ DAYCARE_FORMS = [
         "no": "02",
         "folder": "01_법정필수서식",
         "category": "법정 필수서식",
-        "code_badge": "시행규칙 별지 제11호의4",
+        "code_badge": "시행규칙 별지 제11호의4서식",
         "eval_badge": "지표 22·27 (합계 7점)",
         "title": "장기요양 급여제공계획서 (2026 맞춤형 기능회복훈련 통합본)",
         "summary": "욕구사정·위험도평가 3종 결과를 반영해 연 1회(신규는 시작일까지) 수립하며, 2026년 신설 지표 27번 기준에 따라 '기본동작훈련' 세부내용을 필수로 기재하는 핵심 서식입니다.",
-        "gov_url": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%85%B8%EC%9D%B8%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EB%B3%B4%ED%97%98%EB%B2%95+%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
-        "gov_label": "노인장기요양보험법 시행규칙 별지 서식",
+        "gov_hwp_file": "form11_4_care_plan.hwp",
+        "gov_hwp_name": "[별지 제11호의4서식] 장기요양급여 제공 계획서(시설급여, 주ㆍ야간보호, 단기보호).hwp",
+        "gov_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280315",
+        "gov_label": "국가법령정보센터 원문",
         "checkpoints": [
             "최근 욕구사정 + 낙상·욕창·인지 위험도평가 3종 결과가 급여목표 및 세부내용에 반드시 연결될 것",
             "2026 신설 지표 27(3점): 기능회복훈련란에 '기본동작훈련(체위변경·일어나앉기·이동·보행 등)' 세부내용 필수 수기 기재!",
@@ -113,8 +121,10 @@ DAYCARE_FORMS = [
         "eval_badge": "지표 22·34 (합계 11점)",
         "title": "장기요양급여 제공기록지 (주·야간보호 — 2026 상태변화·인지사유 강화본)",
         "summary": "일일 이용시간·송영·식사섭취량·목욕 전후 상태·프로그램명을 기록하며, 주 1회 이상 구체적 상태변화 서술 및 실제 제공직원 서명(지표 34), 인지활동형 미제공 사유(고시 제32조)를 반영했습니다.",
+        "gov_hwp_file": "form15_care_record.hwp",
+        "gov_hwp_name": "[별지 제15호서식] 장기요양급여 제공기록지(주ㆍ야간보호).hwp",
         "gov_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280315",
-        "gov_label": "국가법령정보센터 별지 제15호 안내",
+        "gov_label": "국가법령정보센터 원문",
         "checkpoints": [
             "주 1회 이상 '잘 지내심' 같은 단순 문구 금지 → 신체·인지·정서 상태변화를 육하원칙으로 구체적 서술 (지표 34·2점)",
             "실제 급여를 제공한 직원이 직접 서명 (대리 일괄서명 시 불인정)",
@@ -152,12 +162,14 @@ DAYCARE_FORMS = [
         "no": "04",
         "folder": "01_법정필수서식",
         "category": "법정 필수서식",
-        "code_badge": "시행규칙 별지 제25호의2",
+        "code_badge": "시행규칙 별지 제25호의2서식",
         "eval_badge": "지표 6·7·8 (합계 8점)",
         "title": "장기요양요원 고충처리대장 및 고충 미처리 시정신청 안내서",
         "summary": "종사자의 업무·인권침해 고충 접수·처리·결과통보 전 과정을 기록하는 기관 비치용 대장 및 시군구 고충 미처리 시정신청(별지 제25호의2서식) 안내 양식입니다.",
-        "gov_url": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%85%B8%EC%9D%B8%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EB%B3%B4%ED%97%98%EB%B2%95+%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
-        "gov_label": "시행규칙 제27조의3·별지 제25호의2",
+        "gov_hwp_file": "form25_2_grievance.hwp",
+        "gov_hwp_name": "[별지 제25호의2서식] 장기요양요원 고충 미처리 시정 신청서.hwp",
+        "gov_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280315",
+        "gov_label": "국가법령정보센터 원문",
         "checkpoints": [
             "실물 고충처리함(잠금·비노출 위치) 또는 익명 온라인 창구를 운영하고 고충처리대장을 상시 비치할 것",
             "고충 접수일 → 상담·조사 → 조치 결과 → 신청 직원 회신 기한(예: 7일 이내) 절차를 전 직원이 면담에서 답변 가능해야 함",
@@ -1232,8 +1244,140 @@ def build_form_xlsx(form, org_name="", org_code=""):
     return buf.getvalue()
 
 
+from functools import lru_cache
+
+
+@lru_cache(maxsize=32)
+def _build_base_hwpx_by_slug(slug):
+    form = FORM_MAP[slug]
+    doc = HwpxDocument.new()
+    # A4(59528 x 84186 HWPUNIT), 좌우상하 15mm(4252) 여백 -> 본문 폭 51024(180mm)
+    doc.page.set_margins(left=4252, right=4252, top=4252, bottom=4252, header=2835, footer=2835)
+    body_w = 51024
+
+    def add_p(text, size=9.5, bold=False, color="#1D242B", align="LEFT", space_after=4):
+        p = doc.add_paragraph(text)
+        p.alignment = align
+        p.spacing_after_pt = space_after
+        if p.runs:
+            r = p.runs[0]
+            r.size = size
+            r.bold = bold
+            r.color = color
+        return p
+
+    def style_cell(tbl, r_idx, c_idx, text, size=9, bold=False, color="#1D242B", align="LEFT", shade=None):
+        c = tbl.cell(r_idx, c_idx)
+        c.text = str(text)
+        c.vertical_alignment = "CENTER"
+        if shade:
+            tbl.set_cell_shading(r_idx, c_idx, shade)
+        for cp in c.paragraphs:
+            cp.alignment = align
+            cp.spacing_after_pt = 1
+            for cr in cp.runs:
+                cr.size = size
+                cr.bold = bold
+                cr.color = color
+
+    add_p(
+        f"[{form['code_badge']} · 2026 정기평가 {form['eval_badge']}]  기관명: __WFORG_NAME__ (__WFORG_CODE__)",
+        size=9,
+        bold=True,
+        color="#003675",
+        space_after=4,
+    )
+    add_p(form["title"], size=15, bold=True, color="#111111", align="CENTER", space_after=5)
+    add_p(form["summary"], size=9, bold=False, color="#475569", align="LEFT", space_after=7)
+
+    if form.get("info_rows"):
+        pair_cnt = max(len(r) for r in form["info_rows"])
+        t_info = doc.add_table(len(form["info_rows"]), pair_cnt * 2)
+        t_info.set_width(body_w)
+        weights = []
+        for _ in range(pair_cnt):
+            weights.extend([38, 62])
+        t_info.set_column_widths(weights)
+        t_info.set_borders(line_type="SOLID", border_width_mm=0.12, color="#94A3B8", inner=True)
+        for r_idx, row in enumerate(form["info_rows"]):
+            for p_idx in range(pair_cnt):
+                lbl, val = row[p_idx] if p_idx < len(row) else ("", "")
+                style_cell(t_info, r_idx, p_idx * 2, lbl, size=9, bold=True, color="#002552", align="CENTER", shade="#EEF4FB")
+                style_cell(t_info, r_idx, p_idx * 2 + 1, val, size=9, bold=False, align="LEFT")
+        add_p("", size=5, space_after=3)
+
+    for tbl_spec in form["tables"]:
+        add_p(f"■ {tbl_spec['caption']}", size=10.5, bold=True, color="#002552", space_after=3)
+        col_cnt = len(tbl_spec["headers"])
+        row_cnt = 1 + len(tbl_spec["rows"])
+        t = doc.add_table(row_cnt, col_cnt)
+        t.set_width(body_w)
+        t.set_header_rows(1)
+        t.repeat_header = True
+        t.set_borders(line_type="SOLID", border_width_mm=0.12, color="#94A3B8", inner=True)
+        for c_idx, h in enumerate(tbl_spec["headers"]):
+            style_cell(t, 0, c_idx, h, size=9, bold=True, color="#002552", align="CENTER", shade="#EEF4FB")
+        for r_off, r_vals in enumerate(tbl_spec["rows"], start=1):
+            for c_idx in range(col_cnt):
+                val = r_vals[c_idx] if c_idx < len(r_vals) else ""
+                style_cell(
+                    t,
+                    r_off,
+                    c_idx,
+                    val,
+                    size=8.8,
+                    bold=(c_idx == 0),
+                    shade=("#F8FAFC" if c_idx == 0 else None),
+                    align=("CENTER" if c_idx == 0 and len(str(val)) <= 10 else "LEFT"),
+                )
+        add_p("", size=5, space_after=3)
+
+    add_p("■ 2026년 공단 평가 및 법령 필수 유의사항", size=10, bold=True, color="#002552", space_after=3)
+    for cp in form["checkpoints"]:
+        add_p(f"• {cp}", size=8.5, color="#334155", space_after=2)
+
+    add_p("", size=4, space_after=2)
+    sigs = form.get("signatures") or ["담당자", "시설장"]
+    ts = doc.add_table(2, len(sigs))
+    ts.set_width(body_w)
+    ts.set_borders(line_type="SOLID", border_width_mm=0.12, color="#94A3B8", inner=True)
+    for idx, s in enumerate(sigs):
+        style_cell(ts, 0, idx, s, size=9, bold=True, color="#1D242B", align="CENTER", shade="#F1F5F9")
+        style_cell(ts, 1, idx, "\n(서명 / 인)\n", size=8.5, color="#64748B", align="CENTER")
+
+    add_p(
+        "작성기관: __WFORG_NAME__  |  웰페어고(welfarego.co.kr) 2026 주·야간보호 최신 표준서식",
+        size=8,
+        color="#64748B",
+        align="RIGHT",
+        space_after=0,
+    )
+    return doc.to_bytes()
+
+
+def build_form_hwpx(form, org_name="", org_code=""):
+    """한컴오피스 한글 국가표준 문서(.hwpx, KS X 6101 OWPML) 바이트를 생성한다."""
+    inst_name, inst_code = _clean_org(org_name, org_code)
+    base_bytes = _build_base_hwpx_by_slug(form["slug"])
+    out_buf = io.BytesIO()
+    with zipfile.ZipFile(io.BytesIO(base_bytes), "r") as zin, zipfile.ZipFile(out_buf, "w") as zout:
+        for item in zin.infolist():
+            raw = zin.read(item.filename)
+            if item.filename == "Contents/section0.xml":
+                raw = (
+                    raw.decode("utf-8")
+                    .replace("__WFORG_NAME__", xe(inst_name))
+                    .replace("__WFORG_CODE__", xe(inst_code))
+                    .encode("utf-8")
+                )
+            zi = zipfile.ZipInfo(item.filename)
+            zi.compress_type = item.compress_type
+            zout.writestr(zi, raw)
+    return out_buf.getvalue()
+
+
 def build_all_forms_zip(org_name="", org_code=""):
-    """20종 전체 표준서식(.docx + .xlsx)을 폴더별로 묶은 ZIP 아카이브 바이트를 반환한다."""
+    """20종 전체 표준서식(.hwpx + .docx + .xlsx)과 법정 별지서식 정부원본(.hwp)을 묶은 ZIP 바이트를 반환한다."""
     inst_name, _ = _clean_org(org_name, org_code)
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -1243,15 +1387,23 @@ def build_all_forms_zip(org_name="", org_code=""):
             "- 본 패키지는 국민건강보험공단 「2026년 장기요양기관 재가급여(주야간보호) 평가매뉴얼」",
             "  및 보건복지부 최신 고시(제2025-247호·제2026-189호), 노인장기요양보험법 시행규칙 별지 서식을",
             "  바탕으로 구성된 실무 표준서식 모음입니다.",
-            "- 모든 파일(.docx, .xlsx)은 웰페어고에서 무료 배포하는 'Welfarego OFFICE'(LibreOffice 기반),",
-            "  MS Office, 한컴오피스에서 별도 변환 없이 바로 열어 편집·인쇄하실 수 있습니다.",
+            "- 전 서식 20종 모두 한글(.hwpx, 한컴오피스 한글 국가표준 문서), 워드(.docx), 엑셀(.xlsx) 3종 포맷으로",
+            "  수록되어 있으며, 법제처 국가법령정보센터의 법정 별지서식 4종 정부 원본(.hwp)도 함께 포함되어 있습니다.",
             "",
         ]
         for f in DAYCARE_FORMS:
             safe_title = f["title"].replace("/", "_").replace(" ", "_")
             base_path = f"{f['folder']}/{f['no']}_{safe_title}"
+            zf.writestr(f"{base_path}.hwpx", build_form_hwpx(f, org_name, org_code))
             zf.writestr(f"{base_path}.docx", build_form_docx(f, org_name, org_code))
             zf.writestr(f"{base_path}.xlsx", build_form_xlsx(f, org_name, org_code))
+            if f.get("gov_hwp_file"):
+                gov_path = GOV_FORMS_DIR / f["gov_hwp_file"]
+                if gov_path.is_file():
+                    zf.writestr(
+                        f"00_법제처_정부원본_법정별지서식_HWP/{f['gov_hwp_name']}",
+                        gov_path.read_bytes(),
+                    )
             readme_lines.append(f"[{f['no']}] {f['title']} ({f['code_badge']} / {f['eval_badge']})")
         zf.writestr("00_서식목록_및_사용안내.txt", "\n".join(readme_lines))
     return buf.getvalue()

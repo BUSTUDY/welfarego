@@ -57,10 +57,29 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("별지 제15호서식", forms_html)
         self.assertIn("/forms/bundle.zip", forms_html)
 
-    def test_all_20_forms_generate_valid_docx_xlsx_and_print(self):
+    def test_all_20_forms_generate_valid_hwpx_docx_xlsx_and_print(self):
+        from hwpx import HwpxDocument, validate_editor_open_safety, validate_package
+
+        gov_hwp_count = 0
         for form in DAYCARE_FORMS:
             slug = form["slug"]
             with self.subTest(slug=slug):
+                hwpx_resp = self.client.get(f"/forms/{slug}.hwpx?org=행복주야간센터&code=2-11000-12345")
+                self.assertEqual(hwpx_resp.status_code, 200)
+                self.assertTrue(validate_package(hwpx_resp.data).ok)
+                self.assertTrue(validate_editor_open_safety(hwpx_resp.data).ok)
+                hwpx_txt = HwpxDocument.open(hwpx_resp.data).text.plain()
+                self.assertIn("행복주야간센터", hwpx_txt)
+                self.assertIn("2-11000-12345", hwpx_txt)
+
+                gov_resp = self.client.get(f"/forms/{slug}/gov.hwp")
+                if form.get("gov_hwp_file"):
+                    gov_hwp_count += 1
+                    self.assertEqual(gov_resp.status_code, 200)
+                    self.assertEqual(gov_resp.data[:8], b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
+                else:
+                    self.assertEqual(gov_resp.status_code, 404)
+
                 docx = self.client.get(f"/forms/{slug}.docx?org=행복주야간센터&code=2-11000-12345")
                 self.assertEqual(docx.status_code, 200)
                 with zipfile.ZipFile(io.BytesIO(docx.data)) as zf:
@@ -80,19 +99,23 @@ class DaycareAndOfficeTests(unittest.TestCase):
                 self.assertEqual(pr.status_code, 200)
                 self.assertIn("행복주야간센터", pr.get_data(as_text=True))
 
+        self.assertEqual(gov_hwp_count, 4)
+        self.assertEqual(self.client.get("/forms/nonexistent.hwpx").status_code, 404)
         self.assertEqual(self.client.get("/forms/nonexistent.docx").status_code, 404)
         self.assertEqual(self.client.get("/forms/nonexistent.xlsx").status_code, 404)
         self.assertEqual(self.client.get("/forms/nonexistent/print").status_code, 404)
 
-    def test_forms_bundle_zip_contains_all_40_files_and_readme(self):
+    def test_forms_bundle_zip_contains_all_65_files_and_readme(self):
         resp = self.client.get("/forms/bundle.zip?org=샘플센터")
         self.assertEqual(resp.status_code, 200)
         with zipfile.ZipFile(io.BytesIO(resp.data)) as zf:
             names = zf.namelist()
-            self.assertEqual(len(names), 41)
+            self.assertEqual(len(names), 65)
             self.assertIn("00_서식목록_및_사용안내.txt", names)
+            self.assertEqual(sum(1 for n in names if n.endswith(".hwpx")), 20)
             self.assertEqual(sum(1 for n in names if n.endswith(".docx")), 20)
             self.assertEqual(sum(1 for n in names if n.endswith(".xlsx")), 20)
+            self.assertEqual(sum(1 for n in names if n.endswith(".hwp")), 4)
 
     def test_free_office_routes_assets_certificate_and_mpl2_zip(self):
         office = self.client.get("/office")
