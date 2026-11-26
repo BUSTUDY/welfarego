@@ -22,6 +22,9 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("site-header", html)
         self.assertIn("id=\"drawer\"", html)
         self.assertIn("hdrScore", html)
+        self.assertIn('id="btnTheme"', html)
+        # 기본은 밝은 화면: 서버가 어두운 테마를 미리 지정하지 않는다.
+        self.assertNotIn('<html lang="ko" data-theme', html)
         self.assertIn("평가매뉴얼", html)
         self.assertIn("운영매뉴얼", html)
         self.assertIn("서식자료실", html)
