@@ -2268,3 +2268,7 @@ html.bk-open { overflow: hidden; }
   border-color: var(--gov-navy);
   background: var(--gov-tint-soft);
 }
+@media (max-width: 720px) {
+  .office-dl-grid { grid-template-columns: 1fr !important; }
+}
+

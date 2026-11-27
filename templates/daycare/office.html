@@ -20,11 +20,23 @@
           MS Word(<code>.docx</code>), Excel(<code>.xlsx</code>), PowerPoint(<code>.pptx</code>), PDF 문서를 광고·구독·저작권 단속 걱정 없이
           시설 내 모든 업무 PC에서 평생 무료로 사용할 수 있습니다.
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
-          <a class="btn btn-white" style="padding:10px 18px;font-size:0.86rem;" href="/office/download/setup?format=exe" target="_blank" rel="noopener noreferrer">
-            {{ 'Welfarego OFFICE Windows 설치파일 (.exe)' if has_custom_exe else '무료 오피스 Windows 64비트 한국어 설치하기' }}
-          </a>
-          <a class="btn btn-ghost-dark" style="padding:10px 16px;font-size:0.84rem;" href="/office/preview">모던 리본 UI 미리 체험하기</a>
+        <form id="officeDownloadForm" action="/office/download/setup" method="get" class="office-dl-form" novalidate style="margin-top:16px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.24);border-radius:8px;padding:12px;">
+          <input type="hidden" name="format" value="exe">
+          <div style="font-size:0.78rem;font-weight:700;color:#e0f2fe;margin-bottom:8px;">무료 배포 현황 확인을 위해 <strong>기관명</strong>과 <strong>사용인원</strong>을 입력하면 바로 다운로드됩니다.</div>
+          <div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,0.75fr) auto;gap:8px;align-items:center;" class="office-dl-grid">
+            <label class="sr-only" for="dlOrgName">기관명</label>
+            <input id="dlOrgName" name="org" type="text" class="gov-input" maxlength="60" placeholder="기관명 (예: 행복주·야간보호센터)" required style="min-height:40px;font-size:0.86rem;">
+            <label class="sr-only" for="dlUserCount">사용인원 (명)</label>
+            <input id="dlUserCount" name="users" type="number" min="1" max="500" class="gov-input" placeholder="사용인원(명)" required style="min-height:40px;font-size:0.86rem;">
+            <button type="submit" class="btn btn-white" style="min-height:40px;padding:0 16px;font-size:0.86rem;white-space:nowrap;">
+              설치파일 (.exe) 다운로드
+            </button>
+          </div>
+          <div id="dlFormError" role="alert" style="margin-top:7px;font-size:0.77rem;font-weight:700;color:#fde68a;{% if not dl_err %}display:none;{% endif %}">{{ dl_err }}</div>
+        </form>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <a class="btn btn-ghost-dark" style="padding:8px 14px;font-size:0.82rem;" href="/office/preview">모던 리본 UI 미리 체험하기</a>
+          <a class="btn btn-ghost-dark" style="padding:8px 14px;font-size:0.82rem;" href="#officeCertSection">정품 라이선스 확인서 발급 &darr;</a>
         </div>
         <p style="font-size:0.74rem;color:#bfdbfe;margin-top:10px;">
           {% if has_custom_exe %}
@@ -73,7 +85,7 @@
       <h2 style="font-size:0.96rem;color:var(--gov-navy-dark);">Windows 한국어 설치 파일</h2>
       <p style="font-size:0.78rem;color:var(--gov-slate-600);flex:1;line-height:1.6;">사회복지사·요양보호사·사무원 PC에 설치해 <code>.docx</code>, <code>.xlsx</code>, <code>.pptx</code> 문서를 바로 열고 PDF로 저장할 수 있습니다.</p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:6px;">
-        <a class="btn btn-sm btn-primary" href="/office/download/setup?format=exe" target="_blank" rel="noopener noreferrer">Windows 64비트 다운로드</a>
+        <a class="btn btn-sm btn-primary" href="#officeDownloadForm" id="btnFocusOfficeDl">기관명 입력 후 다운로드 &uarr;</a>
         <a class="btn btn-sm" href="{{ brand.release_notes_url }}" target="_blank" rel="noopener noreferrer">GitHub 릴리스</a>
       </div>
     </article>
@@ -100,29 +112,30 @@
   </section>
 
   <!-- 정품 라이선스 확인서 발급 -->
-  <section class="gov-card">
+  <section class="gov-card" id="officeCertSection">
     <div class="gov-card-head">
       <div>
-        <span class="tag tag-ok" style="margin-bottom:4px;">저작권 점검 · 지자체 지도점검 대비</span>
+        <span class="tag tag-ok" style="margin-bottom:4px;">저작권 점검 · 지자체 지도점검 대비 · 직인 날인</span>
         <h2>기관 비치용 「무료 오픈소스 오피스 정품 라이선스 확인서」 즉시 발급</h2>
-        <p class="gov-card-sub">소프트웨어 저작권 점검 공문에 대비해 MPL-2.0 오픈소스 라이선스 근거와 무제한 합법 사용 고지가 담긴 기관 비치용 확인서를 인쇄해 보관하세요.</p>
+        <p class="gov-card-sub">소프트웨어 저작권 점검 공문에 대비해 MPL-2.0 오픈소스 라이선스 근거와 웰페어고 공식 한자 직인(福祉高印)이 날인된 기관 비치용 확인서를 인쇄해 보관하세요.</p>
       </div>
     </div>
-    <form class="cert-grid" action="/office/license-certificate" method="get" target="_blank">
+    <form id="officeCertForm" class="cert-grid" action="/office/license-certificate" method="get" target="_blank" novalidate>
       <div class="field">
         <label for="certOrg">사회복지시설(기관)명</label>
-        <input id="certOrg" name="org" type="text" class="gov-input" maxlength="80" placeholder="예: 행복나눔 주·야간보호센터" required>
+        <input id="certOrg" name="org" type="text" class="gov-input" maxlength="60" placeholder="예: 행복나눔 주·야간보호센터" required>
       </div>
       <div class="field">
         <label for="certRep">시설장(대표자) 성명</label>
         <input id="certRep" name="rep" type="text" class="gov-input" maxlength="40" placeholder="예: 홍길동">
       </div>
       <div class="field">
-        <label for="certPcs">설치 PC 범위</label>
-        <input id="certPcs" name="pcs" type="text" class="gov-input" maxlength="20" value="기관 내 업무용 PC 전체">
+        <label for="certUsers">설치 인원 (명)</label>
+        <input id="certUsers" name="users" type="number" min="1" max="500" class="gov-input" placeholder="예: 12" value="10" required>
       </div>
       <button type="submit" class="btn btn-primary">확인서 발급 · 인쇄</button>
     </form>
+    <div id="certFormError" role="alert" style="margin-top:8px;font-size:0.8rem;font-weight:700;color:var(--gov-danger);{% if not cert_err %}display:none;{% endif %}">{{ cert_err }}</div>
   </section>
 
   <!-- 1분 설정 & FAQ -->
