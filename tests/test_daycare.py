@@ -219,7 +219,16 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("확인자 : Welfarego OFFICE 대표", cert_html)
         self.assertIn("福祉高印", cert_html)
         self.assertIn("MPL-2.0", cert_html)
+        self.assertIn("LGPLv3", cert_html)
+        self.assertIn("26.2.9", cert_html)
+        self.assertIn("LibreOffice 26.2.7", cert_html)
         self.assertRegex(cert_html, r"제\s*20\d{2}-\d{2,}\s*호")
+
+        office_page = self.client.get("/office")
+        self.assertEqual(office_page.status_code, 200)
+        office_html = office_page.get_data(as_text=True)
+        self.assertIn("https://download.documentfoundation.org/libreoffice/src/26.2.7/", office_html)
+        self.assertNotIn("MPL-2.0 Subset", office_html)
 
         from office_log import _scan_max_cert_seq, allocate_certificate_no
 
@@ -236,7 +245,7 @@ class DaycareAndOfficeTests(unittest.TestCase):
 
         setup = self.client.get("/office/download/setup?org=사랑돌봄센터&users=12")
         self.assertEqual(setup.status_code, 302)
-        self.assertIn("WelfaregoOFFICE_26.2.8_Setup_x64.exe", setup.location)
+        self.assertIn("WelfaregoOFFICE_26.2.9_Setup_x64.exe", setup.location)
 
         asset = self.client.get("/office/assets/writer_app.png")
         self.assertEqual(asset.status_code, 200)
@@ -249,6 +258,9 @@ class DaycareAndOfficeTests(unittest.TestCase):
         with zipfile.ZipFile(io.BytesIO(src.data)) as zf:
             names = zf.namelist()
             self.assertTrue(any(n.endswith("/LICENSE") for n in names))
+            self.assertTrue(any("legal/SOURCE-OFFER.md" in n for n in names))
+            self.assertTrue(any("legal/THIRD-PARTY-LICENSES.md" in n for n in names))
+            self.assertTrue(any("scripts/generate_branding.py" in n for n in names))
             self.assertTrue(any("0003-fluent-ribbon-rendering.patch" in n for n in names))
             self.assertTrue(any("extensions/welfarego-links/welfarego_links.py" in n for n in names))
 
@@ -266,13 +278,13 @@ class DaycareAndOfficeTests(unittest.TestCase):
             self.assertIn("icons/fees_26.png", oxt_names)
             desc_xml = zf.read("description.xml").decode("utf-8")
             self.assertIn("https://welfarego.co.kr/office/update.xml", desc_xml)
-            self.assertIn('value="26.2.8"', desc_xml)
+            self.assertIn('value="26.2.9"', desc_xml)
 
         upd = self.client.get("/office/update.xml")
         self.assertEqual(upd.status_code, 200)
         upd_root = ET.fromstring(upd.data)
         self.assertIn("kr.co.welfarego.office.links", upd.get_data(as_text=True))
-        self.assertIn('value="26.2.8"', upd.get_data(as_text=True))
+        self.assertIn('value="26.2.9"', upd.get_data(as_text=True))
         self.assertIn("/office/download/welfarego-links.oxt", upd.get_data(as_text=True))
         self.assertIsNotNone(upd_root)
 

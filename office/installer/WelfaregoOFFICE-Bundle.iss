@@ -1,12 +1,12 @@
 ; Welfarego OFFICE Bundle — Windows x64 One-Click Setup (.exe) Inno Setup 6 Script
-; Packages the official LibreOffice Windows x64 MSI (MPL-2.0) together with:
+; Packages the official LibreOffice 26.2.7 Windows x64 MSI (MPL-2.0 / LGPLv3) together with:
 ;   1. Portal-matched Welfarego OFFICE branding & #2151C8 house+heart icons
 ;   2. Dedicated Control Panel uninstaller ("Welfarego OFFICE", hiding inner MSI)
 ;   3. Modern Tabbed Ribbon UI (notebookbar.ui) + Sukapura SVG default preset
 ;   4. Welfarego Practical Shortcuts on Home tab & [★ 실무포털·서식] Ribbon tab (voluntary-click only)
 
 #ifndef AppVersion
-  #define AppVersion "26.2.8"
+  #define AppVersion "26.2.9"
 #endif
 
 #ifndef MsiFile
@@ -55,7 +55,7 @@ VersionInfoCompany=Welfarego
 VersionInfoProductName=Welfarego OFFICE
 VersionInfoProductVersion={#AppVersion}.0
 VersionInfoDescription=Welfarego OFFICE {#AppVersion} Windows x64 Setup (Modern Ribbon UI + Practical Shortcuts / MPL-2.0)
-VersionInfoCopyright=Derived from LibreOffice (MPL-2.0). Branding, preset & shortcuts by Welfarego.
+VersionInfoCopyright=Derived from LibreOffice 26.2.7 (MPL-2.0 / LGPLv3). Branding, preset & shortcuts by Welfarego (MPL-2.0).
 
 [Languages]
 Name: "korean"; MessagesFile: "Korean.isl"
@@ -95,6 +95,9 @@ Source: "..\branding\images\about.svg"; DestDir: "{tmp}\wg-payload\images"; Flag
 Source: "..\LICENSE"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
 Source: "..\NOTICE"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
 Source: "..\legal\PRIVACY.md"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
+Source: "..\legal\SOURCE-OFFER.md"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
+Source: "..\legal\THIRD-PARTY-LICENSES.md"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
+Source: "..\legal\INSTALLER-LICENSE-KO.txt"; DestDir: "{tmp}\wg-payload\legal"; Flags: deleteafterinstall
 
 [Run]
 #if DryRun == "0"

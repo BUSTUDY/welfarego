@@ -108,7 +108,8 @@ def _load_office_brand():
     except (OSError, ValueError):
         return {
             "product_name": "Welfarego OFFICE",
-            "package_version": "26.2.8",
+            "package_version": "26.2.9",
+            "upstream_engine_version": "26.2.7",
             "release_notes_url": "https://github.com/BUSTUDY/welfarego/releases",
         }
 
@@ -319,7 +320,7 @@ def download_forms_bundle():
     )
 
 
-OFFICE_APP_VERSION = "26.2.8"
+OFFICE_APP_VERSION = "26.2.9"
 DEFAULT_OFFICE_EXE_URL = (
     "https://github.com/BUSTUDY/welfarego/releases/download/"
     f"v{OFFICE_APP_VERSION}/WelfaregoOFFICE_{OFFICE_APP_VERSION}_Setup_x64.exe"
@@ -437,7 +438,17 @@ def download_office_setup():
 @lru_cache(maxsize=2)
 def _build_mpl2_source_zip(ver):
     buf = io.BytesIO()
-    include_roots = ["LICENSE", "NOTICE", "README.md", "legal", "patches", "config", "installer", "extensions"]
+    include_roots = [
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "legal",
+        "patches",
+        "config",
+        "installer",
+        "extensions",
+        "scripts",
+    ]
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
         for item in include_roots:
             p = OFFICE_DIR / item
@@ -445,7 +456,7 @@ def _build_mpl2_source_zip(ver):
                 zf.write(p, arcname=f"WelfaregoOFFICE_{ver}_MPL2/{item}")
             elif p.is_dir():
                 for sub in sorted(p.rglob("*")):
-                    if sub.is_file() and "__pycache__" not in sub.parts:
+                    if sub.is_file() and "__pycache__" not in sub.parts and sub.suffix != ".pyc":
                         rel = sub.relative_to(OFFICE_DIR)
                         zf.write(sub, arcname=f"WelfaregoOFFICE_{ver}_MPL2/{rel.as_posix()}")
     return buf.getvalue()

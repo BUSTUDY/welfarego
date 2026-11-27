@@ -1,41 +1,58 @@
-Welfarego OFFICE — 오픈소스 라이선스 및 상표 고지 (MPL-2.0)
+Welfarego OFFICE — 오픈소스 라이선스 · 소스코드 공개 및 상표 고지
 ====================================================================
 
 Welfarego OFFICE를 선택해 주셔서 감사합니다.
 
-1. 라이선스 (Mozilla Public License Version 2.0)
-   - 본 소프트웨어는 오픈소스 LibreOffice(libreoffice-26.2.7.3)의 순수 MPL-2.0
-     서브셋(--enable-mpl-subset)을 기반으로 제작되었으며,
-     Mozilla Public License Version 2.0 (MPL-2.0) 조건에 따라 제공됩니다.
-   - 개인, 기업, 공공기관, 상업적 업무 환경에서 자유롭게 설치 및 사용할 수 있습니다.
-   - 전체 라이선스 전문(LICENSE)과 서드파티 고지(NOTICE, THIRD-PARTY-LICENSES.md)는
-     설치 폴더 내 legal 디렉터리에서 언제든 확인하실 수 있습니다.
+1. 라이선스 (Mozilla Public License Version 2.0 / LGPLv3 등)
+   - 본 통합 설치본은 The Document Foundation이 공개한 공식 LibreOffice
+     26.2.7 Windows 64비트 오픈소스 엔진(MPL-2.0 및 포함된 LGPLv3·
+     Apache-2.0·MIT 서드파티 구성요소)을 기반으로, 웰페어고가 자체 제작한
+     브랜딩·한국어 리본 설정·실무 바로가기 확장기능(MPL-2.0)을 결합해
+     배포합니다.
+   - 개인, 영리·비영리 사회복지시설, 장기요양기관, 기업, 공공기관 어디서나
+     PC 대수 제한 없이 합법적으로 평생 무료 설치·사용할 수 있습니다.
+   - 라이선스 전문(LICENSE)과 서드파티 고지(NOTICE, THIRD-PARTY-LICENSES.md),
+     소스코드 제공 안내(SOURCE-OFFER.md)는 설치 폴더 내 welfarego-legal
+     디렉터리에서 언제든 확인하실 수 있습니다.
 
-2. 수정 소스코드 공개 안내 (MPL-2.0 제3.2조)
-   - Welfarego OFFICE에서 수정된 모든 MPL-2.0 대상 파일의 패치 및 빌드 스크립트는
-     아래 공식 저장소와 릴리스 아카이브를 통해 공개됩니다.
+2. 소스코드 공개 안내 (MPL-2.0 제3.2조 · LGPLv3 제4조 준수)
+   - 웰페어고 수정·구성 소스코드 전체 (설치 스크립트, 리본 UI·한국어 설정,
+     확장기능, C++ 패치 및 빌드 스크립트):
      https://github.com/BUSTUDY/welfarego
+     https://welfarego.co.kr/office/download/mpl2-source.zip
+     (각 GitHub 릴리스 페이지에도 WelfaregoOFFICE_<버전>_Source.zip 동봉)
+   - 상위 원본 LibreOffice 26.2.7 전체 소스코드:
+     https://download.documentfoundation.org/libreoffice/src/26.2.7/
+     https://git.libreoffice.org/core
 
 3. 상표 고지
    - "LibreOffice" 및 "The Document Foundation"은 The Document Foundation(TDF)의
      등록상표입니다. Welfarego OFFICE는 독립적인 파생 배포판이며
      The Document Foundation과 제휴하거나 공식 보증을 받지 않았습니다.
 
-4. 개인정보 보호
+4. 개인정보 보호 및 자발적 클릭 원칙
    - Welfarego OFFICE는 오프라인 우선 데스크톱 오피스로 동작하며,
-     외부 서버로의 사용 통계 수집, 광고, 외부 크래시 리포트 전송을 수행하지 않습니다.
+     외부 서버로의 사용 통계 수집이나 자동 팝업을 일절 수행하지 않습니다.
+   - 상단 [★ 실무포털·서식] 바로가기 버튼은 사용자가 직접 클릭했을 때만
+     PC의 기본 웹브라우저로 웰페어고 실무 포털을 엽니다.
 
 ====================================================================
-Welfarego OFFICE — Open Source License Notice (MPL-2.0)
+Welfarego OFFICE — Open Source License & Source Code Notice
 ====================================================================
 
-Welfarego OFFICE is derived from the open-source LibreOffice codebase
-(tag: libreoffice-26.2.7.3, built with --enable-mpl-subset) and is
-distributed under the Mozilla Public License Version 2.0 (MPL-2.0).
+Welfarego OFFICE packages the official LibreOffice 26.2.7 Windows x64
+open-source engine (MPL-2.0, including its LGPLv3/Apache-2.0/MIT third-party
+components) together with original Welfarego branding, Korean Ribbon UI
+configuration, and voluntary-click shortcut extensions under MPL-2.0.
 
-Source code for all modifications to MPL-2.0 covered files is available at:
-  https://github.com/BUSTUDY/welfarego
+Corresponding source code is publicly available at:
+  - Welfarego modifications & scripts:
+      https://github.com/BUSTUDY/welfarego
+      https://welfarego.co.kr/office/download/mpl2-source.zip
+  - Unmodified upstream LibreOffice 26.2.7 source archive:
+      https://download.documentfoundation.org/libreoffice/src/26.2.7/
+      https://git.libreoffice.org/core
 
 "LibreOffice" and "The Document Foundation" are registered trademarks of
-The Document Foundation. Welfarego OFFICE is an independent derivative
+The Document Foundation (TDF). Welfarego OFFICE is an independent derivative
 distribution and is neither endorsed by nor affiliated with TDF.
