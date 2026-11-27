@@ -1562,3 +1562,533 @@ html[data-theme="dark"] .theme-btn .i-moon { display: none; }
   body.print-checklist .chk-docs-list { grid-template-columns: 1fr !important; }
 }
 
+/* =========================================================
+   실무 자동화 도구 (/tools) & 메인 도구 쇼케이스
+   ========================================================= */
+.home-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 6px;
+}
+.tool-mini-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--gov-paper);
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+  min-width: 0;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.tool-mini-card:hover {
+  border-color: var(--gov-navy);
+  background: var(--bg-tint);
+}
+.tool-mini-card strong {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--gov-navy-dark);
+  line-height: 1.35;
+}
+.tool-mini-card p {
+  font-size: 0.83rem;
+  color: var(--gov-slate-600);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.tools-privacy-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--gov-ok-soft);
+  border: 1px solid var(--gov-ok-line);
+  border-radius: 6px;
+}
+.tools-privacy-note {
+  flex: 1 1 320px;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: var(--gov-ink);
+  line-height: 1.5;
+}
+.tools-privacy-note strong {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: var(--gov-ok);
+  color: #fff;
+  font-size: 0.75rem;
+}
+.tools-org-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
+  gap: 8px;
+  flex: 1 1 340px;
+  min-width: 0;
+}
+.tools-org-inputs .gov-input {
+  min-height: 38px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+}
+
+/* Tab 1: 월 기준근무시간 카드 그리드 & 직원 테이블 */
+.work-month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.wt-month-card {
+  text-align: left;
+  padding: 12px 13px;
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+  background: var(--gov-paper);
+  cursor: pointer;
+  min-width: 0;
+  transition: border-color 0.14s ease, background-color 0.14s ease;
+}
+.wt-month-card:hover {
+  border-color: var(--gov-navy);
+  background: var(--bg-tint);
+}
+.wt-month-card.active {
+  border: 2px solid var(--gov-navy);
+  background: var(--gov-tint-soft);
+}
+.wt-m-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.wt-m-top strong { font-size: 0.85rem; color: var(--gov-navy-dark); font-weight: 800; }
+.wt-m-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--gov-warn-soft);
+  color: var(--gov-warn-text);
+  border: 1px solid var(--gov-warn-line);
+  white-space: nowrap;
+}
+.wt-m-hrs {
+  font-size: 0.85rem;
+  color: var(--gov-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.wt-m-hrs em {
+  font-style: normal;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gov-navy);
+}
+.wt-m-hrs small { font-size: 0.76rem; color: var(--gov-slate-500); font-weight: 500; }
+.wt-m-sub {
+  margin-top: 4px;
+  font-size: 0.73rem;
+  color: var(--gov-slate-600);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wt-ctrl-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: 6px;
+}
+.wt-holiday-pill {
+  font-size: 0.81rem;
+  color: var(--gov-ink);
+  background: var(--gov-paper);
+  border: 1px solid var(--gov-line);
+  border-radius: 5px;
+  padding: 9px 12px;
+  line-height: 1.45;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.wt-staff-table td {
+  vertical-align: middle;
+  padding: 8px 9px;
+}
+.sh-stop-table th, .sh-stop-table td {
+  vertical-align: middle;
+  padding: 7px 6px;
+}
+.sh-stop-table .tbl-in {
+  padding: 4px 6px;
+  font-size: 0.81rem;
+}
+.tbl-in {
+  width: 100%;
+  min-height: 36px;
+  padding: 5px 8px;
+  font-size: 0.84rem;
+  border: 1px solid var(--gov-border-strong);
+  border-radius: 4px;
+  background: var(--gov-paper);
+  color: var(--gov-ink);
+}
+.tbl-in.num-in {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tab 2: 상태변화·상담 육하원칙 문구 생성기 */
+.gov-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.68;
+  border: 1px solid var(--gov-border-strong);
+  border-radius: 6px;
+  background: var(--gov-paper);
+  color: var(--gov-ink);
+  resize: vertical;
+}
+.gov-textarea:focus {
+  outline: 2px solid var(--gov-navy);
+  outline-offset: -1px;
+  border-color: var(--gov-navy);
+}
+.rec-cat-box {
+  padding: 10px 12px;
+  background: var(--gov-paper);
+  border: 1px solid var(--gov-line);
+  border-radius: 6px;
+}
+.rec-cat-title {
+  font-size: 0.79rem;
+  font-weight: 800;
+  color: var(--gov-navy-dark);
+  margin-bottom: 7px;
+}
+.rec-chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rec-chip {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid var(--gov-border-strong);
+  background: var(--gov-surface);
+  color: var(--gov-slate-700);
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.35;
+}
+.rec-chip:hover { border-color: var(--gov-navy); }
+.rec-chip.on {
+  background: var(--gov-navy);
+  border-color: var(--gov-navy);
+  color: #ffffff;
+  font-weight: 700;
+}
+html[data-theme="dark"] .rec-chip.on { color: #0b1020; }
+
+.rec-saved-box {
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gov-tint-line);
+}
+.rec-saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.rec-saved-item {
+  padding: 10px 12px;
+  background: var(--gov-paper);
+  border: 1px solid var(--gov-line);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+.rec-saved-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.74rem;
+  color: var(--gov-slate-500);
+  font-weight: 700;
+}
+
+/* Tab 3: 달력형 월간 이용일정 & 안내문 */
+.cal-preset-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.cal-legend {
+  margin-left: auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.77rem;
+  font-weight: 700;
+  color: var(--gov-slate-700);
+}
+.lg-box {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+.lg-use { background: var(--gov-tint); border: 1px solid var(--gov-navy); }
+.lg-hol { background: var(--gov-ok-soft); border: 1px solid var(--gov-ok); }
+.lg-un { background: var(--gov-warn-soft); border: 1px solid var(--gov-warn); }
+
+.cal-split-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  gap: 18px;
+  align-items: start;
+}
+.cal-split-layout > * { min-width: 0; }
+
+.month-cal-wrap {
+  border: 1px solid var(--gov-border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--gov-paper);
+}
+.month-cal-dow {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--gov-border);
+}
+.month-cal-dow span {
+  padding: 8px 2px;
+  text-align: center;
+  font-size: 0.79rem;
+  font-weight: 800;
+  color: var(--gov-ink);
+}
+.month-cal-dow span.sun { color: var(--gov-danger); }
+.month-cal-dow span.sat { color: var(--gov-navy); }
+
+.month-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.cal-cell {
+  min-height: 74px;
+  padding: 6px 6px 5px;
+  border-right: 1px solid var(--gov-line);
+  border-bottom: 1px solid var(--gov-line);
+  background: var(--gov-paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+  overflow: hidden;
+  transition: background-color 0.12s ease;
+}
+.cal-cell:nth-child(7n) { border-right: 0; }
+.cal-cell.is-empty {
+  background: var(--gov-surface);
+  cursor: default;
+}
+.cal-cell:not(.is-empty):hover { background: var(--bg-tint); }
+.cal-cell.st-use {
+  background: var(--gov-tint-soft);
+  box-shadow: inset 0 0 0 1.5px var(--gov-navy);
+}
+.cal-cell.st-hol {
+  background: var(--gov-ok-soft);
+  box-shadow: inset 0 0 0 1.5px var(--gov-ok);
+}
+.cal-cell.st-unused {
+  background: var(--gov-warn-soft);
+  box-shadow: inset 0 0 0 1.5px var(--gov-warn);
+}
+.cal-day-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px;
+  min-width: 0;
+}
+.cal-day-num {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--gov-ink);
+  font-variant-numeric: tabular-nums;
+}
+.cal-day-num.sun, .cal-day-num.hol { color: var(--gov-danger); }
+.cal-day-num.sat { color: var(--gov-navy); }
+.cal-hol-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--gov-danger);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-hol-lbl.labor { color: var(--gov-warn-text); }
+.cal-st-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.69rem;
+  font-weight: 800;
+  line-height: 1.25;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-st-badge.b-use { background: var(--gov-navy); color: #fff; }
+.cal-st-badge.b-hol { background: var(--gov-ok); color: #fff; }
+.cal-st-badge.b-un { background: var(--gov-warn); color: #fff; }
+html[data-theme="dark"] .cal-st-badge.b-use { color: #0b1020; }
+
+/* Tab 4: 송영 배차표 안전수칙 */
+.sh-safety-box {
+  padding: 12px 14px;
+  background: var(--gov-tint-soft);
+  border: 1px solid var(--gov-tint-line);
+  border-radius: 6px;
+}
+.sh-safety-checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 14px;
+}
+.sh-safety-checks label {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--gov-ink);
+  cursor: pointer;
+  line-height: 1.45;
+}
+.sh-safety-checks input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--gov-navy);
+  flex: none;
+}
+
+.print-only-header,
+.print-sign-box {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .work-month-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cal-split-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 780px) {
+  .home-tools-grid { grid-template-columns: 1fr; }
+  .tools-org-inputs { grid-template-columns: 1fr; }
+  .sh-safety-checks { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .work-month-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .wt-month-card { padding: 10px; }
+  .cal-legend { margin-left: 0; width: 100%; }
+  .cal-cell { min-height: 58px; padding: 4px 3px; }
+  .cal-day-num { font-size: 0.76rem; }
+  .cal-hol-lbl { font-size: 0.58rem; }
+  .cal-st-badge { font-size: 0.6rem; padding: 1px 3px; }
+}
+
+@media print {
+  body.print-tool-worktime .print-only-header,
+  body.print-tool-calendar .print-only-header,
+  body.print-tool-shuttle .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #111827;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  body.print-tool-worktime .print-only-header h1,
+  body.print-tool-calendar .print-only-header h1,
+  body.print-tool-shuttle .print-only-header h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827 !important;
+  }
+  body.print-tool-worktime .print-only-header p,
+  body.print-tool-calendar .print-only-header p,
+  body.print-tool-shuttle .print-only-header p {
+    font-size: 0.82rem;
+    color: #374151 !important;
+    margin-top: 4px;
+  }
+  body.print-tool-shuttle .print-sign-box {
+    display: flex !important;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 22px;
+    padding-top: 12px;
+    border-top: 1px solid #9ca3af;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  body.print-tool-worktime .gov-table-wrap,
+  body.print-tool-shuttle .gov-table-wrap {
+    overflow: visible !important;
+  }
+  body.print-tool-worktime .tbl-in,
+  body.print-tool-shuttle .tbl-in,
+  body.print-tool-calendar .gov-input {
+    border: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    color: #111827 !important;
+  }
+  body.print-tool-calendar .cal-split-layout {
+    grid-template-columns: 1.15fr 0.85fr !important;
+    gap: 14px !important;
+  }
+  body.print-tool-calendar .cal-cell {
+    min-height: 56px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+

@@ -63,6 +63,7 @@ def sitemap():
         ("/", "1.0", "weekly"),
         ("/evaluation", "0.9", "weekly"),
         ("/operations", "0.9", "weekly"),
+        ("/tools", "0.9", "weekly"),
         ("/forms", "0.9", "weekly"),
         ("/office", "0.8", "monthly"),
         ("/about", "0.4", "monthly"),

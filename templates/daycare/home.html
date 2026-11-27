@@ -17,9 +17,10 @@
       <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
     </form>
     <p class="hot-words"><b>자주 찾는 검색어</b>
+      <a href="/tools#worktime">월기준근무시간</a>
+      <a href="/tools#record">상태변화기록</a>
+      <a href="/tools#calendar">미이용일계산</a>
       <a href="/evaluation?q=낙상">낙상</a>
-      <a href="/evaluation?q=욕창">욕창</a>
-      <a href="/evaluation?q=인권">인권교육</a>
       <a href="/forms?q=급여제공계획서">급여제공계획서</a>
       <a href="/forms?q=위험도">위험도평가</a>
     </p>
@@ -35,9 +36,9 @@
       <div><small>2026 정기평가 개편</small><strong>48개 → 36개 지표,<br>A등급 기준이 달라졌어요</strong><span class="more">개편 내용 보기 ›</span></div>
       <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg>
     </a>
-    <a class="banner banner-b" href="/operations#fees">
-      <div><small>보건복지부 고시 제2026-189호</small><strong>10월 1일부터 적용되는<br>수가·본인부담금 확인</strong><span class="more">수가표 보기 ›</span></div>
-      <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg>
+    <a class="banner banner-b" href="/tools">
+      <div><small>내 PC 자동저장 · 가입불필요</small><strong>기준근무시간 · 상태변화문구<br>이용달력 · 송영배차 자동화</strong><span class="more">실무 자동화 열기 ›</span></div>
+      <svg class="art" viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-tools"/></svg>
     </a>
     <a class="banner banner-c" href="/forms">
       <div><small>기관명 자동 기입</small><strong>평가 필수서식 20종<br>한 번에 내려받기</strong><span class="more">서식자료실 가기 ›</span></div>
@@ -50,10 +51,40 @@
     <div class="quick-grid">
       <a class="quick-item" href="/evaluation#checklist"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-eval"/></svg><span>지표 자가점검표<em>36개 준비체크</em></span></a>
       <a class="quick-item" href="/operations#staffing"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-ops"/></svg><span>인력·가산<br>시뮬레이터<em>의무배치·가산금</em></span></a>
-      <a class="quick-item" href="/evaluation#simulator"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-sim"/></svg><span>모의 자가진단<em>A등급 계산</em></span></a>
-      <a class="quick-item" href="/operations#fees"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-calc"/></svg><span>본인부담금<br>계산기<em>월 한도액</em></span></a>
+      <a class="quick-item" href="/tools"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-tools"/></svg><span>실무 자동화<em>근무표·기록·달력·송영</em></span></a>
+      <a class="quick-item" href="/operations#fees"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-calc"/></svg><span>본인부담금<br>계산기<em>수가·월 한도액</em></span></a>
       <a class="quick-item" href="/forms"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-forms"/></svg><span>서식자료실<em>표준서식 20종</em></span></a>
       <a class="quick-item" href="/office"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#ic-office"/></svg><span>무료 오피스<em>MPL-2.0 배포</em></span></a>
+    </div>
+  </section>
+
+  <section class="board" aria-labelledby="toolsHubTitle">
+    <div class="board-head">
+      <h2 id="toolsHubTitle">현장 실무 자동화 도구 (엑셀 대신 브라우저에서 바로 작성·인쇄)</h2>
+      <a class="more-link" href="/tools">실무 자동화 전체 ›</a>
+    </div>
+    <p class="board-sub">회원가입이나 서버 저장 없이 모든 입력 내용이 내 PC·태블릿 브라우저에만 자동 저장되며 개인정보 유출 걱정이 없습니다.</p>
+    <div class="home-tools-grid">
+      <a class="tool-mini-card" href="/tools#worktime">
+        <span class="tag tag-solid">고시 제49조·제51조</span>
+        <strong>① 2026 월 기준근무시간 · 인력인정 계산기</strong>
+        <p>제헌절 복원(7월 176h)·대체공휴일 반영 1~12월 기준시간 및 시간제·연차 합산 시 감액·가산 인정 인원을 즉시 판정합니다.</p>
+      </a>
+      <a class="tool-mini-card" href="/tools#record">
+        <span class="tag tag-navy">평가지표 17 · 27 · 34</span>
+        <strong>② 상태변화 · 상담 육하원칙 문구 생성기</strong>
+        <p>‘잘 지내심’ 같은 단순 기록 감점을 막기 위해 신체·식사·인지·조치 키워드만 고르면 육하원칙 기록 문장을 자동 조합합니다.</p>
+      </a>
+      <a class="tool-mini-card" href="/tools#calendar">
+        <span class="tag tag-ok">고시 제13조·제32조·제33조</span>
+        <strong>③ 월간 이용달력 · 미이용일 · 부담금 안내문</strong>
+        <p>2026년 달력에서 이용일·토/공휴일(+30%)·미이용일(50%)을 클릭하면 보호자 교부용 A4 본인부담금 안내문이 바로 인쇄됩니다.</p>
+      </a>
+      <a class="tool-mini-card" href="/tools#shuttle">
+        <span class="tag tag-warn">평가지표 28 · 송영시간 산입</span>
+        <strong>④ 차량 송영(등·하원) 노선 · 승하차 배차표</strong>
+        <p>호차별 등·하원 승하차 시각 입력 시 급여산입 시간(라-1~라-5)을 자동 계산하고 4대 안전수칙 포함 A4 운행일지를 출력합니다.</p>
+      </a>
     </div>
   </section>
 

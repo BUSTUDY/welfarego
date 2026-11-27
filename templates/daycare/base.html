@@ -60,6 +60,7 @@
         <a href="{{ item.path }}" class="{{ 'is-active' if active == item.key else '' }}"{% if active == item.key %} aria-current="page"{% endif %}>
           {% if item.key == 'evaluation' %}평가매뉴얼
           {% elif item.key == 'operations' %}운영매뉴얼
+          {% elif item.key == 'tools' %}실무 자동화
           {% elif item.key == 'forms' %}서식자료실
           {% elif item.key == 'office' %}무료 오피스
           {% else %}{{ item.label }}{% endif %}
@@ -83,14 +84,16 @@
         <a class="pill-btn" href="/evaluation#simulator">자가진단</a>
       </div>
       <div class="drawer-pills">
+        <a class="pill-btn" href="/tools">실무 자동화</a>
         <a class="pill-btn" href="/forms">서식 받기</a>
-        <a class="pill-btn" href="/operations#fees">수가·본인부담금 계산</a>
+        <a class="pill-btn" href="/operations#fees">수가 계산</a>
       </div>
     </div>
     <div class="drawer-body">
       <div class="drawer-main" role="tablist" aria-label="대분류">
         <button type="button" class="is-on" data-dmenu="eval">평가매뉴얼</button>
         <button type="button" data-dmenu="ops">운영매뉴얼</button>
+        <button type="button" data-dmenu="tools">실무 자동화</button>
         <button type="button" data-dmenu="forms">서식자료실</button>
         <button type="button" data-dmenu="office">무료 오피스</button>
         <button type="button" data-dmenu="about">포털 안내</button>
@@ -115,6 +118,15 @@
             <li><a href="/operations#sop">운영 SOP·개정고시</a></li>
             <li><a href="/operations#training">법정·평가 필수교육</a></li>
             <li><a href="/operations#audit">현지조사 환수 예방</a></li>
+          </ul>
+        </div>
+        <div class="drawer-sub" data-dpanel="tools" hidden>
+          <h3>실무 자동화 도구</h3>
+          <ul>
+            <li><a href="/tools#worktime">2026 월 기준시간·근무표 인력인정</a></li>
+            <li><a href="/tools#record">상태변화·상담 육하원칙 문구 생성기</a></li>
+            <li><a href="/tools#calendar">월간 이용달력·미이용일·안내문 출력</a></li>
+            <li><a href="/tools#shuttle">차량 송영(등·하원) 노선·배차 일지</a></li>
           </ul>
         </div>
         <div class="drawer-sub" data-dpanel="forms" hidden>
@@ -163,6 +175,7 @@
         <nav class="gov-footer-links" aria-label="하단 바로가기">
           <a href="/evaluation">평가매뉴얼</a>
           <a href="/operations">운영매뉴얼</a>
+          <a href="/tools">실무 자동화</a>
           <a href="/forms">서식자료실</a>
           <a href="/office">무료 오피스</a>
           <a href="/about">출처·개인정보</a>

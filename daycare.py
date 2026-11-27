@@ -26,9 +26,11 @@ from daycare_data import (
     AUDIT_CASES_2026,
     DEMENTIA_FEES_2026,
     GENERAL_FEES_2026,
+    HOLIDAYS_2026_MAP,
     LABOR_RATIOS_2026,
     LONG_TERM_ALLOWANCE_2026,
     MONTHLY_LIMITS_2026,
+    MONTHLY_WORK_HOURS_2026,
     OPS_CHAPTERS_2026,
     TRAINING_MATRIX_2026,
     load_eval_bundle,
@@ -111,6 +113,7 @@ def portal_globals():
             {"key": "home", "path": "/", "label": "포털 메인"},
             {"key": "evaluation", "path": "/evaluation", "label": "주·야간보호 평가매뉴얼 (36)"},
             {"key": "operations", "path": "/operations", "label": "주·야간보호 운영매뉴얼 (2026)"},
+            {"key": "tools", "path": "/tools", "label": "실무 자동화 도구"},
             {"key": "forms", "path": "/forms", "label": "최신 서식자료실 (20종)"},
             {"key": "office", "path": "/office", "label": "무료 오피스 다운로드"},
         ],
@@ -184,6 +187,22 @@ def operations():
         training_matrix=TRAINING_MATRIX_2026,
         ops_chapters=OPS_CHAPTERS_2026,
         audit_cases=AUDIT_CASES_2026,
+    )
+
+
+@daycare_bp.route("/tools")
+def practical_tools():
+    today = korea_today()
+    return render_template(
+        "daycare/tools.html",
+        active="tools",
+        page_crumb_name="주·야간보호 실무 자동화 도구",
+        default_month=today.month,
+        monthly_work_hours=MONTHLY_WORK_HOURS_2026,
+        holidays_map=HOLIDAYS_2026_MAP,
+        monthly_limits=MONTHLY_LIMITS_2026,
+        general_fees=GENERAL_FEES_2026,
+        dementia_fees=DEMENTIA_FEES_2026,
     )
 
 
