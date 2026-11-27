@@ -213,6 +213,21 @@ class DaycareAndOfficeTests(unittest.TestCase):
             for req in ("META-INF/manifest.xml", "Addons.xcu", "ProtocolHandler.xcu", "welfarego_links.py", "LICENSE.txt"):
                 self.assertIn(req, oxt_names)
             self.assertFalse(any("Jobs.xcu" in n for n in oxt_names))
+            desc_xml = zf.read("description.xml").decode("utf-8")
+            self.assertIn("https://welfarego.co.kr/office/update.xml", desc_xml)
+
+        upd = self.client.get("/office/update.xml")
+        self.assertEqual(upd.status_code, 200)
+        upd_root = ET.fromstring(upd.data)
+        self.assertIn("kr.co.welfarego.office.links", upd.get_data(as_text=True))
+        self.assertIn("/office/download/welfarego-links.oxt", upd.get_data(as_text=True))
+        self.assertIsNotNone(upd_root)
+
+        from pathlib import Path
+        xcd_path = Path(__file__).resolve().parent.parent / "office" / "config" / "welfarego-defaults.xcd"
+        xcd_text = xcd_path.read_text(encoding="utf-8")
+        ET.fromstring(xcd_text)
+        self.assertIn("<value>Tabbed</value>", xcd_text)
 
         expected_go = {
             "forms": "/forms",
