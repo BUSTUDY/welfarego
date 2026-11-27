@@ -280,7 +280,9 @@ class DaycareAndOfficeTests(unittest.TestCase):
         ET.fromstring(xcd_text)
         self.assertIn("<value>notebookbar.ui</value>", xcd_text)
         self.assertIn("<value>sukapura_svg</value>", xcd_text)
-        self.assertIn("<value>Welfarego OFFICE</value>", xcd_text)
+        self.assertIn("<value>Welfarego Office</value>", xcd_text)
+        self.assertIn("<value>Presentation</value>", xcd_text)
+        self.assertIn("<value>Spreadsheet</value>", xcd_text)
 
         expected_go = {
             "forms": "/forms",
