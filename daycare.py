@@ -45,6 +45,12 @@ from daycare_forms import (
     build_form_hwpx,
     build_form_xlsx,
 )
+from office_log import (
+    record_license_certificate,
+    record_office_download,
+    validate_org_name,
+    validate_user_count,
+)
 
 daycare_bp = Blueprint("daycare", __name__)
 
@@ -330,6 +336,8 @@ def free_office():
         brand=brand,
         has_custom_exe=bool(custom_exe_url),
         has_custom_msi=bool(custom_msi_url),
+        dl_err=(request.args.get("dl_err") or "").strip()[:120],
+        cert_err=(request.args.get("cert_err") or "").strip()[:120],
     )
 
 
@@ -354,21 +362,60 @@ def free_office_preview():
 @daycare_bp.route("/office/license-certificate")
 def office_license_certificate():
     brand = _load_office_brand()
-    org = (request.args.get("org") or "").strip()[:80] or "○○사회복지시설 (주·야간보호센터)"
+    ok_org, org_res = validate_org_name(request.args.get("org"))
+    if not ok_org:
+        return redirect(f"/office?cert_err={quote(org_res)}#officeCertSection")
+
+    raw_users = request.args.get("users")
+    if raw_users is None and request.args.get("pcs"):
+        raw_users = request.args.get("pcs")
+    ok_users, users_res = validate_user_count(raw_users)
+    if not ok_users:
+        return redirect(f"/office?cert_err={quote(str(users_res))}#officeCertSection")
+
     rep = (request.args.get("rep") or "").strip()[:40] or "시설장"
-    pcs = (request.args.get("pcs") or "").strip()[:20] or "시설 내 업무용 PC 전체"
+    user_count = int(users_res)
+
+    if not current_app.config.get("TESTING"):
+        record_license_certificate(
+            org_name=org_res,
+            rep_name=rep,
+            user_count=user_count,
+            version=brand.get("package_version", "26.2.7"),
+        )
+
     return render_template(
         "daycare/office_certificate.html",
         brand=brand,
-        org_name=org,
+        org_name=org_res,
         rep_name=rep,
-        pc_scope=pcs,
+        user_count=user_count,
     )
 
 
 @daycare_bp.route("/office/download/setup")
 def download_office_setup():
-    target_kind = request.args.get("format", "exe")
+    ok_org, org_res = validate_org_name(request.args.get("org"))
+    if not ok_org:
+        return redirect(f"/office?dl_err={quote(org_res)}#officeDownloadForm")
+
+    ok_users, users_res = validate_user_count(request.args.get("users"))
+    if not ok_users:
+        return redirect(f"/office?dl_err={quote(str(users_res))}#officeDownloadForm")
+
+    brand = _load_office_brand()
+    target_kind = (request.args.get("format") or "exe").strip().lower()
+    if target_kind not in ("exe", "msi"):
+        target_kind = "exe"
+
+    if not current_app.config.get("TESTING"):
+        record_office_download(
+            org_name=org_res,
+            user_count=int(users_res),
+            version=brand.get("package_version", "26.2.7"),
+            fmt=target_kind,
+        )
+
     if target_kind == "msi":
         custom = os.environ.get("WELFAREGO_OFFICE_MSI_URL", "").strip()
         if custom.startswith(("https://", "http://")):

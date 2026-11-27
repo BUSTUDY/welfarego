@@ -3480,10 +3480,128 @@
     window.addEventListener('hashchange', applyToolsHash);
   }
 
+  /* =========================================================
+     5. OFFICE DOWNLOAD & LICENSE CERTIFICATE VALIDATION (/office)
+     ========================================================= */
+  function initOfficeForms() {
+    const dlForm = document.getElementById('officeDownloadForm');
+    const certForm = document.getElementById('officeCertForm');
+    if (!dlForm && !certForm) return;
+
+    const DUMMY_WORDS = new Set([
+      '테스트', '테스트기관', '테스트센터', '아무거나', '없음', '모름', '미입력',
+      '기관명', '센터명', '시설명', '샘플', '샘플기관', '샘플센터', '임시',
+      '임시기관', '가나다', '가나다라', '홍길동', '관리자', '사용자', '기본값',
+      '주야간', '복지관', '요양원',
+    ]);
+    const ASCII_MASH_RE = /(asdf|qwer|zxcv|hjkl|yuio|abcd|1234|test|admin|sample|dummy)/i;
+    const ALLOWED_RE = /^[가-힣A-Za-z0-9\s·ㆍ\-\(\)&.,/]+$/;
+
+    function validateOrg(raw) {
+      const cleaned = String(raw || '').trim().replace(/\s+/g, ' ');
+      if (!cleaned) return { ok: false, msg: '기관명을 입력해 주세요. (예: 행복주·야간보호센터)' };
+      const compact = cleaned.replace(/\s+/g, '');
+      if (compact.length < 3) return { ok: false, msg: '기관명은 공백 제외 3글자 이상 정확히 입력해 주세요.' };
+      if (cleaned.length > 60) return { ok: false, msg: '기관명은 60자 이내로 입력해 주세요.' };
+      if (/[ㄱ-ㅎㅏ-ㅣ]/.test(cleaned)) return { ok: false, msg: '자음·모음 나열(예: ㅁㄴㅇㄹ, ㅋㅋㅋ)은 사용할 수 없습니다.' };
+      if (!ALLOWED_RE.test(cleaned)) return { ok: false, msg: '기관명에 사용할 수 없는 특수문자가 포함되어 있습니다.' };
+      if (/(.)\1\1/.test(compact)) return { ok: false, msg: '같은 글자가 3회 이상 반복된 기관명은 사용할 수 없습니다.' };
+      const hangul = cleaned.match(/[가-힣]/g) || [];
+      if (hangul.length < 2) return { ok: false, msg: '영문·숫자 나열 대신 실제 한글 기관명(한글 2글자 이상)을 입력해 주세요.' };
+      if (new Set(hangul).size < 2) return { ok: false, msg: '의미 없는 반복 한글 대신 실제 기관명을 입력해 주세요.' };
+      const low = compact.toLowerCase();
+      if (DUMMY_WORDS.has(low) || ASCII_MASH_RE.test(low)) {
+        return { ok: false, msg: '테스트·임시 문구 대신 실제 사용하시는 기관명을 입력해 주세요.' };
+      }
+      return { ok: true, value: cleaned };
+    }
+
+    function validateUsers(raw) {
+      const s = String(raw || '').trim();
+      const m = /^(\d{1,4})\s*(?:명|대|인)?$/.exec(s);
+      if (!m) return { ok: false, msg: '사용(설치) 인원은 1 이상 숫자로 입력해 주세요. (예: 12)' };
+      const n = Number(m[1]);
+      if (n < 1 || n > 500) return { ok: false, msg: '사용(설치) 인원은 1명 이상 500명 이하로 입력해 주세요.' };
+      return { ok: true, value: String(n) };
+    }
+
+    function prefillSavedOrg() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '{}');
+        if (saved.org) {
+          const dlOrg = document.getElementById('dlOrgName');
+          const certOrg = document.getElementById('certOrg');
+          if (dlOrg && !dlOrg.value) dlOrg.value = saved.org;
+          if (certOrg && !certOrg.value) certOrg.value = saved.org;
+        }
+      } catch (_) {}
+    }
+
+    function saveOrgName(orgVal) {
+      try {
+        const cur = JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '{}');
+        cur.org = orgVal;
+        localStorage.setItem(ORG_STORAGE_KEY, JSON.stringify(cur));
+      } catch (_) {}
+    }
+
+    function bindOfficeForm(formEl, orgId, usersId, errId, isDownload) {
+      if (!formEl) return;
+      const orgIn = document.getElementById(orgId);
+      const usersIn = document.getElementById(usersId);
+      const errEl = document.getElementById(errId);
+
+      function setErr(msg) {
+        if (!errEl) return;
+        errEl.textContent = msg || '';
+        errEl.style.display = msg ? 'block' : 'none';
+      }
+
+      formEl.addEventListener('submit', e => {
+        const oRes = validateOrg(orgIn?.value);
+        if (!oRes.ok) {
+          e.preventDefault();
+          setErr(oRes.msg);
+          orgIn?.focus();
+          return;
+        }
+        const uRes = validateUsers(usersIn?.value);
+        if (!uRes.ok) {
+          e.preventDefault();
+          setErr(uRes.msg);
+          usersIn?.focus();
+          return;
+        }
+        setErr('');
+        if (orgIn) orgIn.value = oRes.value;
+        if (usersIn) usersIn.value = uRes.value;
+        saveOrgName(oRes.value);
+        if (isDownload) {
+          const certOrg = document.getElementById('certOrg');
+          const certUsers = document.getElementById('certUsers');
+          if (certOrg && !certOrg.value) certOrg.value = oRes.value;
+          if (certUsers) certUsers.value = uRes.value;
+          showToast(`${oRes.value} (${uRes.value}명) 설치파일 다운로드를 시작합니다.`);
+        }
+      });
+
+      [orgIn, usersIn].forEach(el => el?.addEventListener('input', () => setErr('')));
+    }
+
+    prefillSavedOrg();
+    bindOfficeForm(dlForm, 'dlOrgName', 'dlUserCount', 'dlFormError', true);
+    bindOfficeForm(certForm, 'certOrg', 'certUsers', 'certFormError', false);
+
+    document.getElementById('btnFocusOfficeDl')?.addEventListener('click', () => {
+      setTimeout(() => document.getElementById('dlOrgName')?.focus(), 120);
+    });
+  }
+
   initGlobalChrome();
   initEvaluation();
   initOperations();
   initForms();
   initTools();
+  initOfficeForms();
   centerActiveSubtab();
 })();

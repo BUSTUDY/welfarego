@@ -59,14 +59,47 @@
     }
     .sign {
       text-align: center;
-      margin-top: 28px;
+      margin-top: 26px;
       font-size: 14px;
       line-height: 1.9;
+    }
+    .issuer-seal-wrap {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px dashed #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .issuer-text {
+      text-align: right;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.04em;
+    }
+    .issuer-text small {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0;
+    }
+    .hanja-seal {
+      width: 68px;
+      height: 68px;
+      flex: none;
+      transform: rotate(-4deg);
+      opacity: 0.9;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     @media print {
       body { background: #fff; padding: 0; }
       .bar { display: none !important; }
       .cert { box-shadow: none; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
 </head>
@@ -86,7 +119,7 @@
         <tr><th>시설장(대표자)</th><td>{{ rep_name }}</td></tr>
         <tr><th>사용 소프트웨어</th><td>{{ brand.product_name }} / LibreOffice {{ brand.package_version }} (Windows 64-bit)</td></tr>
         <tr><th>적용 라이선스</th><td><strong>Mozilla Public License Version 2.0 (MPL-2.0)</strong></td></tr>
-        <tr><th>설치 및 사용 범위</th><td>{{ pc_scope }} (PC 대수 제한 없음 · 영구 무료)</td></tr>
+        <tr><th>설치 인원</th><td><strong>{{ user_count }}명</strong> (기관 내 업무용 PC 자유 설치 · 영구 무료)</td></tr>
         <tr><th>발급(확인)일자</th><td>{{ today.strftime('%Y년 %m월 %d일') }}</td></tr>
       </tbody>
     </table>
@@ -99,8 +132,27 @@
     </div>
 
     <div class="sign">
-      위와 같이 정품 오픈소스 무료 오피스 소프트웨어를 적법하게 설치·운영하고 있음을 확인합니다.<br>
-      <strong>{{ org_name }} 시설장 {{ rep_name }} (서명 / 직인)</strong>
+      위 기관이 정품 오픈소스 무료 오피스 소프트웨어를 적법하게 설치·운영하고 있음을 확인합니다.
+
+      <div class="issuer-seal-wrap">
+        <div class="issuer-text">
+          <small>배포 · 정품 라이선스 확인</small>
+          확인자 : Welfarego OFFICE 대표
+        </div>
+        <!-- 전통 한자 직인: 福祉高印 (우측 상→하: 福祉, 좌측 상→하: 高印) -->
+        <svg class="hanja-seal" viewBox="0 0 100 100" role="img" aria-label="Welfarego OFFICE 대표 직인 (福祉高印)">
+          <rect x="4" y="4" width="92" height="92" rx="6" fill="rgba(197,31,26,0.05)" stroke="#C51F1A" stroke-width="5"/>
+          <rect x="11" y="11" width="78" height="78" rx="3" fill="none" stroke="#C51F1A" stroke-width="1.6"/>
+          <line x1="50" y1="14" x2="50" y2="86" stroke="#C51F1A" stroke-width="1" stroke-dasharray="2 2" opacity="0.45"/>
+          <line x1="14" y1="50" x2="86" y2="50" stroke="#C51F1A" stroke-width="1" stroke-dasharray="2 2" opacity="0.45"/>
+          <g fill="#C51F1A" font-family="'Batang', 'Gungsuh', 'NanumMyeongjo', 'Noto Serif KR', serif" font-weight="900" font-size="31" text-anchor="middle" dominant-baseline="central">
+            <text x="69" y="32">福</text>
+            <text x="69" y="69">祉</text>
+            <text x="31" y="32">高</text>
+            <text x="31" y="69">印</text>
+          </g>
+        </svg>
+      </div>
     </div>
   </article>
 </body>

@@ -181,14 +181,44 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertEqual(preview.status_code, 200)
         self.assertIn("Fluent Ribbon UI", preview.get_data(as_text=True))
 
-        cert = self.client.get("/office/license-certificate?org=사랑돌봄센터&rep=김복지&pcs=5대")
+        from office_log import validate_org_name, validate_user_count
+
+        for bad_org in ("", "가", "행복", "adfaffdk", "1230120", "ㅁㄴㅇㄹ", "ㅋㅋㅋ센터", "가가가센터", "테스트기관", "asdf센터"):
+            ok, _ = validate_org_name(bad_org)
+            self.assertFalse(ok, f"Should reject invalid org name: {bad_org!r}")
+        for good_org in ("사랑돌봄센터", "행복주·야간보호센터", "서울강남데이케어"):
+            ok, cleaned = validate_org_name(good_org)
+            self.assertTrue(ok, f"Should accept valid org name: {good_org!r}")
+            self.assertEqual(cleaned, good_org)
+
+        self.assertFalse(validate_user_count("0")[0])
+        self.assertFalse(validate_user_count("abc")[0])
+        self.assertEqual(validate_user_count("15"), (True, 15))
+
+        # 이상한 기관명·인원 누락 시 확인서 및 다운로드 차단 (오피스 폼으로 리다이렉트)
+        bad_cert = self.client.get("/office/license-certificate?org=ㅁㄴㅇㄹ&users=10")
+        self.assertEqual(bad_cert.status_code, 302)
+        self.assertIn("/office?cert_err=", bad_cert.location)
+
+        bad_setup = self.client.get("/office/download/setup?org=adfaffdk&users=10")
+        self.assertEqual(bad_setup.status_code, 302)
+        self.assertIn("/office?dl_err=", bad_setup.location)
+
+        no_org_setup = self.client.get("/office/download/setup")
+        self.assertEqual(no_org_setup.status_code, 302)
+        self.assertIn("/office?dl_err=", no_org_setup.location)
+
+        cert = self.client.get("/office/license-certificate?org=사랑돌봄센터&rep=김복지&users=12")
         self.assertEqual(cert.status_code, 200)
         cert_html = cert.get_data(as_text=True)
         self.assertIn("사랑돌봄센터", cert_html)
         self.assertIn("김복지", cert_html)
+        self.assertIn("12명", cert_html)
+        self.assertIn("확인자 : Welfarego OFFICE 대표", cert_html)
+        self.assertIn("福祉高印", cert_html)
         self.assertIn("MPL-2.0", cert_html)
 
-        setup = self.client.get("/office/download/setup")
+        setup = self.client.get("/office/download/setup?org=사랑돌봄센터&users=12")
         self.assertEqual(setup.status_code, 302)
         self.assertIn("WelfaregoOFFICE_26.2.7_Setup_x64.exe", setup.location)
 
