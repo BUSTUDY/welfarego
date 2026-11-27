@@ -20,7 +20,7 @@ permissions:
 jobs:
   build-bundle-exe:
     runs-on: windows-2022
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - name: Checkout welfarego
         uses: actions/checkout@v4
@@ -30,9 +30,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Pillow & verify compliance + rebuild .oxt
+      - name: Generate portal-matched branding, rebuild .oxt & verify compliance
         run: |
           python -m pip install --upgrade pillow
+          python office/scripts/generate_branding.py
           python office/scripts/build_extension.py
           python office/scripts/verify_compliance.py
 
@@ -106,14 +107,18 @@ jobs:
           }
           if (-not $iscc) { throw "ISCC.exe not found." }
 
-          # Ensure UTF-8 BOM for Korean Inno Setup resources
-          $koreanIsl = Join-Path $officeRoot "installer\Korean.isl"
-          $islText = Get-Content -Path $koreanIsl -Raw -Encoding UTF8
-          [System.IO.File]::WriteAllText($koreanIsl, $islText, (New-Object System.Text.UTF8Encoding($true)))
+          $utf8Bom = New-Object System.Text.UTF8Encoding($true)
+          foreach ($f in @(
+            (Join-Path $officeRoot "installer\Korean.isl"),
+            (Join-Path $officeRoot "installer\configure-installed-office.ps1")
+          )) {
+            $txt = Get-Content -Path $f -Raw -Encoding UTF8
+            [System.IO.File]::WriteAllText($f, $txt, $utf8Bom)
+          }
 
           $licKo = Join-Path $officeRoot "legal\INSTALLER-LICENSE-KO.txt"
           $licText = (Get-Content -Path $licKo -Raw -Encoding UTF8) -replace "`r?`n", "`r`n"
-          [System.IO.File]::WriteAllText($licKo, $licText, (New-Object System.Text.UTF8Encoding($true)))
+          [System.IO.File]::WriteAllText($licKo, $licText, $utf8Bom)
 
           & $iscc `
             "/DAppVersion=$ver" `
@@ -138,12 +143,73 @@ jobs:
           }
           Set-Content -Path (Join-Path $distDir "SHA256SUMS.txt") -Value $sums -Encoding UTF8
           Get-ChildItem $distDir | Format-Table Name, Length
+          "BUILT_EXE_PATH=$exePath" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: End-to-End Install & Verify Welfarego OFFICE on Windows
+        shell: pwsh
+        run: |
+          Write-Host "Running silent install of $env:BUILT_EXE_PATH ..." -ForegroundColor Cyan
+          $proc = Start-Process -FilePath $env:BUILT_EXE_PATH -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait -PassThru
+          if ($proc.ExitCode -ne 0) {
+            throw "Installer exited with code $($proc.ExitCode)"
+          }
+
+          $loDir = "C:\Program Files\LibreOffice"
+          $xcd = Join-Path $loDir "share\registry\zz-welfarego-defaults.xcd"
+          if (-not (Test-Path $xcd)) { throw "Missing zz-welfarego-defaults.xcd!" }
+          $xcdText = Get-Content -Path $xcd -Raw -Encoding UTF8
+          if ($xcdText -notmatch "notebookbar\.ui" -or $xcdText -notmatch "sukapura_svg" -or $xcdText -notmatch "Welfarego OFFICE") {
+            throw "zz-welfarego-defaults.xcd content verification failed!"
+          }
+          Write-Host "[OK] zz-welfarego-defaults.xcd verified (notebookbar.ui + sukapura_svg + Welfarego OFFICE)" -ForegroundColor Green
+
+          $ico = Join-Path $loDir "welfarego-brand\icons\soffice.ico"
+          if (-not (Test-Path $ico)) { throw "Missing portal-matched soffice.ico!" }
+
+          $pubDesk = [Environment]::GetFolderPath("CommonDesktopDirectory")
+          $wgLnk = Join-Path $pubDesk "Welfarego OFFICE.lnk"
+          if (-not (Test-Path $wgLnk)) { throw "Missing Desktop shortcut: $wgLnk" }
+          $strayDesk = Get-ChildItem -Path $pubDesk -Filter "LibreOffice*.lnk" -ErrorAction SilentlyContinue
+          if ($strayDesk) { throw "Found stray LibreOffice desktop shortcut: $($strayDesk.FullName)" }
+          Write-Host "[OK] Desktop shortcut is 'Welfarego OFFICE.lnk' with portal icon (no LibreOffice shortcut)" -ForegroundColor Green
+
+          $commonProg = [Environment]::GetFolderPath("CommonPrograms")
+          $wgMenu = Join-Path $commonProg "Welfarego OFFICE\Welfarego OFFICE.lnk"
+          if (-not (Test-Path $wgMenu)) { throw "Missing Start Menu shortcut: $wgMenu" }
+          $strayMenu = Get-ChildItem -Path $commonProg -Filter "LibreOffice*" -ErrorAction SilentlyContinue
+          if ($strayMenu) { throw "Found stray LibreOffice Start Menu folder: $($strayMenu.FullName)" }
+          Write-Host "[OK] Start Menu folder is 'Welfarego OFFICE' (no LibreOffice folder)" -ForegroundColor Green
+
+          $extOut = & (Join-Path $loDir "program\unopkg.com") list --shared | Out-String
+          Write-Host $extOut
+          if ($extOut -notmatch "kr\.co\.welfarego\.office\.links") {
+            throw "Shared extension kr.co.welfarego.office.links was not registered!"
+          }
+          Write-Host "[OK] Shared extension kr.co.welfarego.office.links registered!" -ForegroundColor Green
+
+          $writerUi = Join-Path $loDir "share\config\soffice.cfg\modules\swriter\ui\notebookbar.ui"
+          $uiText = Get-Content -Path $writerUi -Raw -Encoding UTF8
+          if ($uiText -notmatch "WelfaregoHomeAddons" -or $uiText -notmatch "실무포털·서식") {
+            throw "swriter notebookbar.ui customization missing!"
+          }
+          Write-Host "[OK] swriter notebookbar.ui contains WelfaregoHomeAddons and '★ 실무포털·서식' tab!" -ForegroundColor Green
+
+          # Smoke-launch soffice --headless --convert-to pdf to prove configmgr & XML parse with 0 errors
+          $sampleTxt = Join-Path $env:TEMP "wg_smoke.txt"
+          $samplePdf = Join-Path $env:TEMP "wg_smoke.pdf"
+          Set-Content -Path $sampleTxt -Value "Welfarego OFFICE Smoke Test" -Encoding UTF8
+          & (Join-Path $loDir "program\soffice.com") --headless --nologo --convert-to pdf --outdir $env:TEMP $sampleTxt
+          if (-not (Test-Path $samplePdf)) {
+            throw "Headless Writer PDF conversion failed (possible invalid XML in xcd or notebookbar.ui)!"
+          }
+          Write-Host "[OK] Welfarego OFFICE runtime configmgr & Writer engine smoke test passed!" -ForegroundColor Green
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.release_tag }}
           name: "Welfarego OFFICE ${{ inputs.lo_version }} (Windows x64 통합 설치파일)"
+          overwrite_files: true
           files: |
             office/dist/WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe
             office/dist/Welfarego_Office_Shortcuts_${{ inputs.lo_version }}.oxt
@@ -153,7 +219,7 @@ jobs:
 
             - **원클릭 설치파일**: `WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe`
             - **포함 구성**:
-              1. LibreOffice ${{ inputs.lo_version }} 공식 Windows 64비트 한국어 엔진 (MPL-2.0)
-              2. 모던 탭형 리본 메뉴(`Tabbed`) + Sukapura SVG 벡터 아이콘 기본 프리셋 (`welfarego-defaults.xcd`)
-              3. `[실무포털·서식]` 자발적 클릭 바로가기 확장기능 (`welfarego-links.oxt`, 공식 업데이트 알림 `update.xml` 연동)
-            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0) — 사회복지시설·주야간보호센터 평생 무료 사용 가능
+              1. **웰페어고 공식 사이트 아이콘(`#2151C8` 집·하트 심볼) 및 `Welfarego OFFICE` 바로가기·브랜딩 적용**
+              2. **모던 탭형 리본 메뉴(`notebookbar.ui`) + Sukapura SVG 컬러 벡터 아이콘** 설치 즉시 기본 활성화 (`zz-welfarego-defaults.xcd`)
+              3. **상단 `[홈]` 탭 및 `[★ 실무포털·서식]` 리본 탭** 바로가기 자동 내장 (표준서식 20종 · 기준근무시간 · 2026 표준수가 · 본인부담금 달력 · 평가 자가점검표)
+            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0, LibreOffice ${{ inputs.lo_version }} 기반) — 사회복지시설·주야간보호센터 평생 무료 사용 가능

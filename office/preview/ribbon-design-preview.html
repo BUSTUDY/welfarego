@@ -3,73 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welfarego OFFICE — 모던 플루언트 리본 UI 미리보기</title>
+  <title>Welfarego OFFICE — 모던 탭형 리본(Fluent Ribbon UI) 미리보기</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", "Segoe UI", sans-serif; background: #F4F7F6; color: #192D2A; padding: 24px; }
-    .wrap { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
-    .bar { background: #fff; border: 1px solid #DFE7E4; border-radius: 12px; padding: 14px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    body { font-family: "Noto Sans KR", "Malgun Gothic", "Segoe UI", sans-serif; background: #EEF2FB; color: #14213D; padding: 24px; }
+    .wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .bar { background: #fff; border: 1px solid #D9E1F2; border-radius: 10px; padding: 14px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
     .brand { display: flex; align-items: center; gap: 12px; }
-    .emblem { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg,#08776A,#075C53); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 18px; }
-    .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #E6F4F1; color: #08776A; }
-    .controls { display: flex; flex-wrap: wrap; gap: 8px; }
-    .seg { display: inline-flex; border: 1px solid #D5E0DC; border-radius: 8px; padding: 2px; background: #F7F9F8; }
-    .seg button, .btn { border: none; background: transparent; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #4A5F5A; }
-    .btn { border: 1px solid #D5E0DC; background: #fff; color: #192D2A; }
-    .window { border-radius: 12px; overflow: hidden; border: 1px solid #CFDAD6; box-shadow: 0 14px 36px rgba(10,36,32,0.10); }
-    .titlebar { height: 38px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-bottom: 1px solid #DFE7E4; }
-    .tabs { padding: 6px 10px 0; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #DFE7E4; }
-    .tab-list { display: flex; gap: 4px; }
-    .tab { position: relative; padding: 7px 16px; font-size: 12px; border: 1px solid transparent; border-bottom: none; border-radius: 7px 7px 0 0; background: transparent; cursor: pointer; font-weight: 500; }
-    .tab.active { font-weight: 700; }
-    .tab.active.modern::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 3px; border-radius: 99px; background: var(--accent); }
-    .ribbon { padding: 10px 14px; display: flex; align-items: center; gap: 8px; min-height: 74px; border-bottom: 1px solid #DFE7E4; overflow-x: auto; }
-    .rbtn { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 6px 10px; font-size: 11px; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 6px; min-width: 50px; }
-    .rbtn-sm { padding: 4px 8px; font-size: 12px; font-weight: 700; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 6px; }
-    .sep { width: 1px; height: 42px; margin: 0 4px; flex-shrink: 0; }
-    .canvas { padding: 28px; display: flex; justify-content: center; min-height: 260px; }
-    .paper { width: 100%; max-width: 680px; padding: 32px; border-radius: 3px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-    .status { height: 28px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-top: 1px solid #DFE7E4; }
+    .emblem { width: 40px; height: 40px; flex: none; display: inline-flex; }
+    .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 5px; background: #EEF2FB; color: #2151C8; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .seg { display: inline-flex; border: 1px solid #C9D5F2; border-radius: 7px; padding: 2px; background: #F5F7FD; }
+    .seg button, .btn { border: none; background: transparent; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer; color: #475569; text-decoration: none; }
+    .btn { border: 1px solid #C9D5F2; background: #fff; color: #14213D; }
+    .window { border-radius: 10px; overflow: hidden; border: 1px solid #C9D5F2; box-shadow: 0 14px 36px rgba(20,33,61,0.12); }
+    .titlebar { height: 36px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; border-bottom: 1px solid #E2E8F0; }
+    .title-left { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .tabs { padding: 6px 10px 0; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #E2E8F0; overflow-x: auto; }
+    .tab-list { display: flex; gap: 2px; }
+    .tab { position: relative; padding: 7px 14px; font-size: 12px; border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; background: transparent; cursor: pointer; font-weight: 600; white-space: nowrap; }
+    .tab.active { font-weight: 800; }
+    .tab.active.modern::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 3px; border-radius: 99px; background: var(--accent); }
+    .ribbon { padding: 8px 12px; display: flex; align-items: stretch; gap: 6px; min-height: 78px; border-bottom: 1px solid #E2E8F0; overflow-x: auto; }
+    .rgroup { display: flex; align-items: center; gap: 4px; padding-right: 8px; border-right: 1px solid var(--bd); flex: none; }
+    .rgroup:last-child { border-right: none; }
+    .rbtn { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 5px 9px; font-size: 11px; font-weight: 600; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 6px; min-width: 52px; text-decoration: none; white-space: nowrap; }
+    .rbtn:hover { background: rgba(33,81,200,0.07); }
+    .rbtn-sm { padding: 4px 8px; font-size: 12px; font-weight: 700; border: 1px solid transparent; background: transparent; cursor: pointer; border-radius: 5px; }
+    .ic-box { width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; }
+    .canvas { padding: 26px; display: flex; justify-content: center; min-height: 260px; }
+    .paper { width: 100%; max-width: 720px; padding: 34px; border-radius: 3px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+    .status { height: 28px; padding: 0 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border-top: 1px solid #E2E8F0; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="bar">
       <div class="brand">
-        <div class="emblem">W</div>
+        <span class="emblem" aria-hidden="true">
+          <svg viewBox="0 0 36 36" width="40" height="40">
+            <rect width="36" height="36" rx="8" fill="#2151C8"/>
+            <path d="M7.5 17.2 18 8l10.5 9.2" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.5 16v11.5h15V16" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
+            <path d="M18 24.2c-3.4-2.2-4.6-3.6-4.6-5.1 0-1.3 1-2.2 2.2-2.2.9 0 1.9.5 2.4 1.5.5-1 1.5-1.5 2.4-1.5 1.2 0 2.2.9 2.2 2.2 0 1.5-1.2 2.9-4.6 5.1Z" fill="#fff"/>
+          </svg>
+        </span>
         <div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <strong style="font-size:15px;">Welfarego OFFICE</strong>
-            <span class="pill">Offline Preview · MPL-2.0</span>
+            <strong style="font-size:15px;">Welfarego OFFICE 26.2</strong>
+            <span class="pill">Tabbed Ribbon · Sukapura SVG · MPL-2.0</span>
           </div>
-          <div style="font-size:12px;color:#5D716C;">Fluent Ribbon UI Preview (patches/0003-fluent-ribbon-rendering.patch)</div>
+          <div style="font-size:12px;color:#556070;">실제 설치 화면 구성 미리보기 (Fluent Ribbon UI · 홈 탭 &amp; ★ 실무포털·서식 탭 기본 내장)</div>
         </div>
       </div>
       <div class="controls">
         <div class="seg">
-          <button id="m-modern" onclick="S.style='modern';render()">Welfarego 모던 리본</button>
-          <button id="m-classic" onclick="S.style='classic';render()">기존 LibreOffice</button>
+          <button id="m-modern" onclick="S.style='modern';render()">모던 탭형 리본 (기본값)</button>
+          <button id="m-classic" onclick="S.style='classic';render()">클래식 툴바</button>
         </div>
         <button class="btn" id="m-dark" onclick="S.dark=!S.dark;render()">🌙 다크 모드</button>
+        <a class="btn" href="/office" style="background:#2151C8;border-color:#2151C8;color:#fff;">&larr; 무료 다운로드로 돌아가기</a>
       </div>
     </div>
 
     <div class="window" id="win">
       <div class="titlebar" id="tb">
-        <span id="title-txt" style="font-weight:600;">2026_사업계획서.odt — Welfarego OFFICE Writer</span>
+        <div class="title-left">
+          <svg viewBox="0 0 36 36" width="18" height="18" aria-hidden="true">
+            <rect width="36" height="36" rx="8" fill="#2151C8"/>
+            <path d="M7.5 17.2 18 8l10.5 9.2" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.5 16v11.5h15V16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linejoin="round"/>
+            <path d="M18 24.2c-3.4-2.2-4.6-3.6-4.6-5.1 0-1.3 1-2.2 2.2-2.2.9 0 1.9.5 2.4 1.5.5-1 1.5-1.5 2.4-1.5 1.2 0 2.2.9 2.2 2.2 0 1.5-1.2 2.9-4.6 5.1Z" fill="#fff"/>
+          </svg>
+          <span id="title-txt">2026_운영규정_및_사업계획서.docx — Welfarego OFFICE Writer</span>
+        </div>
         <span style="opacity:.6;font-family:monospace;">─ &nbsp; □ &nbsp; ✕</span>
       </div>
       <div class="tabs" id="tabbar">
         <div class="tab-list" id="tablist"></div>
-        <span id="mode-tag" style="font-size:11px;padding-bottom:6px;opacity:.8;">Sukapura SVG · Tabbed</span>
+        <span id="mode-tag" style="font-size:11px;padding-bottom:6px;opacity:.8;white-space:nowrap;">Sukapura SVG · notebookbar.ui</span>
       </div>
       <div class="ribbon" id="ribbon"></div>
       <div class="canvas" id="canvas">
         <div class="paper" id="paper">
-          <div style="font-size:11px;font-weight:700;color:#08776A;margin-bottom:8px;">WELFAREGO OFFICE WRITER</div>
-          <h2 id="doc-h" contenteditable="true" style="margin-bottom:12px;outline:none;">2026년 업무용 설치형 오피스 도입 안내</h2>
-          <p id="doc-p" style="font-size:14px;line-height:1.7;opacity:.88;">
-            Welfarego OFFICE는 익숙한 리본 메뉴 디자인과 깔끔한 벡터 아이콘을 기본 제공하며, MPL-2.0 오픈소스 규정을 완벽하게 준수합니다.
+          <div style="font-size:11px;font-weight:700;color:#2151C8;margin-bottom:8px;">WELFAREGO OFFICE WRITER · 26.2</div>
+          <h2 id="doc-h" contenteditable="true" style="margin-bottom:12px;outline:none;">2026년 주·야간보호시설 연간 운영계획서</h2>
+          <p id="doc-p" style="font-size:14px;line-height:1.75;opacity:.9;">
+            설치 즉시 모던 탭형 리본(Tabbed UI)과 Sukapura 벡터 아이콘이 자동 적용되며, 상단 <strong>[홈]</strong> 탭과 <strong>[★ 실무포털·서식]</strong> 탭에서 표준서식 20종·기준근무시간·2026 표준수가·평가 자가점검표를 클릭 한 번으로 열 수 있습니다.
           </p>
         </div>
       </div>
@@ -81,45 +101,66 @@
   </div>
   <script>
     const S = { style: 'modern', dark: false, tab: '홈', bold: true, italic: false, underline: false };
-    const TABS = ['파일', '홈', '삽입', '레이아웃', '검토', '보기'];
+    const TABS = ['파일', '홈', '삽입', '레이아웃', '참조', '검토', '보기', '★ 실무포털·서식'];
+    const WG_LINKS = [
+      { lbl: '표준서식 20종', href: '/go/forms', bg: '#2151C8', sym: '📄' },
+      { lbl: '기준근무시간', href: '/go/worktime', bg: '#0D9488', sym: '⏱' },
+      { lbl: '2026 표준수가', href: '/go/fees', bg: '#15803D', sym: '₩' },
+      { lbl: '본인부담·달력', href: '/go/calendar', bg: '#D97706', sym: '📅' },
+      { lbl: '평가 자가점검', href: '/go/checklist', bg: '#DC2626', sym: '✓' }
+    ];
     function pal() {
-      if (S.style === 'classic') return { h:'#D8D8D8', b:'#F0F0F0', bd:'#9E9E9E', cv:'#CCCCCC', tx:'#111', ac:'#18A303', ck:'#C4D9F2', ckbd:'#5B8AC6', pp:'#fff', pt:'#111' };
-      if (S.dark) return { h:'#181E1D', b:'#222A29', bd:'#323E3C', cv:'#141918', tx:'#CBD5D3', ac:'#2DD4BF', ck:'#183F3A', ckbd:'#14B8A6', pp:'#1F2625', pt:'#EDF3F1' };
-      return { h:'#F3F6F5', b:'#FFFFFF', bd:'#DFE7E4', cv:'#EEF2F0', tx:'#192D2A', ac:'#08776A', ck:'#DCF3EE', ckbd:'#0F9687', pp:'#fff', pt:'#192D2A' };
+      if (S.style === 'classic') return { h:'#E2E5EC', b:'#F4F6FA', bd:'#B8C2D8', cv:'#CBD5E1', tx:'#1E293B', ac:'#2151C8', ck:'#DBEAFE', ckbd:'#2151C8', pp:'#fff', pt:'#111' };
+      if (S.dark) return { h:'#151C2C', b:'#1E293B', bd:'#334155', cv:'#0F172A', tx:'#E2E8F0', ac:'#60A5FA', ck:'#1E3A8A', ckbd:'#60A5FA', pp:'#1E293B', pt:'#F1F5F9' };
+      return { h:'#F5F7FD', b:'#FFFFFF', bd:'#D9E1F2', cv:'#E9EEF8', tx:'#14213D', ac:'#2151C8', ck:'#DBEAFE', ckbd:'#2151C8', pp:'#fff', pt:'#14213D' };
     }
     function render() {
       const p = pal();
-      document.getElementById('m-modern').style.cssText = S.style==='modern' ? 'background:#08776A;color:#fff' : '';
-      document.getElementById('m-classic').style.cssText = S.style==='classic' ? 'background:#08776A;color:#fff' : '';
+      document.getElementById('m-modern').style.cssText = S.style==='modern' ? 'background:#2151C8;color:#fff' : '';
+      document.getElementById('m-classic').style.cssText = S.style==='classic' ? 'background:#2151C8;color:#fff' : '';
       document.getElementById('m-dark').textContent = S.dark ? '☀️ 라이트 모드' : '🌙 다크 모드';
       const w = document.getElementById('win');
       w.style.setProperty('--accent', p.ac);
+      w.style.setProperty('--bd', p.bd);
       w.style.borderColor = p.bd;
       ['tb','tabbar','status'].forEach(id => { const el = document.getElementById(id); el.style.background = p.h; el.style.borderColor = p.bd; el.style.color = p.tx; });
       document.getElementById('tablist').innerHTML = TABS.map(t => {
         const a = S.tab === t;
-        return `<button class="tab ${a?'active':''} ${S.style==='modern'?'modern':''}" onclick="S.tab='${t}';render()" style="background:${a?p.b:'transparent'};color:${a?p.ac:p.tx};border-color:${a?p.bd:'transparent'};">${t}</button>`;
+        const star = t.startsWith('★');
+        return `<button class="tab ${a?'active':''} ${S.style==='modern'?'modern':''}" onclick="S.tab='${t}';render()" style="background:${a?p.b:'transparent'};color:${a?p.ac:(star?p.ac:p.tx)};border-color:${a?p.bd:'transparent'};">${t}</button>`;
       }).join('');
       const rb = document.getElementById('ribbon');
       rb.style.background = p.b; rb.style.borderColor = p.bd;
-      const rad = S.style==='modern' ? '6px' : '2px';
-      const mkBtn = (lbl, on, fn) => `<button class="rbtn-sm" onclick="${fn}" style="border-radius:${rad};color:${p.tx};background:${on?p.ck:'transparent'};border-color:${on?p.ckbd:'transparent'};">${lbl}</button>`;
-      rb.innerHTML = `
-        <button class="rbtn" style="color:${p.tx};border-radius:${rad};" onclick="document.getElementById('msg').textContent='붙여넣기 완료'"><span style="font-size:17px;">📋</span><span>붙여넣기</span></button>
-        <div class="sep" style="background:${p.bd};"></div>
-        <div style="display:flex;gap:4px;align-items:center;">
-          ${mkBtn('B', S.bold, 'S.bold=!S.bold;render()')}
-          ${mkBtn('<i>I</i>', S.italic, 'S.italic=!S.italic;render()')}
-          ${mkBtn('<u>U</u>', S.underline, 'S.underline=!S.underline;render()')}
-        </div>
-        <div class="sep" style="background:${p.bd};"></div>
-        <button class="rbtn" style="color:${p.tx};border-radius:${rad};" onclick="document.getElementById('msg').textContent='PDF 내보내기 준비 완료'"><span style="font-size:17px;">📑</span><span>PDF 저장</span></button>
-        <div style="margin-left:auto;display:flex;gap:6px;align-items:center;padding-left:10px;border-left:1px solid ${p.bd};">
-          <a href="/go/forms" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.ac};color:${p.ac};font-size:11px;font-weight:700;white-space:nowrap;">표준서식 20종 ↗</a>
-          <a href="/go/worktime" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.bd};color:${p.tx};font-size:11px;font-weight:600;white-space:nowrap;">기준근무시간·수가 계산기 ↗</a>
-          <a href="/go/checklist" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.bd};color:${p.tx};font-size:11px;font-weight:600;white-space:nowrap;">평가 자가점검표 ↗</a>
-        </div>
-      `;
+      const mkBtn = (lbl, on, fn) => `<button class="rbtn-sm" onclick="${fn}" style="color:${p.tx};background:${on?p.ck:'transparent'};border-color:${on?p.ckbd:'transparent'};">${lbl}</button>`;
+      const wgHtml = WG_LINKS.map(x => `
+        <a class="rbtn" href="${x.href}" target="_blank" rel="noopener noreferrer" style="color:${p.tx};">
+          <span class="ic-box" style="background:${x.bg};">${x.sym}</span>
+          <span>${x.lbl}</span>
+        </a>
+      `).join('');
+
+      if (S.tab === '★ 실무포털·서식') {
+        rb.innerHTML = `<div class="rgroup">${wgHtml}</div>`;
+      } else {
+        rb.innerHTML = `
+          <div class="rgroup">
+            <button class="rbtn" style="color:${p.tx};" onclick="document.getElementById('msg').textContent='클립보드 붙여넣기 완료'"><span class="ic-box" style="background:#3B82F6;">📋</span><span>붙여넣기</span></button>
+            <button class="rbtn" style="color:${p.tx};" onclick="document.getElementById('msg').textContent='문서 저장 완료'"><span class="ic-box" style="background:#2563EB;">💾</span><span>저장</span></button>
+            <button class="rbtn" style="color:${p.tx};" onclick="document.getElementById('msg').textContent='PDF 내보내기 준비 완료'"><span class="ic-box" style="background:#E11D48;">PDF</span><span>PDF 내보내기</span></button>
+          </div>
+          <div class="rgroup">
+            <span style="font-size:12px;padding:4px 10px;border:1px solid ${p.bd};border-radius:4px;">맑은 고딕 ▾</span>
+            <span style="font-size:12px;padding:4px 8px;border:1px solid ${p.bd};border-radius:4px;">11 pt ▾</span>
+            ${mkBtn('B', S.bold, 'S.bold=!S.bold;render()')}
+            ${mkBtn('<i>I</i>', S.italic, 'S.italic=!S.italic;render()')}
+            ${mkBtn('<u>U</u>', S.underline, 'S.underline=!S.underline;render()')}
+          </div>
+          <div class="rgroup">
+            <button class="rbtn" style="color:${p.tx};" onclick="document.getElementById('msg').textContent='표 삽입'"><span class="ic-box" style="background:#0284C7;">⊞</span><span>표 삽입</span></button>
+          </div>
+          <div class="rgroup">${wgHtml}</div>
+        `;
+      }
       document.getElementById('canvas').style.background = p.cv;
       const pp = document.getElementById('paper');
       pp.style.background = p.pp; pp.style.color = p.pt;
