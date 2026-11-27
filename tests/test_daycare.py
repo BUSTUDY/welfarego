@@ -260,6 +260,10 @@ class DaycareAndOfficeTests(unittest.TestCase):
             for req in ("META-INF/manifest.xml", "Addons.xcu", "ProtocolHandler.xcu", "welfarego_links.py", "LICENSE.txt"):
                 self.assertIn(req, oxt_names)
             self.assertFalse(any("Jobs.xcu" in n for n in oxt_names))
+            addons_xml = zf.read("Addons.xcu").decode("utf-8")
+            self.assertIn("OfficeNotebookBar", addons_xml)
+            self.assertIn("kr.co.welfarego.links:fees", addons_xml)
+            self.assertIn("icons/fees_26.png", oxt_names)
             desc_xml = zf.read("description.xml").decode("utf-8")
             self.assertIn("https://welfarego.co.kr/office/update.xml", desc_xml)
 
@@ -274,7 +278,9 @@ class DaycareAndOfficeTests(unittest.TestCase):
         xcd_path = Path(__file__).resolve().parent.parent / "office" / "config" / "welfarego-defaults.xcd"
         xcd_text = xcd_path.read_text(encoding="utf-8")
         ET.fromstring(xcd_text)
-        self.assertIn("<value>Tabbed</value>", xcd_text)
+        self.assertIn("<value>notebookbar.ui</value>", xcd_text)
+        self.assertIn("<value>sukapura_svg</value>", xcd_text)
+        self.assertIn("<value>Welfarego OFFICE</value>", xcd_text)
 
         expected_go = {
             "forms": "/forms",
