@@ -13,6 +13,21 @@ class DaycareAndOfficeTests(unittest.TestCase):
         welfare_app.app.config.update(TESTING=True, SITE_BASE="https://welfarego.co.kr")
         cls.client = welfare_app.app.test_client()
 
+    def test_backup_menu_and_assets_are_served_on_every_page(self):
+        for path in ("/", "/tools", "/about"):
+            html = self.client.get(path).get_data(as_text=True)
+            self.assertIn("data-backup-open", html)
+            self.assertIn("js/backup.js", html)
+            self.assertIn("vendor/xlsx.mini.min.js", html)
+        for asset in ("/static/js/backup.js", "/static/vendor/xlsx.mini.min.js"):
+            resp = self.client.get(asset)
+            self.assertEqual(resp.status_code, 200, asset)
+            resp.close()
+        # 백업 스크립트는 사용자 자료를 서버로 보내는 네트워크 호출을 하지 않는다.
+        src = self.client.get("/static/js/backup.js").get_data(as_text=True)
+        for needle in ("fetch(", "XMLHttpRequest", "sendBeacon", "WebSocket"):
+            self.assertNotIn(needle, src)
+
     def test_homepage_uses_gov_portal_design_and_links_to_subsites(self):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, 200)
