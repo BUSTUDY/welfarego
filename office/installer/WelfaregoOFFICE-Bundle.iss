@@ -6,7 +6,7 @@
 ;   4. Welfarego Practical Shortcuts on Home tab & [★ 실무포털·서식] Ribbon tab (voluntary-click only)
 
 #ifndef AppVersion
-  #define AppVersion "26.2.7"
+  #define AppVersion "26.2.8"
 #endif
 
 #ifndef MsiFile
@@ -82,6 +82,7 @@ Source: "{#MsiFile}"; DestDir: "{tmp}"; DestName: "LibreOffice_Win_x86-64.msi"; 
 Source: "configure-installed-office.ps1"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "uninstall-welfarego-office.ps1"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\config\welfarego-defaults.xcd"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
+Source: "..\config\welfarego-ko-labels.xcd"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\extensions\welfarego-links.oxt"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\branding\icons\*.ico"; DestDir: "{tmp}\wg-payload\icons"; Flags: deleteafterinstall
 Source: "..\branding\images\intro.png"; DestDir: "{tmp}\wg-payload\images"; Flags: deleteafterinstall
