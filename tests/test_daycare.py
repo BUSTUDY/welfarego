@@ -190,6 +190,7 @@ class DaycareAndOfficeTests(unittest.TestCase):
 
         setup = self.client.get("/office/download/setup")
         self.assertEqual(setup.status_code, 302)
+        self.assertIn("WelfaregoOFFICE_26.2.7_Setup_x64.exe", setup.location)
 
         asset = self.client.get("/office/assets/writer_app.png")
         self.assertEqual(asset.status_code, 200)

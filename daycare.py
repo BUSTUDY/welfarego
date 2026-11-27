@@ -312,10 +312,16 @@ def download_forms_bundle():
     )
 
 
+DEFAULT_OFFICE_EXE_URL = (
+    "https://github.com/BUSTUDY/welfarego/releases/download/"
+    "v26.2.7/WelfaregoOFFICE_26.2.7_Setup_x64.exe"
+)
+
+
 @daycare_bp.route("/office")
 def free_office():
     brand = _load_office_brand()
-    custom_exe_url = os.environ.get("WELFAREGO_OFFICE_EXE_URL", "").strip()
+    custom_exe_url = os.environ.get("WELFAREGO_OFFICE_EXE_URL", "").strip() or DEFAULT_OFFICE_EXE_URL
     custom_msi_url = os.environ.get("WELFAREGO_OFFICE_MSI_URL", "").strip()
     return render_template(
         "daycare/office.html",
@@ -367,12 +373,12 @@ def download_office_setup():
         custom = os.environ.get("WELFAREGO_OFFICE_MSI_URL", "").strip()
         if custom.startswith(("https://", "http://")):
             return redirect(custom)
-        return redirect("https://www.libreoffice.org/download/download-libreoffice/?type=win-x86_64&lang=ko")
+        return redirect(DEFAULT_OFFICE_EXE_URL)
 
     custom = os.environ.get("WELFAREGO_OFFICE_EXE_URL", "").strip()
     if custom.startswith(("https://", "http://")):
         return redirect(custom)
-    return redirect("https://www.libreoffice.org/download/download-libreoffice/?type=win-x86_64&lang=ko")
+    return redirect(DEFAULT_OFFICE_EXE_URL)
 
 
 @lru_cache(maxsize=2)
