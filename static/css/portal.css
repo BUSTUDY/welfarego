@@ -2161,3 +2161,21 @@ html.bk-open { overflow: hidden; }
 .bk-status.is-err { color: #c0281c; }
 .bk-note { margin-top: 8px; font-size: 0.76rem; line-height: 1.6; color: var(--gov-slate-600); }
 @media (max-width: 480px) { .bk-actions .btn { flex: 1 1 100%; } }
+
+/* 실무 자동화 상단 엑셀 백업 바 */
+.tools-backup-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 14px 16px;
+  background: var(--gov-tint-soft);
+  border: 1px solid var(--gov-tint-line);
+  border-left: 4px solid var(--gov-navy);
+  border-radius: 4px;
+}
+.tools-backup-text { flex: 1 1 360px; font-size: 0.84rem; line-height: 1.6; color: var(--gov-slate-700); }
+.tools-backup-text strong { display: block; font-size: 0.95rem; font-weight: 800; color: var(--gov-navy-dark); margin-bottom: 2px; }
+.tools-backup-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 480px) { .tools-backup-actions { width: 100%; } .tools-backup-actions .btn { flex: 1 1 100%; } }
