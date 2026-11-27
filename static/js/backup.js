@@ -334,12 +334,16 @@
   }
 
   document.addEventListener('click', e => {
-    const trigger = e.target.closest('[data-backup-open]');
+    const trigger = e.target.closest('[data-backup-open], [data-backup-export], [data-backup-import]');
     if (!trigger) return;
     e.preventDefault();
     const drawer = document.getElementById('drawer');
     if (drawer && !drawer.hidden && drawer.contains(trigger)) document.getElementById('btnMenuClose')?.click();
     openDialog();
+    // 화면에 바로 놓인 버튼은 대화상자를 연 뒤 곧바로 해당 동작을 실행한다.
+    // (파일 선택창은 클릭 직후에만 열 수 있으므로 같은 클릭 안에서 호출한다.)
+    if (trigger.hasAttribute('data-backup-export')) exportBackup();
+    else if (trigger.hasAttribute('data-backup-import')) overlay.querySelector('#bkFile').click();
   });
 
   if (location.hash === '#backup') openDialog();

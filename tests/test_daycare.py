@@ -13,6 +13,13 @@ class DaycareAndOfficeTests(unittest.TestCase):
         welfare_app.app.config.update(TESTING=True, SITE_BASE="https://welfarego.co.kr")
         cls.client = welfare_app.app.test_client()
 
+    def test_tools_page_shows_excel_backup_and_restore_buttons(self):
+        html = self.client.get("/tools").get_data(as_text=True)
+        self.assertIn("data-backup-export", html)
+        self.assertIn("data-backup-import", html)
+        self.assertIn("엑셀로 백업하기", html)
+        self.assertIn("백업 불러오기", html)
+
     def test_backup_menu_and_assets_are_served_on_every_page(self):
         for path in ("/", "/tools", "/about"):
             html = self.client.get(path).get_data(as_text=True)
