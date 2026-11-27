@@ -13,6 +13,22 @@ class DaycareAndOfficeTests(unittest.TestCase):
         welfare_app.app.config.update(TESTING=True, SITE_BASE="https://welfarego.co.kr")
         cls.client = welfare_app.app.test_client()
 
+    def test_all_four_tools_have_saved_history_and_edit_controls(self):
+        html = self.client.get("/tools").get_data(as_text=True)
+        for elem_id in (
+            "btnWtSaveHistory", "wtEditBanner", "wtHistoryList",
+            "recEditBanner", "recSavedList",
+            "btnCalSaveHistory", "calEditBanner", "calHistoryList",
+            "btnShSaveHistory", "shEditBanner", "shHistoryList",
+        ):
+            self.assertIn(f'id="{elem_id}"', html)
+
+    def test_record_tool_has_a4_print_button_and_print_area(self):
+        html = self.client.get("/tools").get_data(as_text=True)
+        self.assertIn('id="btnRecPrint"', html)
+        self.assertIn('id="recPrintArea"', html)
+        self.assertIn('id="recPrintBody"', html)
+
     def test_tools_page_shows_excel_backup_and_restore_buttons(self):
         html = self.client.get("/tools").get_data(as_text=True)
         self.assertIn("data-backup-export", html)

@@ -2179,3 +2179,92 @@ html.bk-open { overflow: hidden; }
 .tools-backup-text strong { display: block; font-size: 0.95rem; font-weight: 800; color: var(--gov-navy-dark); margin-bottom: 2px; }
 .tools-backup-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 @media (max-width: 480px) { .tools-backup-actions { width: 100%; } .tools-backup-actions .btn { flex: 1 1 100%; } }
+
+/* 상태변화·상담 기록지 인쇄 */
+.rec-print-area { display: none; }
+@media print {
+  body.print-tool-record #tooltab-record > .gov-card { display: none !important; }
+  body.print-tool-record .rec-print-area { display: block !important; }
+  body.print-tool-record .rec-print-area .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #111827;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  body.print-tool-record .rec-print-area .print-only-header h1 { font-size: 1.25rem; font-weight: 800; color: #111827 !important; }
+  body.print-tool-record .rec-print-area .print-only-header p { font-size: 0.82rem; color: #374151 !important; margin-top: 4px; }
+  body.print-tool-record .rec-print-body {
+    min-height: 220px;
+    padding: 14px 16px;
+    border: 1px solid #9ca3af;
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #111827 !important;
+    white-space: pre-wrap;
+    word-break: keep-all;
+  }
+  body.print-tool-record .rec-print-area .print-sign-box {
+    display: flex !important;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 22px;
+    padding-top: 12px;
+    border-top: 1px solid #9ca3af;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+}
+
+/* 실무 자동화 4종 지난 기록 보관함 · 수정 배너 */
+.tool-edit-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: var(--gov-tint);
+  border: 1px solid var(--gov-navy);
+  border-left: 4px solid var(--gov-navy);
+  border-radius: 4px;
+  font-size: 0.84rem;
+  color: var(--gov-navy-dark);
+}
+.tool-edit-banner[hidden] { display: none; }
+.tool-history-box {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--gov-tint-line);
+}
+.tool-history-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.tool-history-head strong { font-size: 0.88rem; color: var(--gov-navy-dark); }
+.tool-history-cnt { font-weight: 700; color: var(--gov-navy); }
+.tool-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.tool-history-empty {
+  font-size: 0.8rem;
+  color: var(--gov-slate-500);
+  padding: 8px 2px;
+}
+.tool-history-sub {
+  font-size: 0.78rem;
+  color: var(--gov-slate-700);
+  line-height: 1.5;
+}
+.rec-saved-item.is-editing {
+  border-color: var(--gov-navy);
+  background: var(--gov-tint-soft);
+}

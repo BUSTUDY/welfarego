@@ -107,10 +107,13 @@
           <p class="gov-card-sub">상근 직원(기준시간 이상 = 1명)과 기준시간 미만 직원(시간제·중도입퇴사 등 동일 직종 합산)을 자동 구분하여 감액 방지 인정인원과 추가배치 가산 인정인원을 각각 산출합니다.</p>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm btn-soft" id="btnWtSaveHistory">현재 근무표 저장</button>
           <button type="button" class="btn btn-sm btn-soft" id="btnWtResetSample">예시 불러오기</button>
           <button type="button" class="btn btn-sm btn-primary" id="btnWtPrint">산정표 A4 인쇄</button>
         </div>
       </div>
+
+      <div id="wtEditBanner" class="tool-edit-banner no-print" hidden></div>
 
       <div class="wt-ctrl-bar no-print">
         <div class="field" style="min-width:190px;">
@@ -147,6 +150,17 @@
       </div>
 
       <div id="wtSummaryOutput" style="margin-top:16px;" aria-live="polite"></div>
+
+      <div class="tool-history-box no-print" id="wtHistoryBox">
+        <div class="tool-history-head">
+          <strong>저장된 월별 근무표 보관함 <span id="wtHistoryCount" class="tool-history-cnt"></span></strong>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-xs btn-soft" id="btnWtSaveHistory2">현재 근무표 저장</button>
+            <button type="button" class="btn btn-xs" id="btnWtClearHistory">전체 비우기</button>
+          </div>
+        </div>
+        <div id="wtHistoryList" class="tool-history-list"></div>
+      </div>
     </div>
   </section>
 
@@ -202,6 +216,8 @@
             </div>
           </div>
 
+          <div id="recEditBanner" class="tool-edit-banner no-print" hidden></div>
+
           <div class="field" style="margin-top:4px;">
             <label for="recResultText">생성된 육하원칙 기록 문안 (자유롭게 수정 후 복사하세요)</label>
             <textarea id="recResultText" rows="8" class="gov-textarea"></textarea>
@@ -212,6 +228,7 @@
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <button type="button" class="btn btn-primary" id="btnRecCopy">클립보드 원클릭 복사</button>
             <button type="button" class="btn btn-soft" id="btnRecSaveNote">내 보관함에 저장</button>
+            <button type="button" class="btn btn-soft" id="btnRecPrint">A4 인쇄</button>
             <button type="button" class="btn" id="btnRecResetChips">선택 초기화</button>
           </div>
 
@@ -226,6 +243,19 @@
             <div id="recSavedList" class="rec-saved-list"></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 인쇄 전용 기록지 (화면에는 보이지 않음) -->
+    <div id="recPrintArea" class="rec-print-area">
+      <div class="print-only-header">
+        <h1 id="recPrintTitle">주·야간보호 상태변화·상담 기록지</h1>
+        <p id="recPrintMeta"></p>
+      </div>
+      <div id="recPrintBody" class="rec-print-body"></div>
+      <div class="print-sign-box">
+        <div>작성자 확인: ________________ (서명)</div>
+        <div>시설장 결재: ________________ (서명)</div>
       </div>
     </div>
   </section>
@@ -249,8 +279,13 @@
           <h2>2026 달력형 월간 이용일정 · 미이용일(50% 특례) · 보호자 안내문 출력기</h2>
           <p class="gov-card-sub">달력 날짜를 클릭할 때마다 <b>[휴무 → 정상 이용 → 평일 미이용(50% 특례)]</b> 순으로 전환되며, 보호자에게 배부할 월간 예상 본인부담금 안내문을 A4 1장으로 바로 인쇄할 수 있습니다.</p>
         </div>
-        <button type="button" class="btn btn-primary" id="btnCalPrint">보호자 안내문 A4 인쇄</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm btn-soft" id="btnCalSaveHistory">현재 달력 저장</button>
+          <button type="button" class="btn btn-sm btn-primary" id="btnCalPrint">보호자 안내문 A4 인쇄</button>
+        </div>
       </div>
+
+      <div id="calEditBanner" class="tool-edit-banner no-print" hidden></div>
 
       <div class="grid-4 no-print" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:6px;margin-bottom:14px;">
         <div class="field">
@@ -345,6 +380,17 @@
 
         <div id="calBillingOutput" class="calc-out" aria-live="polite"></div>
       </div>
+
+      <div class="tool-history-box no-print" id="calHistoryBox">
+        <div class="tool-history-head">
+          <strong>저장된 이용달력 · 안내문 보관함 <span id="calHistoryCount" class="tool-history-cnt"></span></strong>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-xs btn-soft" id="btnCalSaveHistory2">현재 달력 저장</button>
+            <button type="button" class="btn btn-xs" id="btnCalClearHistory">전체 비우기</button>
+          </div>
+        </div>
+        <div id="calHistoryList" class="tool-history-list"></div>
+      </div>
     </div>
   </section>
 
@@ -368,10 +414,13 @@
           <p class="gov-card-sub">호차별 운전원·동승자를 지정하고 등원 탑승시각과 하원 하차시각을 입력하면 <b>급여제공 인정시간(라-1~라-5)</b>을 자동 판정하여 시간 미달 청구 오류를 사전에 차단합니다.</p>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm btn-soft" id="btnShSaveHistory">현재 날짜 일지 저장</button>
           <button type="button" class="btn btn-sm btn-soft" id="btnShExportCsv">엑셀(CSV) 다운로드</button>
           <button type="button" class="btn btn-sm btn-primary" id="btnShPrint">운행일지 A4 인쇄</button>
         </div>
       </div>
+
+      <div id="shEditBanner" class="tool-edit-banner no-print" hidden></div>
 
       <div class="chip-bar no-print" id="shVehicleTabs" style="margin-top:0;padding-top:0;border-top:0;margin-bottom:12px;">
         <button type="button" class="chip-btn active" data-sh-veh="0">1호차 배차표</button>
@@ -436,6 +485,17 @@
       </div>
 
       <div id="shSummaryBar" style="margin-top:12px;"></div>
+
+      <div class="tool-history-box no-print" id="shHistoryBox">
+        <div class="tool-history-head">
+          <strong>저장된 날짜별 송영일지 보관함 <span id="shHistoryCount" class="tool-history-cnt"></span></strong>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-xs btn-soft" id="btnShSaveHistory2">현재 날짜 일지 저장</button>
+            <button type="button" class="btn btn-xs" id="btnShClearHistory">전체 비우기</button>
+          </div>
+        </div>
+        <div id="shHistoryList" class="tool-history-list"></div>
+      </div>
 
       <div class="print-sign-box">
         <div>운전원 확인: ________________ (서명)</div>
