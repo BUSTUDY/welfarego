@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  oor:name="Addons" oor:package="org.openoffice.Office">
+  <node oor:name="AddonUI">
+
+    <!-- 상단 메뉴바: 실무포털·서식(W) -->
+    <node oor:name="OfficeMenuBar">
+      <node oor:name="kr.co.welfarego.office.menubar" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="ko">실무포털·서식(~W)</value>
+          <value xml:lang="en">Welfarego Tools (~W)</value>
+        </prop>
+        <prop oor:name="Target" oor:type="xs:string">
+          <value>_self</value>
+        </prop>
+        <prop oor:name="Context" oor:type="xs:string">
+          <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.presentation.PresentationDocument,com.sun.star.drawing.DrawingDocument,com.sun.star.frame.StartModule</value>
+        </prop>
+        <node oor:name="Submenu">
+          <node oor:name="m01_forms" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:forms</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">표준 업무서식 20종 무료 다운로드 (HWPX·DOCX·XLSX)</value>
+              <value xml:lang="en">Download 20 Standard Daycare Forms</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+          <node oor:name="m02_worktime" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:worktime</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">2026 월 기준근무시간 · 근무표 인력인정 계산기</value>
+              <value xml:lang="en">2026 Monthly Standard Work Hours Calculator</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+          <node oor:name="m03_calendar" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:calendar</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">월간 이용달력 · 보호자 본인부담금 안내문 출력기</value>
+              <value xml:lang="en">Monthly Attendance &amp; Copay Notice Generator</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+          <node oor:name="m04_record" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:record</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">공단 평가 대비 상태변화 · 상담 육하원칙 문구 생성기</value>
+              <value xml:lang="en">Care Status &amp; Counseling Record Generator</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+          <node oor:name="m05_staffing" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:staffing</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">법정 의무인력 · 인력추가배치 가산금 시뮬레이터</value>
+              <value xml:lang="en">Mandatory Staffing &amp; Add-on Simulator</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+          <node oor:name="m06_checklist" oor:op="replace">
+            <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:checklist</value></prop>
+            <prop oor:name="Title" oor:type="xs:string">
+              <value xml:lang="ko">2026 정기평가 36개 지표 준비완료 자가점검표</value>
+              <value xml:lang="en">2026 NHIS Evaluation 36-Indicator Checklist</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          </node>
+        </node>
+      </node>
+    </node>
+
+    <!-- 상단 실무 바로가기 툴바 (Writer · Calc) -->
+    <node oor:name="OfficeToolBar">
+      <node oor:name="kr.co.welfarego.office.toolbar" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="ko">웰페어고 실무 바로가기</value>
+          <value xml:lang="en">Welfarego Practical Shortcuts</value>
+        </prop>
+        <node oor:name="t01_forms" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:forms</value></prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="ko">표준서식 20종 다운로드</value>
+            <value xml:lang="en">Standard Forms</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+          </prop>
+        </node>
+        <node oor:name="t02_worktime" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:worktime</value></prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="ko">월 기준근무시간·인력계산기</value>
+            <value xml:lang="en">Work Hours Calc</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+          </prop>
+        </node>
+        <node oor:name="t03_calendar" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:calendar</value></prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="ko">이용달력·본인부담금 안내문</value>
+            <value xml:lang="en">Copay Calendar</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+          </prop>
+        </node>
+        <node oor:name="t04_checklist" oor:op="replace">
+          <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:checklist</value></prop>
+          <prop oor:name="Title" oor:type="xs:string">
+            <value xml:lang="ko">평가지표 36개 자가점검표</value>
+            <value xml:lang="en">Eval Checklist</value>
+          </prop>
+          <prop oor:name="Target" oor:type="xs:string"><value>_self</value></prop>
+          <prop oor:name="Context" oor:type="xs:string">
+            <value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+
+    <!-- 버튼 아이콘 바인딩 -->
+    <node oor:name="Images">
+      <node oor:name="kr.co.welfarego.office.img.forms" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:forms</value></prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL" oor:type="xs:string"><value>%origin%/icons/forms_16.png</value></prop>
+          <prop oor:name="ImageBigURL" oor:type="xs:string"><value>%origin%/icons/forms_26.png</value></prop>
+        </node>
+      </node>
+      <node oor:name="kr.co.welfarego.office.img.worktime" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:worktime</value></prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL" oor:type="xs:string"><value>%origin%/icons/calc_16.png</value></prop>
+          <prop oor:name="ImageBigURL" oor:type="xs:string"><value>%origin%/icons/calc_26.png</value></prop>
+        </node>
+      </node>
+      <node oor:name="kr.co.welfarego.office.img.calendar" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:calendar</value></prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL" oor:type="xs:string"><value>%origin%/icons/cal_16.png</value></prop>
+          <prop oor:name="ImageBigURL" oor:type="xs:string"><value>%origin%/icons/cal_26.png</value></prop>
+        </node>
+      </node>
+      <node oor:name="kr.co.welfarego.office.img.checklist" oor:op="replace">
+        <prop oor:name="URL" oor:type="xs:string"><value>kr.co.welfarego.links:checklist</value></prop>
+        <node oor:name="UserDefinedImages">
+          <prop oor:name="ImageSmallURL" oor:type="xs:string"><value>%origin%/icons/check_16.png</value></prop>
+          <prop oor:name="ImageBigURL" oor:type="xs:string"><value>%origin%/icons/check_26.png</value></prop>
+        </node>
+      </node>
+    </node>
+
+  </node>
+</oor:component-data>

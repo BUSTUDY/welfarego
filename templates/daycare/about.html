@@ -32,11 +32,17 @@
 
   <section class="gov-card" id="privacy">
     <div class="gov-card-head">
-      <h2>2. 개인정보 보호 및 무광고 정책</h2>
+      <h2>{{ '2. 개인정보 보호 및 쿠키·광고 운영 안내' if (adsense and adsense.enabled) else '2. 개인정보 보호 및 무광고 정책' }}</h2>
     </div>
     <ul style="margin:0;padding-left:20px;font-size:0.82rem;color:var(--gov-slate-700);line-height:1.8;">
+      {% if adsense and adsense.enabled %}
+      <li>본 포털은 <strong>회원가입·로그인·결제를 요구하지 않으며</strong>, 평가 자가진단·근무시간·상담문구·이용달력·송영배차·서식 기관명 등 사용자가 입력한 실무 데이터는 서버로 전송되지 않고 <strong>사용자의 브라우저 로컬 저장소(localStorage)에만 저장</strong>됩니다.</li>
+      <li>무료 실무 도구·표준서식 및 무료 오피스 배포 유지를 위해 Google AdSense 광고가 게재될 수 있습니다. Google을 포함한 제3자 공급업체는 브라우저 쿠키(Cookie)를 사용하여 사용자의 이전 웹사이트 방문 기록을 바탕으로 광고를 게재합니다.</li>
+      <li>사용자는 언제든지 <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style="color:var(--gov-navy);text-decoration:underline;">Google 광고 설정(adssettings.google.com)</a> 또는 브라우저 쿠키 설정에서 맞춤형 광고를 직접 해제할 수 있습니다.</li>
+      {% else %}
       <li>본 포털은 <strong>회원가입·로그인·결제를 요구하지 않으며, 어떠한 광고 스크립트나 외부 방문 추적 코드도 포함하지 않습니다.</strong></li>
-      <li>평가매뉴얼 자가진단 점수, 서류 점검 체크, 주기별 일정, 면담 체크, 서식자료실에 입력한 기관명·기관기호는 사용자의 <strong>브라우저 로컬 저장소(localStorage)에만 저장</strong>되며 외부 서버에 보관되지 않습니다.</li>
+      <li>평가매뉴얼 자가진단 점수, 서류 점검 체크, 실무 자동화 도구 입력값, 서식자료실에 입력한 기관명·기관기호는 사용자의 <strong>브라우저 로컬 저장소(localStorage)에만 저장</strong>되며 외부 서버에 보관되지 않습니다.</li>
+      {% endif %}
       <li>본 포털은 정부기관·국민건강보험공단이 직접 운영하는 공식 누리집이 아닌 민간 실무 지원 도구입니다. 실제 정기평가·현지조사·수가 청구 시에는 반드시 국민건강보험공단(longtermcare.or.kr) 및 국가법령정보센터 최신 공고를 최종 확인하시기 바랍니다.</li>
     </ul>
   </section>

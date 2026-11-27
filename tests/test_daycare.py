@@ -165,6 +165,36 @@ class DaycareAndOfficeTests(unittest.TestCase):
             names = zf.namelist()
             self.assertTrue(any(n.endswith("/LICENSE") for n in names))
             self.assertTrue(any("0003-fluent-ribbon-rendering.patch" in n for n in names))
+            self.assertTrue(any("extensions/welfarego-links/welfarego_links.py" in n for n in names))
+
+        oxt = self.client.get("/office/download/welfarego-links.oxt")
+        self.assertEqual(oxt.status_code, 200)
+        self.assertEqual(oxt.headers.get("X-Robots-Tag"), "noindex, nofollow")
+        with zipfile.ZipFile(io.BytesIO(oxt.data)) as zf:
+            oxt_names = set(zf.namelist())
+            for req in ("META-INF/manifest.xml", "Addons.xcu", "ProtocolHandler.xcu", "welfarego_links.py", "LICENSE.txt"):
+                self.assertIn(req, oxt_names)
+            self.assertFalse(any("Jobs.xcu" in n for n in oxt_names))
+
+        expected_go = {
+            "forms": "/forms",
+            "tools": "/tools",
+            "worktime": "/tools#worktime",
+            "record": "/tools#record",
+            "calendar": "/tools#calendar",
+            "shuttle": "/tools#shuttle",
+            "staffing": "/operations#staffing",
+            "fees": "/operations#fees",
+            "checklist": "/evaluation#checklist",
+            "eval": "/evaluation#simulator",
+        }
+        for key, target_path in expected_go.items():
+            with self.subTest(go_key=key):
+                go_resp = self.client.get(f"/go/{key}")
+                self.assertEqual(go_resp.status_code, 302)
+                self.assertEqual(go_resp.location, target_path)
+                self.assertEqual(go_resp.headers.get("X-Robots-Tag"), "noindex, nofollow")
+        self.assertEqual(self.client.get("/go/nonexistent").status_code, 404)
 
     def test_rate_limiting_and_bandwidth_guards(self):
         from rate_limit import reset_rate_limits

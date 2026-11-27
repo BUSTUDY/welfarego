@@ -114,6 +114,11 @@
         </div>
         <div class="sep" style="background:${p.bd};"></div>
         <button class="rbtn" style="color:${p.tx};border-radius:${rad};" onclick="document.getElementById('msg').textContent='PDF 내보내기 준비 완료'"><span style="font-size:17px;">📑</span><span>PDF 저장</span></button>
+        <div style="margin-left:auto;display:flex;gap:6px;align-items:center;padding-left:10px;border-left:1px solid ${p.bd};">
+          <a href="/go/forms" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.ac};color:${p.ac};font-size:11px;font-weight:700;white-space:nowrap;">표준서식 20종 ↗</a>
+          <a href="/go/worktime" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.bd};color:${p.tx};font-size:11px;font-weight:600;white-space:nowrap;">기준근무시간·수가 계산기 ↗</a>
+          <a href="/go/checklist" target="_blank" rel="noopener noreferrer" style="text-decoration:none;padding:6px 10px;border-radius:${rad};border:1px solid ${p.bd};color:${p.tx};font-size:11px;font-weight:600;white-space:nowrap;">평가 자가점검표 ↗</a>
+        </div>
       `;
       document.getElementById('canvas').style.background = p.cv;
       const pp = document.getElementById('paper');
