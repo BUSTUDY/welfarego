@@ -225,10 +225,10 @@ New-Item -ItemType Directory -Force -Path $wgMenuDir | Out-Null
 
 $shortcutSpecs = @(
     @{ Name = "Welfarego OFFICE"; Exe = "soffice.exe"; Ico = "soffice.ico"; Desc = "Welfarego OFFICE" },
-    @{ Name = (U "Welfarego Writer (\uBB38\uC11C \uC791\uC131)"); Exe = "swriter.exe"; Ico = "writer_app.ico"; Desc = "Welfarego OFFICE Writer" },
-    @{ Name = (U "Welfarego Calc (\uC5D1\uC140\u00B7\uD68C\uACC4)"); Exe = "scalc.exe"; Ico = "calc_app.ico"; Desc = "Welfarego OFFICE Calc" },
-    @{ Name = (U "Welfarego Impress (\uBC1C\uD45C\uC790\uB8CC)"); Exe = "simpress.exe"; Ico = "impress_app.ico"; Desc = "Welfarego OFFICE Impress" },
-    @{ Name = (U "Welfarego Draw (PDF\u00B7\uC548\uB0B4\uBB38)"); Exe = "sdraw.exe"; Ico = "draw_app.ico"; Desc = "Welfarego OFFICE Draw" }
+    @{ Name = "Welfarego Writer"; Exe = "swriter.exe"; Ico = "writer_app.ico"; Desc = "Welfarego OFFICE Writer" },
+    @{ Name = "Welfarego Calc"; Exe = "scalc.exe"; Ico = "calc_app.ico"; Desc = "Welfarego OFFICE Calc" },
+    @{ Name = "Welfarego Impress"; Exe = "simpress.exe"; Ico = "impress_app.ico"; Desc = "Welfarego OFFICE Impress" },
+    @{ Name = "Welfarego Draw"; Exe = "sdraw.exe"; Ico = "draw_app.ico"; Desc = "Welfarego OFFICE Draw" }
 )
 
 foreach ($sp in $shortcutSpecs) {
