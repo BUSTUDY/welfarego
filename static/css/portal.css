@@ -137,6 +137,17 @@ svg { flex: none; }
 }
 .util-agency { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 .util-agency strong { color: var(--gov-ink); font-weight: 700; }
+.util-suggest {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 10px;
+  margin-left: 2px;
+  border-left: 1px solid var(--gov-border);
+  color: var(--gov-navy);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.util-suggest:hover { text-decoration: underline; }
 .util-right { display: flex; align-items: center; gap: 14px; }
 
 .status-pill {
@@ -1178,8 +1189,10 @@ body.drawer-open { overflow: hidden; }
    ========================================================= */
 .gov-footer { background: var(--bg-2); border-top: 1px solid var(--gov-border); padding: 26px 0 34px; margin-top: auto; }
 .gov-footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--gov-border); }
+.footer-brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
 .footer-brand strong { font-size: 1.1rem; font-weight: 900; color: var(--gov-navy); letter-spacing: -0.04em; }
-.footer-brand span { margin-left: 8px; font-size: 0.8rem; color: var(--gov-slate-500); }
+.footer-brand span { font-size: 0.8rem; color: var(--gov-slate-500); }
+.footer-brand .util-suggest { font-size: 0.8rem; padding-left: 10px; margin-left: 0; }
 .gov-footer-links { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.84rem; font-weight: 700; color: var(--gov-ink); }
 .gov-footer-links a:hover { color: var(--gov-navy); text-decoration: underline; }
 .footer-note { margin-top: 14px; font-size: 0.78rem; line-height: 1.7; color: var(--gov-slate-600); }
@@ -1223,7 +1236,8 @@ body.drawer-open { overflow: hidden; }
   .desktop-nav { display: none; }
   .menu-btn { display: inline-flex; }
   .site-header-inner { height: 58px; }
-  .util-agency span { display: none; }
+  .util-agency span,
+  .util-agency .util-suggest { display: none; }
   .banner-row {
     display: flex;
     overflow-x: auto;
@@ -1242,6 +1256,7 @@ body.drawer-open { overflow: hidden; }
   .gov-main { padding-top: 16px; padding-bottom: 36px; }
   .util-bar-inner { min-height: 34px; }
   .util-agency { display: none; }
+  .footer-brand .util-suggest { border-left: 0; padding-left: 0; }
   .util-right { width: 100%; justify-content: space-between; }
   .status-pill-check { padding-left: 6px; }
 

@@ -67,6 +67,8 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("운영매뉴얼", html)
         self.assertIn("서식자료실", html)
         self.assertIn("무료 오피스", html)
+        self.assertIn("기능개선건의 sllwe7@gmail.com", html)
+        self.assertIn('href="mailto:sllwe7@gmail.com"', html)
         self.assertIn("48.6%", html)
         self.assertNotIn("복지시설 일자리", html)
         self.assertNotIn("우리 동네 복지혜택", html)
@@ -217,6 +219,20 @@ class DaycareAndOfficeTests(unittest.TestCase):
         self.assertIn("확인자 : Welfarego OFFICE 대표", cert_html)
         self.assertIn("福祉高印", cert_html)
         self.assertIn("MPL-2.0", cert_html)
+        self.assertRegex(cert_html, r"제\s*20\d{2}-\d{2,}\s*호")
+
+        from office_log import _scan_max_cert_seq, allocate_certificate_no
+
+        sample_csv = (
+            "발급확인번호,일시(KST),기관명,시설장(대표자),설치인원(명),오피스버전\n"
+            "2026-01,2026-11-27 11:30:00,사랑돌봄센터,김복지,12,26.2.7\n"
+            "2026-02,2026-11-27 11:35:00,행복주야간센터,이대표,8,26.2.7\n"
+        )
+        self.assertEqual(_scan_max_cert_seq(sample_csv, 2026), 2)
+        n1 = allocate_certificate_no(year=2099, sync_github=False)
+        n2 = allocate_certificate_no(year=2099, sync_github=False)
+        self.assertEqual(n1, "2099-01")
+        self.assertEqual(n2, "2099-02")
 
         setup = self.client.get("/office/download/setup?org=사랑돌봄센터&users=12")
         self.assertEqual(setup.status_code, 302)

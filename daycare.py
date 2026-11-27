@@ -46,6 +46,7 @@ from daycare_forms import (
     build_form_xlsx,
 )
 from office_log import (
+    allocate_certificate_no,
     record_license_certificate,
     record_office_download,
     validate_org_name,
@@ -375,9 +376,12 @@ def office_license_certificate():
 
     rep = (request.args.get("rep") or "").strip()[:40] or "시설장"
     user_count = int(users_res)
+    is_testing = bool(current_app.config.get("TESTING"))
+    cert_no = allocate_certificate_no(year=korea_today().year, sync_github=not is_testing)
 
-    if not current_app.config.get("TESTING"):
+    if not is_testing:
         record_license_certificate(
+            cert_no=cert_no,
             org_name=org_res,
             rep_name=rep,
             user_count=user_count,
@@ -387,6 +391,7 @@ def office_license_certificate():
     return render_template(
         "daycare/office_certificate.html",
         brand=brand,
+        cert_no=cert_no,
         org_name=org_res,
         rep_name=rep,
         user_count=user_count,

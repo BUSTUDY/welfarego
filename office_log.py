@@ -62,9 +62,72 @@ DOWNLOAD_CSV_PATH = "logs/office_downloads.csv"
 DOWNLOAD_CSV_HEADER = ["일시(KST)", "구분", "기관명", "사용인원(명)", "설치버전"]
 
 CERT_CSV_PATH = "logs/license_certificates.csv"
-CERT_CSV_HEADER = ["일시(KST)", "기관명", "시설장(대표자)", "설치인원(명)", "오피스버전"]
+CERT_CSV_HEADER = ["발급확인번호", "일시(KST)", "기관명", "시설장(대표자)", "설치인원(명)", "오피스버전"]
 
 _github_lock = threading.Lock()
+_seq_lock = threading.Lock()
+_cert_seq_cache: dict[int, int] = {}
+_CERT_NO_RE = re.compile(r"^(\d{4})-(\d{2,})$")
+
+
+def _scan_max_cert_seq(text: str, year: int) -> int:
+    best = 0
+    for line in text.splitlines()[1:]:
+        if not line.strip():
+            continue
+        first_col = line.split(",", 1)[0].strip().strip('"').lstrip("\ufeff")
+        m = _CERT_NO_RE.match(first_col)
+        if m and int(m.group(1)) == year:
+            num = int(m.group(2))
+            if num > best:
+                best = num
+    return best
+
+
+def _fetch_github_text(rel_path: str) -> str:
+    token = os.environ.get("GITHUB_LOG_TOKEN", "").strip()
+    if not token:
+        return ""
+    repo = os.environ.get("GITHUB_LOG_REPO", "BUSTUDY/welfarego-logs").strip()
+    branch = os.environ.get("GITHUB_LOG_BRANCH", "main").strip() or "main"
+    api_url = f"https://api.github.com/repos/{repo}/contents/{rel_path}?ref={branch}"
+    req = urllib.request.Request(
+        api_url,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "User-Agent": "welfarego-office-logger",
+        },
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+            return base64.b64decode(payload.get("content", "")).decode("utf-8")
+    except Exception:
+        return ""
+
+
+def allocate_certificate_no(year: int | None = None, sync_github: bool = True) -> str:
+    """연도별 순번 라이선스 발급 확인 번호(예: 2026-01, 2026-02)를 생성한다."""
+    yr = year or datetime.now(KST).year
+    with _seq_lock:
+        if yr not in _cert_seq_cache:
+            max_seq = 0
+            local_path = LOCAL_LOG_DIR / Path(CERT_CSV_PATH).name
+            if local_path.is_file():
+                try:
+                    max_seq = max(max_seq, _scan_max_cert_seq(local_path.read_text(encoding="utf-8"), yr))
+                except OSError:
+                    pass
+            if sync_github:
+                gh_text = _fetch_github_text(CERT_CSV_PATH)
+                if gh_text:
+                    max_seq = max(max_seq, _scan_max_cert_seq(gh_text, yr))
+            _cert_seq_cache[yr] = max_seq
+        _cert_seq_cache[yr] += 1
+        return f"{yr}-{_cert_seq_cache[yr]:02d}"
 
 
 def validate_org_name(raw_org: str | None) -> tuple[bool, str]:
@@ -221,12 +284,18 @@ def record_office_download(org_name: str, user_count: int, version: str, fmt: st
     )
 
 
-def record_license_certificate(org_name: str, rep_name: str, user_count: int, version: str) -> None:
+def record_license_certificate(
+    cert_no: str,
+    org_name: str,
+    rep_name: str,
+    user_count: int,
+    version: str,
+) -> None:
     now_kst = datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
-    row = [now_kst, org_name, rep_name, user_count, version]
+    row = [cert_no, now_kst, org_name, rep_name, user_count, version]
     _dispatch_log(
         CERT_CSV_PATH,
         CERT_CSV_HEADER,
         row,
-        f"log(certificate): {org_name} ({user_count}명)",
+        f"log(certificate): {cert_no} {org_name} ({user_count}명)",
     )
