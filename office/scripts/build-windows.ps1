@@ -143,6 +143,7 @@ Compress-Archive -Path `
     (Join-Path $RepoRoot "patches"), `
     (Join-Path $RepoRoot "config"), `
     (Join-Path $RepoRoot "installer"), `
+    (Join-Path $RepoRoot "extensions"), `
     (Join-Path $RepoRoot "branding\brand.json"), `
     (Join-Path $RepoRoot "scripts") `
     -DestinationPath $SourceZip

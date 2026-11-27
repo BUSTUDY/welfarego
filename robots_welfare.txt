@@ -9,6 +9,7 @@ Disallow: /forms/*.xlsx
 Disallow: /forms/*/gov.hwp
 Disallow: /forms/*/print
 Disallow: /office/download/
+Disallow: /go/
 
 # ── AI 검색·답변 엔진 ──────────────────────────────────────────
 User-agent: GPTBot
@@ -33,6 +34,7 @@ Disallow: /forms/*.xlsx
 Disallow: /forms/*/gov.hwp
 Disallow: /forms/*/print
 Disallow: /office/download/
+Disallow: /go/
 
 # 학습 활용 opt-in 신호 (크롤러가 아니라 별도 토큰입니다)
 User-agent: Google-Extended

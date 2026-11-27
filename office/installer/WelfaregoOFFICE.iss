@@ -80,10 +80,13 @@ Source: "..\NOTICE"; DestDir: "{autopf}\Welfarego OFFICE\legal"; Flags: ignoreve
 Source: "..\legal\SOURCE-OFFER.md"; DestDir: "{autopf}\Welfarego OFFICE\legal"; Flags: ignoreversion
 Source: "..\legal\THIRD-PARTY-LICENSES.md"; DestDir: "{autopf}\Welfarego OFFICE\legal"; Flags: ignoreversion
 Source: "..\legal\PRIVACY.md"; DestDir: "{autopf}\Welfarego OFFICE\legal"; Flags: ignoreversion
+; Bundled MPL-2.0 voluntary-click menu & toolbar shortcuts extension (.oxt)
+Source: "..\extensions\welfarego-links.oxt"; DestDir: "{autopf}\Welfarego OFFICE\share\extensions"; Flags: ignoreversion
 
 [Run]
 #if DryRun == "0"
 Filename: "msiexec.exe"; Parameters: "/i ""{tmp}\WelfaregoOFFICE.msi"" /qb! ALLUSERS=1 {code:GetMsiProperties}"; StatusMsg: "{cm:InstallingMsi}"; Flags: waituntilterminated
+Filename: "{autopf}\Welfarego OFFICE\program\unopkg.com"; Parameters: "add --shared --force ""{autopf}\Welfarego OFFICE\share\extensions\welfarego-links.oxt"""; Flags: runhidden waituntilterminated skipifdoesntexist
 Filename: "{autopf}\Welfarego OFFICE\program\soffice.exe"; Description: "{cm:LaunchApp}"; Flags: nowait postinstall skipifsilent
 #endif
 
