@@ -117,7 +117,7 @@ end;
 
 function GetDesktopFlag(Param: String): String;
 begin
-  if WizardIsTaskSelected('desktopicon') then
+  if WizardSilent or WizardIsTaskSelected('desktopicon') then
     Result := '1'
   else
     Result := '0';

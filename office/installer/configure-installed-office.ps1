@@ -41,6 +41,12 @@ if (-not $loDir) {
 }
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+$installLog = Join-Path $loDir "welfarego-install.log"
+function Log-Step([string]$Msg) {
+    $line = "[$(Get-Date -Format 'HH:mm:ss')] $Msg"
+    try { Add-Content -Path $installLog -Value $line -Encoding UTF8 } catch {}
+}
+Log-Step "Starting Welfarego OFFICE post-install configuration in $loDir (Desktop=$CreateDesktopShortcut)"
 
 # 2. Clean stray raw .oxt inside share\extensions from older bundle builds
 $strayOxt = Join-Path $loDir "share\extensions\welfarego-links.oxt"
@@ -68,6 +74,7 @@ foreach ($svg in @("logo.svg", "logo-sc.svg", "logo_inverted.svg", "logo-sc_inve
 if (Test-Path (Join-Path $PayloadDir "legal")) {
     Copy-Item -Path (Join-Path $PayloadDir "legal\*") -Destination $legalDest -Force
 }
+Log-Step "Copied Welfarego icons, splash screens, and Start Center SVGs."
 
 # 4. Deploy zz-welfarego-defaults.xcd (Tabbed Ribbon UI + Sukapura SVG + Welfarego OFFICE ooName)
 $regDir = Join-Path $loDir "share\registry"
@@ -76,6 +83,7 @@ if (Test-Path $oldXcd) {
     Remove-Item -Path $oldXcd -Force -ErrorAction SilentlyContinue
 }
 Copy-Item -Path (Join-Path $PayloadDir "welfarego-defaults.xcd") -Destination (Join-Path $regDir "zz-welfarego-defaults.xcd") -Force
+Log-Step "Deployed zz-welfarego-defaults.xcd."
 
 # 5. Configure bootstrap.ini (isolated WelfaregoOFFICE profile) & sofficerc splash colors
 $bootstrapIni = Join-Path $loDir "program\bootstrap.ini"
@@ -104,12 +112,16 @@ if ($env:APPDATA) {
         Remove-Item -Path $wgExtCache -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
+Log-Step "Updated bootstrap.ini and sofficerc."
 
-# 6. Install Welfarego Practical Shortcuts extension (.oxt) for all users
+# 6. Install Welfarego Practical Shortcuts extension (.oxt) for all users via Start-Process
+#    (Avoids Windows PowerShell 5.1 NativeCommandError when stderr is emitted under ErrorActionPreference=Stop)
 $unopkg = Join-Path $loDir "program\unopkg.com"
 $oxtPath = Join-Path $PayloadDir "welfarego-links.oxt"
 if ((Test-Path $unopkg) -and (Test-Path $oxtPath)) {
-    & $unopkg add --shared --suppress-license --force $oxtPath | Out-Null
+    $unoArgs = "add --shared --suppress-license --force `"$oxtPath`""
+    $unoProc = Start-Process -FilePath $unopkg -ArgumentList $unoArgs -WindowStyle Hidden -Wait -PassThru
+    Log-Step "unopkg add exited with code $($unoProc.ExitCode)."
 }
 
 # 7. Customize Ribbon UI (notebookbar.ui): rename Extension tab & surface buttons on Home tab
@@ -185,15 +197,18 @@ foreach ($mod in @("swriter", "scalc", "simpress", "sdraw")) {
         } finally {
             $sw.Close()
         }
+        Log-Step "Customized notebookbar.ui for $mod."
     } catch {
-        Write-Warning "Failed to customize notebookbar.ui for ${mod}: $_"
+        Log-Step "WARN: Failed to customize notebookbar.ui for ${mod}: $_"
     }
 }
 
 # 8. Replace "LibreOffice 26.2" shortcuts with "Welfarego OFFICE" + portal #2151C8 icon
 $publicDesktop = [Environment]::GetFolderPath("CommonDesktopDirectory")
+if (-not $publicDesktop) { $publicDesktop = "C:\Users\Public\Desktop" }
 $userDesktop = [Environment]::GetFolderPath("Desktop")
 $commonPrograms = [Environment]::GetFolderPath("CommonPrograms")
+if (-not $commonPrograms) { $commonPrograms = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs" }
 
 foreach ($desk in @($publicDesktop, $userDesktop)) {
     if ($desk -and (Test-Path $desk)) {
@@ -227,6 +242,7 @@ foreach ($sp in $shortcutSpecs) {
 }
 
 if ($CreateDesktopShortcut -eq "1" -and $publicDesktop) {
+    New-Item -ItemType Directory -Force -Path $publicDesktop | Out-Null
     $deskLnk = Join-Path $publicDesktop "Welfarego OFFICE.lnk"
     $sc = $wsh.CreateShortcut($deskLnk)
     $sc.TargetPath = Join-Path $loDir "program\soffice.exe"
@@ -234,6 +250,7 @@ if ($CreateDesktopShortcut -eq "1" -and $publicDesktop) {
     $sc.IconLocation = (Join-Path $brandIconsDest "soffice.ico") + ",0"
     $sc.Description = "Welfarego OFFICE"
     $sc.Save()
+    Log-Step "Created Desktop shortcut: $deskLnk"
 }
 
 # 9. Update Windows Installed Apps (Add/Remove Programs) DisplayName & Icon
@@ -256,8 +273,10 @@ foreach ($root in $uninstRoots) {
         } catch {}
     }
 }
+Log-Step "Updated Uninstall registry entries."
 
 # 10. Notify Windows Shell to refresh shortcut & taskbar icons immediately
 try {
-    & ie4uinit.exe -show 2>$null | Out-Null
+    Start-Process -FilePath "ie4uinit.exe" -ArgumentList "-show" -WindowStyle Hidden -Wait -ErrorAction SilentlyContinue | Out-Null
 } catch {}
+Log-Step "Completed Welfarego OFFICE post-install configuration."
