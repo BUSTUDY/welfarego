@@ -108,7 +108,7 @@ def _load_office_brand():
     except (OSError, ValueError):
         return {
             "product_name": "Welfarego OFFICE",
-            "package_version": "26.2.7.3",
+            "package_version": "26.2.8",
             "release_notes_url": "https://github.com/BUSTUDY/welfarego/releases",
         }
 
@@ -319,9 +319,10 @@ def download_forms_bundle():
     )
 
 
+OFFICE_APP_VERSION = "26.2.8"
 DEFAULT_OFFICE_EXE_URL = (
     "https://github.com/BUSTUDY/welfarego/releases/download/"
-    "v26.2.7/WelfaregoOFFICE_26.2.7_Setup_x64.exe"
+    f"v{OFFICE_APP_VERSION}/WelfaregoOFFICE_{OFFICE_APP_VERSION}_Setup_x64.exe"
 )
 
 
@@ -385,7 +386,7 @@ def office_license_certificate():
             org_name=org_res,
             rep_name=rep,
             user_count=user_count,
-            version=brand.get("package_version", "26.2.7"),
+            version=brand.get("package_version", OFFICE_APP_VERSION),
         )
 
     return render_template(
@@ -417,7 +418,7 @@ def download_office_setup():
         record_office_download(
             org_name=org_res,
             user_count=int(users_res),
-            version=brand.get("package_version", "26.2.7"),
+            version=brand.get("package_version", OFFICE_APP_VERSION),
             fmt=target_kind,
         )
 
@@ -453,7 +454,7 @@ def _build_mpl2_source_zip(ver):
 @daycare_bp.route("/office/download/mpl2-source.zip")
 def download_office_mpl2_source():
     brand = _load_office_brand()
-    ver = brand.get("package_version", "26.2.7.3")
+    ver = brand.get("package_version", OFFICE_APP_VERSION)
     return _attachment_response(
         _build_mpl2_source_zip(ver),
         f"WelfaregoOFFICE_{ver}_MPL2_Source_Patches.zip",
@@ -468,7 +469,7 @@ def download_office_links_oxt():
         abort(404)
     return _attachment_response(
         oxt_path.read_bytes(),
-        "Welfarego_Office_Shortcuts_26.2.7.oxt",
+        f"Welfarego_Office_Shortcuts_{OFFICE_APP_VERSION}.oxt",
         "application/vnd.openofficeorg.extension",
     )
 
@@ -481,7 +482,7 @@ def office_extension_update_xml():
         '<description xmlns="http://openoffice.org/extensions/update/2006"\n'
         '  xmlns:xlink="http://www.w3.org/1999/xlink">\n'
         '  <identifier value="kr.co.welfarego.office.links"/>\n'
-        '  <version value="26.2.7"/>\n'
+        f'  <version value="{OFFICE_APP_VERSION}"/>\n'
         '  <update-download>\n'
         f'    <src xlink:href="{site}/office/download/welfarego-links.oxt"/>\n'
         '  </update-download>\n'

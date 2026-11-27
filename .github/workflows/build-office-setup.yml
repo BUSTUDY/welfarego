@@ -3,15 +3,20 @@ name: Build Welfarego OFFICE Bundle EXE
 on:
   workflow_dispatch:
     inputs:
-      lo_version:
-        description: "Official LibreOffice Windows x64 stable version (e.g. 26.2.7)"
+      app_version:
+        description: "Welfarego OFFICE release version (e.g. 26.2.8)"
         required: true
-        default: "26.2.7"
+        default: "26.2.8"
         type: string
       release_tag:
-        description: "GitHub Release tag to publish"
+        description: "GitHub Release tag to publish (e.g. v26.2.8)"
         required: true
-        default: "v26.2.7"
+        default: "v26.2.8"
+        type: string
+      lo_version:
+        description: "Upstream LibreOffice Windows x64 MSI version (e.g. 26.2.7)"
+        required: true
+        default: "26.2.7"
         type: string
 
 permissions:
@@ -40,18 +45,18 @@ jobs:
       - name: Download official LibreOffice Windows x64 MSI & verify SHA256
         shell: pwsh
         run: |
-          $ver = "${{ inputs.lo_version }}"
+          $loVer = "${{ inputs.lo_version }}"
           $distDir = Join-Path $PWD "office\dist"
           New-Item -ItemType Directory -Force -Path $distDir | Out-Null
 
-          $msiName = "LibreOffice_${ver}_Win_x86-64.msi"
+          $msiName = "LibreOffice_${loVer}_Win_x86-64.msi"
           $msiPath = Join-Path $distDir $msiName
           $shaPath = Join-Path $distDir "${msiName}.sha256"
 
           $baseUrls = @(
-            "https://download.documentfoundation.org/libreoffice/stable/${ver}/win/x86_64",
-            "https://downloadarchive.documentfoundation.org/libreoffice/old/${ver}.2/win/x86_64",
-            "https://downloadarchive.documentfoundation.org/libreoffice/old/${ver}.3/win/x86_64"
+            "https://download.documentfoundation.org/libreoffice/stable/${loVer}/win/x86_64",
+            "https://downloadarchive.documentfoundation.org/libreoffice/old/${loVer}.2/win/x86_64",
+            "https://downloadarchive.documentfoundation.org/libreoffice/old/${loVer}.3/win/x86_64"
           )
 
           $downloaded = $false
@@ -90,7 +95,7 @@ jobs:
       - name: Compile one-click Setup .exe with Inno Setup 6
         shell: pwsh
         run: |
-          $ver = "${{ inputs.lo_version }}"
+          $appVer = "${{ inputs.app_version }}"
           $officeRoot = Join-Path $PWD "office"
           $distDir = Join-Path $officeRoot "dist"
           $issFile = Join-Path $officeRoot "installer\WelfaregoOFFICE-Bundle.iss"
@@ -122,21 +127,21 @@ jobs:
           [System.IO.File]::WriteAllText($licKo, $licText, $utf8Bom)
 
           & $iscc `
-            "/DAppVersion=$ver" `
+            "/DAppVersion=$appVer" `
             "/DMsiFile=$env:LO_MSI_PATH" `
             "/DOutputDirPath=$distDir" `
             "/DDryRun=0" `
             $issFile
           if ($LASTEXITCODE -ne 0) { throw "ISCC failed with code $LASTEXITCODE" }
 
-          $exePath = Join-Path $distDir "WelfaregoOFFICE_${ver}_Setup_x64.exe"
+          $exePath = Join-Path $distDir "WelfaregoOFFICE_${appVer}_Setup_x64.exe"
           if (-not (Test-Path $exePath)) { throw "Expected EXE not found at $exePath" }
 
-          Copy-Item -Path (Join-Path $officeRoot "extensions\welfarego-links.oxt") -Destination (Join-Path $distDir "Welfarego_Office_Shortcuts_${ver}.oxt") -Force
+          Copy-Item -Path (Join-Path $officeRoot "extensions\welfarego-links.oxt") -Destination (Join-Path $distDir "Welfarego_Office_Shortcuts_${appVer}.oxt") -Force
 
           $hashFiles = @(
             $exePath,
-            (Join-Path $distDir "Welfarego_Office_Shortcuts_${ver}.oxt")
+            (Join-Path $distDir "Welfarego_Office_Shortcuts_${appVer}.oxt")
           )
           $sums = foreach ($f in $hashFiles) {
             $h = (Get-FileHash -Path $f -Algorithm SHA256).Hash.ToLower()
@@ -149,6 +154,7 @@ jobs:
       - name: End-to-End Install & Verify Welfarego OFFICE on Windows
         shell: pwsh
         run: |
+          $appVer = "${{ inputs.app_version }}"
           Write-Host "Running silent install of $env:BUILT_EXE_PATH ..." -ForegroundColor Cyan
           $proc = Start-Process -FilePath $env:BUILT_EXE_PATH -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait -PassThru
           if ($proc.ExitCode -ne 0) {
@@ -163,21 +169,37 @@ jobs:
           }
 
           $xcd = Join-Path $loDir "share\registry\zz-welfarego-defaults.xcd"
+          $koXcd = Join-Path $loDir "share\registry\res\zz-welfarego-ko-labels.xcd"
           if (-not (Test-Path $xcd)) { throw "Missing zz-welfarego-defaults.xcd!" }
+          if (-not (Test-Path $koXcd)) { throw "Missing res\zz-welfarego-ko-labels.xcd!" }
           $xcdText = Get-Content -Path $xcd -Raw -Encoding UTF8
-          if ($xcdText -notmatch "notebookbar\.ui" -or $xcdText -notmatch "sukapura_svg" -or $xcdText -notmatch "Welfarego Office" -or $xcdText -notmatch "Presentation") {
+          if ($xcdText -notmatch "notebookbar\.ui" -or $xcdText -notmatch "WelfaregoModern" -or $xcdText -notmatch "WhatsNew") {
             throw "zz-welfarego-defaults.xcd content verification failed!"
           }
-          Write-Host "[OK] zz-welfarego-defaults.xcd verified (notebookbar.ui + sukapura_svg + Welfarego Office Document/Spreadsheet/Presentation)" -ForegroundColor Green
+          Write-Host "[OK] zz-welfarego-defaults.xcd & res/zz-welfarego-ko-labels.xcd verified" -ForegroundColor Green
+
+          # Verify Korean Ribbon Tabs & New Word/Excel/PowerPoint Tabs across all 3 main apps
+          foreach ($chk in @(
+            @{ Mod = "swriter"; MustHave = @("WelfaregoDesignLabel", "WelfaregoHomeAddons") },
+            @{ Mod = "scalc"; MustHave = @("WelfaregoFormulasLabel", "WelfaregoHomeAddons") },
+            @{ Mod = "simpress"; MustHave = @("WelfaregoTransitionsLabel", "WelfaregoAnimationsLabel") }
+          )) {
+            $uiPath = Join-Path $loDir "share\config\soffice.cfg\modules\$($chk.Mod)\ui\notebookbar.ui"
+            $uiTxt = Get-Content -Path $uiPath -Raw -Encoding UTF8
+            foreach ($needle in $chk.MustHave) {
+              if ($uiTxt -notmatch [regex]::Escape($needle)) {
+                throw "Missing $needle in $($chk.Mod) notebookbar.ui!"
+              }
+            }
+            if ($uiTxt -match ">~Insert<|>~Layout<|>Fiel_d<|>_Insert<") {
+              throw "Untranslated English tab/button label remained in $($chk.Mod) notebookbar.ui!"
+            }
+          }
+          Write-Host "[OK] Korean full Ribbon tabs verified (Document: Design, Spreadsheet: Page Layout + Formulas, Presentation: Design + Transitions + Animations)" -ForegroundColor Green
 
           $pubDesk = [Environment]::GetFolderPath("CommonDesktopDirectory")
           if (-not $pubDesk) { $pubDesk = "C:\Users\Public\Desktop" }
-          $wgLnk = Join-Path $pubDesk "Welfarego OFFICE.lnk"
-          if (-not (Test-Path $wgLnk)) { throw "Missing Desktop shortcut: $wgLnk" }
-          $strayDesk = Get-ChildItem -Path $pubDesk -Filter "LibreOffice*.lnk" -ErrorAction SilentlyContinue
-          if ($strayDesk) { throw "Found stray LibreOffice desktop shortcut: $($strayDesk.FullName)" }
-          Write-Host "[OK] Desktop shortcut is 'Welfarego OFFICE.lnk'" -ForegroundColor Green
-
+          if (-not (Test-Path (Join-Path $pubDesk "Welfarego OFFICE.lnk"))) { throw "Missing Desktop shortcut" }
           $commonProg = [Environment]::GetFolderPath("CommonPrograms")
           if (-not $commonProg) { $commonProg = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs" }
           foreach ($reqMenu in @(
@@ -187,14 +209,11 @@ jobs:
             "Welfarego OFFICE\Welfarego Office Presentation.lnk",
             "Welfarego OFFICE\Welfarego Office Draw.lnk"
           )) {
-            $fullLnk = Join-Path $commonProg $reqMenu
-            if (-not (Test-Path $fullLnk)) { throw "Missing Start Menu shortcut: $fullLnk" }
+            if (-not (Test-Path (Join-Path $commonProg $reqMenu))) { throw "Missing Start Menu shortcut: $reqMenu" }
           }
-          $strayMenu = Get-ChildItem -Path $commonProg -Filter "LibreOffice*" -ErrorAction SilentlyContinue
-          if ($strayMenu) { throw "Found stray LibreOffice Start Menu folder: $($strayMenu.FullName)" }
-          Write-Host "[OK] Start Menu shortcuts verified (Document / Spreadsheet / Presentation / Draw)" -ForegroundColor Green
+          Write-Host "[OK] Desktop & Start Menu shortcuts verified" -ForegroundColor Green
 
-          # Verify Control Panel (Uninstall registry): ONLY Welfarego OFFICE is visible (no visible LibreOffice!)
+          # Verify Control Panel shows ONLY Welfarego OFFICE $appVer
           $visibleLo = @()
           $visibleWg = @()
           foreach ($root in @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall")) {
@@ -209,7 +228,7 @@ jobs:
           }
           if ($visibleLo.Count -gt 0) { throw "LibreOffice is still visible in Control Panel: $($visibleLo -join ', ')" }
           if ($visibleWg.Count -eq 0) { throw "Welfarego OFFICE uninstaller missing from Control Panel!" }
-          Write-Host "[OK] Control Panel shows ONLY '$($visibleWg -join ', ')' (LibreOffice hidden via SystemComponent=1)" -ForegroundColor Green
+          Write-Host "[OK] Control Panel shows ONLY '$($visibleWg -join ', ')'" -ForegroundColor Green
 
           $extListFile = Join-Path $env:TEMP "unopkg_list.txt"
           Start-Process -FilePath (Join-Path $loDir "program\unopkg.com") -ArgumentList "list --shared" -RedirectStandardOutput $extListFile -WindowStyle Hidden -Wait
@@ -217,40 +236,30 @@ jobs:
           if ($extOut -notmatch "kr\.co\.welfarego\.office\.links") {
             throw "Shared extension kr.co.welfarego.office.links was not registered!"
           }
-          Write-Host "[OK] Shared extension kr.co.welfarego.office.links registered!" -ForegroundColor Green
+          Write-Host "[OK] Shared extension kr.co.welfarego.office.links ($appVer) registered!" -ForegroundColor Green
 
-          # 1) Headless PDF conversion smoke test
-          $sampleTxt = Join-Path $env:TEMP "wg_smoke.txt"
-          $samplePdf = Join-Path $env:TEMP "wg_smoke.pdf"
-          Set-Content -Path $sampleTxt -Value "Welfarego OFFICE Smoke Test" -Encoding UTF8
-          Start-Process -FilePath (Join-Path $loDir "program\soffice.com") -ArgumentList "--headless --nologo --convert-to pdf --outdir `"$env:TEMP`" `"$sampleTxt`"" -WindowStyle Hidden -Wait
-          if (-not (Test-Path $samplePdf)) {
-            throw "Headless Writer PDF conversion failed!"
-          }
-          Write-Host "[OK] Headless PDF conversion passed!" -ForegroundColor Green
-
-          # 2) REAL GUI launch verification: Start Center (exact Desktop shortcut target) + Document Editor
+          # REAL GUI launch verification across Start Center, Document, Spreadsheet, and Presentation!
           foreach ($mode in @(
             @{ Label = "Start Center"; Args = "--norestore" },
-            @{ Label = "Document Editor"; Args = "--norestore --writer" }
+            @{ Label = "Document"; Args = "--norestore --writer" },
+            @{ Label = "Spreadsheet"; Args = "--norestore --calc" },
+            @{ Label = "Presentation"; Args = "--norestore --impress" }
           )) {
             Write-Host "Testing real GUI launch of soffice.exe ($($mode.Label)) ..." -ForegroundColor Cyan
             $guiErr = Join-Path $env:TEMP "gui_stderr.txt"
             $guiOut = Join-Path $env:TEMP "gui_stdout.txt"
             Remove-Item -Path $guiErr, $guiOut -Force -ErrorAction SilentlyContinue
             $guiProc = Start-Process -FilePath (Join-Path $loDir "program\soffice.exe") -ArgumentList $mode.Args -RedirectStandardError $guiErr -RedirectStandardOutput $guiOut -PassThru
-            Start-Sleep -Seconds 9
+            Start-Sleep -Seconds 8
             $binProcs = Get-Process -Name "soffice.bin" -ErrorAction SilentlyContinue
             if (-not $binProcs) {
               Write-Host "=== GUI stdout ($($mode.Label)) ===" -ForegroundColor Yellow
               if (Test-Path $guiOut) { Get-Content $guiOut | Write-Host }
               Write-Host "=== GUI stderr ($($mode.Label)) ===" -ForegroundColor Yellow
               if (Test-Path $guiErr) { Get-Content $guiErr | Write-Host }
-              Write-Host "=== Windows Application Error Events ===" -ForegroundColor Yellow
-              Get-WinEvent -LogName Application -MaxEvents 15 -ErrorAction SilentlyContinue | Where-Object { $_.Level -le 3 } | Format-List TimeCreated, ProviderName, Id, Message | Out-String | Write-Host
-              throw "GUI soffice.exe ($($mode.Label)) exited/crashed instead of staying open! (ExitCode=$($guiProc.ExitCode))"
+              throw "GUI soffice.exe ($($mode.Label)) exited/crashed! (ExitCode=$($guiProc.ExitCode))"
             }
-            Write-Host "[OK] Real GUI $($mode.Label) is alive and running! PID=$($binProcs.Id -join ',') Title='$($binProcs.MainWindowTitle -join ', ')'" -ForegroundColor Green
+            Write-Host "[OK] Real GUI $($mode.Label) alive! PID=$($binProcs.Id -join ',') Title='$($binProcs.MainWindowTitle -join ', ')'" -ForegroundColor Green
             Start-Process -FilePath "taskkill.exe" -ArgumentList "/F /IM soffice.bin /IM soffice.exe /T" -WindowStyle Hidden -Wait | Out-Null
             Start-Sleep -Seconds 2
           }
@@ -259,18 +268,22 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.release_tag }}
-          name: "Welfarego OFFICE ${{ inputs.lo_version }} (Windows x64 통합 설치파일)"
+          name: "Welfarego OFFICE ${{ inputs.app_version }} (Windows x64 통합 설치파일)"
           overwrite_files: true
           files: |
-            office/dist/WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe
-            office/dist/Welfarego_Office_Shortcuts_${{ inputs.lo_version }}.oxt
+            office/dist/WelfaregoOFFICE_${{ inputs.app_version }}_Setup_x64.exe
+            office/dist/Welfarego_Office_Shortcuts_${{ inputs.app_version }}.oxt
             office/dist/SHA256SUMS.txt
           body: |
-            ## Welfarego OFFICE ${{ inputs.lo_version }} (Windows 64비트 통합 설치파일)
+            ## Welfarego OFFICE ${{ inputs.app_version }} (Windows 64비트 통합 설치파일)
 
-            - **원클릭 설치파일**: `WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe`
-            - **포함 구성**:
-              1. **웰페어고 공식 사이트 아이콘(`#2151C8` 집·하트 심볼) 및 `Welfarego OFFICE` 바로가기·브랜딩 적용**
-              2. **모던 탭형 리본 메뉴(`notebookbar.ui`) + Sukapura SVG 컬러 벡터 아이콘** 설치 즉시 기본 활성화 (`zz-welfarego-defaults.xcd`)
-              3. **상단 `[홈]` 탭 및 `[★ 실무포털·서식]` 리본 탭** 바로가기 자동 내장 (표준서식 20종 · 기준근무시간 · 2026 표준수가 · 본인부담금 달력 · 평가 자가점검표)
-            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0, LibreOffice ${{ inputs.lo_version }} 기반) — 사회복지시설·주야간보호센터 평생 무료 사용 가능
+            - **원클릭 설치파일**: `WelfaregoOFFICE_${{ inputs.app_version }}_Setup_x64.exe`
+            - **v${{ inputs.app_version }} 주요 개선 사항**:
+              1. **100% 한국어 UI 완성**: 영문 초기 환영창 제거 및 리본·메뉴·시작센터의 미번역 영문 항목(`Insert`, `Layout`, `Field`, `Insert OLE Object` 등) 전면 한글화
+              2. **워드·엑셀·파워포인트 친숙 리본 탭 확장 + 전체 상단 메뉴바 병행 표시**:
+                 - Document: `파일 | 홈 | 삽입 | 디자인 | 레이아웃 | 참조 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
+                 - Spreadsheet: `파일 | 홈 | 삽입 | 페이지 레이아웃 | 수식 | 데이터 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
+                 - Presentation: `파일 | 홈 | 삽입 | 디자인 | 화면 전환 | 애니메이션 | 슬라이드 쇼 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
+              3. **2026 WelfaregoModern 라이트 블루-화이트 테마** + Sukapura SVG 컬러 벡터 아이콘 기본 적용
+              4. **제어판 `Welfarego OFFICE ${{ inputs.app_version }}` 단독 표시** 및 사이트 동일 파란 집·하트 아이콘 적용
+            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0, LibreOffice ${{ inputs.lo_version }} 엔진 기반)

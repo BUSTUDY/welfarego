@@ -236,7 +236,7 @@ class DaycareAndOfficeTests(unittest.TestCase):
 
         setup = self.client.get("/office/download/setup?org=사랑돌봄센터&users=12")
         self.assertEqual(setup.status_code, 302)
-        self.assertIn("WelfaregoOFFICE_26.2.7_Setup_x64.exe", setup.location)
+        self.assertIn("WelfaregoOFFICE_26.2.8_Setup_x64.exe", setup.location)
 
         asset = self.client.get("/office/assets/writer_app.png")
         self.assertEqual(asset.status_code, 200)
@@ -266,23 +266,33 @@ class DaycareAndOfficeTests(unittest.TestCase):
             self.assertIn("icons/fees_26.png", oxt_names)
             desc_xml = zf.read("description.xml").decode("utf-8")
             self.assertIn("https://welfarego.co.kr/office/update.xml", desc_xml)
+            self.assertIn('value="26.2.8"', desc_xml)
 
         upd = self.client.get("/office/update.xml")
         self.assertEqual(upd.status_code, 200)
         upd_root = ET.fromstring(upd.data)
         self.assertIn("kr.co.welfarego.office.links", upd.get_data(as_text=True))
+        self.assertIn('value="26.2.8"', upd.get_data(as_text=True))
         self.assertIn("/office/download/welfarego-links.oxt", upd.get_data(as_text=True))
         self.assertIsNotNone(upd_root)
 
         from pathlib import Path
-        xcd_path = Path(__file__).resolve().parent.parent / "office" / "config" / "welfarego-defaults.xcd"
-        xcd_text = xcd_path.read_text(encoding="utf-8")
+        cfg_dir = Path(__file__).resolve().parent.parent / "office" / "config"
+        xcd_text = (cfg_dir / "welfarego-defaults.xcd").read_text(encoding="utf-8")
         ET.fromstring(xcd_text)
         self.assertIn("<value>notebookbar.ui</value>", xcd_text)
         self.assertIn("<value>sukapura_svg</value>", xcd_text)
         self.assertIn("<value>Welfarego Office</value>", xcd_text)
         self.assertIn("<value>Presentation</value>", xcd_text)
         self.assertIn("<value>Spreadsheet</value>", xcd_text)
+        self.assertIn('oor:name="WhatsNew"', xcd_text)
+        self.assertIn('oor:name="HasMenubar"', xcd_text)
+        self.assertIn("<value>WelfaregoModern</value>", xcd_text)
+
+        ko_xcd_text = (cfg_dir / "welfarego-ko-labels.xcd").read_text(encoding="utf-8")
+        ET.fromstring(ko_xcd_text)
+        self.assertIn("개체(OLE) 삽입", ko_xcd_text)
+        self.assertIn("PDF 바로 저장", ko_xcd_text)
 
         expected_go = {
             "forms": "/forms",
