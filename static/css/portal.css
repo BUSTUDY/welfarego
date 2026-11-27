@@ -2112,3 +2112,52 @@ html[data-theme="dark"] .cal-st-badge.b-use { color: #0b1020; }
 
 
 
+
+/* ───────── 내 자료 백업(엑셀 백업·불러오기) ───────── */
+.footer-link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+.footer-link-btn:hover { color: var(--gov-navy); text-decoration: underline; }
+button.pill-btn { font-family: inherit; cursor: pointer; }
+html.bk-open { overflow: hidden; }
+.bk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.bk-overlay[hidden] { display: none; }
+.bk-panel {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--gov-paper);
+  color: var(--gov-ink);
+  border: 1px solid var(--gov-border);
+  border-top: 3px solid var(--gov-navy);
+  border-radius: 6px;
+  padding: 18px 20px 20px;
+}
+.bk-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bk-head h2 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.03em; }
+.bk-head .icon-btn { font-size: 1.6rem; line-height: 1; }
+.bk-lead { font-size: 0.86rem; line-height: 1.65; color: var(--gov-slate-700); }
+.bk-summary { list-style: none; margin: 12px 0; padding: 0; border: 1px solid var(--gov-border); border-radius: 4px; }
+.bk-summary li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 12px; font-size: 0.82rem; border-bottom: 1px solid var(--gov-line); }
+.bk-summary li:last-child { border-bottom: 0; }
+.bk-summary li.none { color: var(--gov-slate-500); }
+.bk-summary li em { font-style: normal; font-weight: 700; white-space: nowrap; }
+.bk-summary li.has em { color: var(--gov-navy); }
+.bk-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.bk-pending { margin-top: 12px; padding: 12px; background: var(--gov-tint-soft); border: 1px solid var(--gov-tint-line); border-radius: 4px; font-size: 0.84rem; }
+.bk-pending[hidden] { display: none; }
+.bk-pending ul { margin: 8px 0 12px; padding-left: 18px; line-height: 1.7; }
+.bk-status { min-height: 1.4em; margin-top: 12px; font-size: 0.84rem; line-height: 1.6; font-weight: 700; }
+.bk-status.is-ok { color: #1a7f45; }
+.bk-status.is-warn { color: #a05a00; }
+.bk-status.is-err { color: #c0281c; }
+.bk-note { margin-top: 8px; font-size: 0.76rem; line-height: 1.6; color: var(--gov-slate-600); }
+@media (max-width: 480px) { .bk-actions .btn { flex: 1 1 100%; } }

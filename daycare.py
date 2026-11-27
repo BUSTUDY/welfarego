@@ -80,7 +80,7 @@ OFFICE_SHORTCUT_TARGETS = {
 
 def _compute_asset_ver():
     h = hashlib.sha256()
-    for rel in ("static/css/portal.css", "static/js/portal.js"):
+    for rel in ("static/css/portal.css", "static/js/portal.js", "static/js/backup.js"):
         p = ROOT / rel
         if p.is_file():
             h.update(p.read_bytes())

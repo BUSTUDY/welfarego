@@ -91,6 +91,7 @@
         <a class="pill-btn" href="/tools">실무 자동화</a>
         <a class="pill-btn" href="/forms">서식 받기</a>
         <a class="pill-btn" href="/operations#fees">수가 계산</a>
+        <button type="button" class="pill-btn" data-backup-open>내 자료 백업</button>
       </div>
     </div>
     <div class="drawer-body">
@@ -197,6 +198,7 @@
           <a href="/forms">서식자료실</a>
           <a href="/office">무료 오피스</a>
           <a href="/about">출처·개인정보</a>
+          <button type="button" class="footer-link-btn" data-backup-open>내 자료 백업</button>
         </nav>
       </div>
       <p class="footer-note">본 포털은 국민건강보험공단 「2026년 장기요양기관 재가급여(주야간보호) 평가 매뉴얼」(2025.12.), 보건복지부 고시(제2025-247호·제2026-189호) 및 노인장기요양보험법 시행규칙을 참고하여 제작된 민간 실무 지원 도구입니다. 최종 평가 및 청구 적용 시 공단 최신 공고 및 시행세칙을 함께 확인하시기 바랍니다. (© {{ today.year }} WELFAREGO)</p>
@@ -205,6 +207,7 @@
 
   <script id="global-eval-summary" type="application/json">{{ global_eval_summary_indicators | tojson }}</script>
   <script src="{{ url_for('static', filename='js/portal.js', v=asset_ver) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/backup.js', v=asset_ver) }}" data-xlsx-src="{{ url_for('static', filename='vendor/xlsx.mini.min.js') }}" defer></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>
