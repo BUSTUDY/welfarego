@@ -1443,9 +1443,10 @@ html[data-theme="dark"] .theme-btn .i-moon { display: none; }
   background: var(--gov-surface);
   min-width: 132px;
 }
-.chk-kpi span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); font-weight: 600; }
-.chk-kpi strong { display: block; font-size: 0.98rem; color: var(--gov-ink); margin-top: 2px; }
-.chk-kpi strong em { font-style: normal; font-size: 1.2rem; color: var(--gov-navy); font-weight: 800; }
+.chk-kpi > span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); font-weight: 600; }
+.chk-kpi > strong { display: block; font-size: 0.98rem; color: var(--gov-ink); margin-top: 2px; }
+.chk-kpi > strong em { font-style: normal; font-size: 1.2rem; color: var(--gov-navy); font-weight: 800; }
+.chk-kpi > strong span { display: inline; font-size: inherit; color: inherit; font-weight: inherit; }
 
 .chk-toolbar {
   display: flex;
