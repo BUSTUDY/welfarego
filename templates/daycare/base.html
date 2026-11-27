@@ -19,6 +19,10 @@
   <link rel="icon" href="{{ url_for('static', filename='portal/favicon.svg') }}" type="image/svg+xml">
   <script>try{if(localStorage.getItem("welfarego.daycare.theme.v1")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css', v=asset_ver) }}">
+  {% if adsense and adsense.enabled %}
+  <meta name="google-adsense-account" content="{{ adsense.client_id }}">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense.client_id }}" crossorigin="anonymous"></script>
+  {% endif %}
   {% block extra_head %}{% endblock %}
   <script type="application/ld+json" id="ld">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"웰페어고 주·야간보호 실무 포털","url":{{ (site_base + '/')|tojson }},"inLanguage":"ko-KR"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"웰페어고","item":{{ (site_base + '/')|tojson }}}{% if request.path != '/' %},{"@type":"ListItem","position":2,"name":{{ (page_crumb_name or '실무 안내')|tojson }},"item":{{ (site_base + request.path)|tojson }}}{% endif %}]}]}</script>
 </head>
@@ -160,7 +164,21 @@
   <main id="main" class="gov-main">
     {% block fullbleed %}{% endblock %}
     <div class="wrap">
+      {% if adsense and adsense.enabled and adsense.slot_top %}
+      <aside class="ad-slot-box no-print" aria-label="광고">
+        <span class="ad-slot-lbl">광고</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense.client_id }}" data-ad-slot="{{ adsense.slot_top }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </aside>
+      {% endif %}
       {% block content %}{% endblock %}
+      {% if adsense and adsense.enabled and adsense.slot_bottom %}
+      <aside class="ad-slot-box no-print" aria-label="광고">
+        <span class="ad-slot-lbl">광고</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense.client_id }}" data-ad-slot="{{ adsense.slot_bottom }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </aside>
+      {% endif %}
     </div>
   </main>
 

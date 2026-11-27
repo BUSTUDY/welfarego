@@ -265,6 +265,46 @@ def check_patches(lo_dir: Path | None, errors: list[str]) -> None:
                 subprocess.run(["git", "-C", str(lo_dir), "checkout", "--", "."], check=False)
 
 
+def check_extension(errors: list[str]) -> None:
+    import xml.etree.ElementTree as ET
+    import zipfile
+
+    print("\n5. Bundled Practical Shortcuts Extension (extensions/welfarego-links.oxt)")
+    oxt_path = ROOT / "extensions" / "welfarego-links.oxt"
+    if not oxt_path.is_file():
+        fail("Missing extensions/welfarego-links.oxt", errors)
+        return
+
+    req_entries = {
+        "META-INF/manifest.xml",
+        "Addons.xcu",
+        "ProtocolHandler.xcu",
+        "description.xml",
+        "welfarego_links.py",
+        "LICENSE.txt",
+    }
+    with zipfile.ZipFile(oxt_path) as zf:
+        names = set(zf.namelist())
+        missing = sorted(req_entries - names)
+        if missing:
+            fail(f"welfarego-links.oxt missing required entries: {', '.join(missing)}", errors)
+            return
+        if any("Jobs.xcu" in n for n in names):
+            fail("welfarego-links.oxt must NOT contain Jobs.xcu startup/exit auto-launch hooks", errors)
+            return
+        for xml_name in ("META-INF/manifest.xml", "Addons.xcu", "ProtocolHandler.xcu", "description.xml"):
+            try:
+                ET.fromstring(zf.read(xml_name))
+            except ET.ParseError as exc:
+                fail(f"Invalid XML in {xml_name}: {exc}", errors)
+                return
+        py_src = zf.read("welfarego_links.py").decode("utf-8")
+        if "OnStartApp" in py_src or "URIS_ONLY_FLAG = 1" not in py_src:
+            fail("welfarego_links.py must enforce URIS_ONLY_FLAG = 1 without startup hooks", errors)
+            return
+    ok(f"extensions/welfarego-links.oxt verified ({oxt_path.stat().st_size:,} bytes, voluntary-click only)")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify Welfarego OFFICE compliance and build artifacts.")
     parser.add_argument("--lo-dir", type=Path, default=None, help="Optional LibreOffice core checkout for live patch test")
@@ -276,6 +316,7 @@ def main() -> None:
     check_build_config(errors)
     check_branding_assets(errors)
     check_patches(args.lo_dir, errors)
+    check_extension(errors)
 
     print("\n=== Summary ===")
     if errors:

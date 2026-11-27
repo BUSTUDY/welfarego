@@ -1443,9 +1443,10 @@ html[data-theme="dark"] .theme-btn .i-moon { display: none; }
   background: var(--gov-surface);
   min-width: 132px;
 }
-.chk-kpi span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); font-weight: 600; }
-.chk-kpi strong { display: block; font-size: 0.98rem; color: var(--gov-ink); margin-top: 2px; }
-.chk-kpi strong em { font-style: normal; font-size: 1.2rem; color: var(--gov-navy); font-weight: 800; }
+.chk-kpi > span { display: block; font-size: 0.74rem; color: var(--gov-slate-600); font-weight: 600; }
+.chk-kpi > strong { display: block; font-size: 0.98rem; color: var(--gov-ink); margin-top: 2px; }
+.chk-kpi > strong em { font-style: normal; font-size: 1.2rem; color: var(--gov-navy); font-weight: 800; }
+.chk-kpi > strong span { display: inline; font-size: inherit; color: inherit; font-weight: inherit; }
 
 .chk-toolbar {
   display: flex;
@@ -2090,6 +2091,25 @@ html[data-theme="dark"] .cal-st-badge.b-use { color: #0b1020; }
     print-color-adjust: exact;
   }
 }
+
+/* 애드센스 활성화 시(ADSENSE_PUB_ID 설정 후) 인쇄 제외·오클릭 방지 광고 컨테이너 */
+.ad-slot-box {
+  margin: 22px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--gov-line);
+  border-radius: 6px;
+  background: var(--gov-surface);
+  text-align: center;
+  overflow: hidden;
+}
+.ad-slot-lbl {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--gov-slate-500);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
 
 
 

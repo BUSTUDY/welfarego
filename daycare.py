@@ -63,6 +63,20 @@ ALLOWED_OFFICE_ASSETS = {
     "logo-sc.svg",
 }
 
+# Welfarego OFFICE 확장기능(.oxt) 및 리본 바로가기 전용 고정 리다이렉트 목적지
+OFFICE_SHORTCUT_TARGETS = {
+    "forms": "/forms",
+    "tools": "/tools",
+    "worktime": "/tools#worktime",
+    "record": "/tools#record",
+    "calendar": "/tools#calendar",
+    "shuttle": "/tools#shuttle",
+    "staffing": "/operations#staffing",
+    "fees": "/operations#fees",
+    "checklist": "/evaluation#checklist",
+    "eval": "/evaluation#simulator",
+}
+
 
 def _compute_asset_ver():
     h = hashlib.sha256()
@@ -104,11 +118,14 @@ def _attachment_response(payload_bytes, filename, mimetype):
 
 @daycare_bp.app_context_processor
 def portal_globals():
+    from welfare_app import get_adsense_config
+
     bundle = load_eval_bundle()
     return {
         "today": korea_today(),
         "asset_ver": ASSET_VER,
         "site_base": current_app.config["SITE_BASE"].rstrip("/"),
+        "adsense": get_adsense_config(),
         "nav_items": [
             {"key": "home", "path": "/", "label": "포털 메인"},
             {"key": "evaluation", "path": "/evaluation", "label": "주·야간보호 평가매뉴얼 (36)"},
@@ -361,7 +378,7 @@ def download_office_setup():
 @lru_cache(maxsize=2)
 def _build_mpl2_source_zip(ver):
     buf = io.BytesIO()
-    include_roots = ["LICENSE", "NOTICE", "README.md", "legal", "patches", "config", "installer"]
+    include_roots = ["LICENSE", "NOTICE", "README.md", "legal", "patches", "config", "installer", "extensions"]
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
         for item in include_roots:
             p = OFFICE_DIR / item
@@ -369,7 +386,7 @@ def _build_mpl2_source_zip(ver):
                 zf.write(p, arcname=f"WelfaregoOFFICE_{ver}_MPL2/{item}")
             elif p.is_dir():
                 for sub in sorted(p.rglob("*")):
-                    if sub.is_file():
+                    if sub.is_file() and "__pycache__" not in sub.parts:
                         rel = sub.relative_to(OFFICE_DIR)
                         zf.write(sub, arcname=f"WelfaregoOFFICE_{ver}_MPL2/{rel.as_posix()}")
     return buf.getvalue()
@@ -384,6 +401,29 @@ def download_office_mpl2_source():
         f"WelfaregoOFFICE_{ver}_MPL2_Source_Patches.zip",
         "application/zip",
     )
+
+
+@daycare_bp.route("/office/download/welfarego-links.oxt")
+def download_office_links_oxt():
+    oxt_path = OFFICE_DIR / "extensions" / "welfarego-links.oxt"
+    if not oxt_path.is_file():
+        abort(404)
+    return _attachment_response(
+        oxt_path.read_bytes(),
+        "Welfarego_Office_Shortcuts_26.2.7.oxt",
+        "application/vnd.openofficeorg.extension",
+    )
+
+
+@daycare_bp.route("/go/<target>")
+def office_shortcut_redirect(target):
+    dest = OFFICE_SHORTCUT_TARGETS.get(target)
+    if not dest:
+        abort(404)
+    resp = redirect(dest, code=302)
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
 
 
 @daycare_bp.route("/office/assets/<path:filename>")

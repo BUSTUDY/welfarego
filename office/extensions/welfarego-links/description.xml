@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+  xmlns:d="http://openoffice.org/extensions/description/2006"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <identifier value="kr.co.welfarego.office.links"/>
+  <version value="26.2.7"/>
+  <dependencies>
+    <d:LibreOffice-minimal-version value="7.0" d:name="LibreOffice 7.0 or Welfarego OFFICE"/>
+  </dependencies>
+  <display-name>
+    <name lang="ko">웰페어고 주·야간보호 표준서식·실무계산기 바로가기</name>
+    <name lang="en">Welfarego Standard Forms &amp; Practical Calculators</name>
+  </display-name>
+  <publisher>
+    <name xlink:href="https://welfarego.co.kr" lang="ko">웰페어고 (Welfarego)</name>
+    <name xlink:href="https://welfarego.co.kr" lang="en">Welfarego</name>
+  </publisher>
+  <extension-description>
+    <src xlink:href="pkg-desc/desc_ko.txt" lang="ko"/>
+    <src xlink:href="pkg-desc/desc_en.txt" lang="en"/>
+  </extension-description>
+  <icon>
+    <default xlink:href="icons/ext_icon_42.png"/>
+  </icon>
+</description>

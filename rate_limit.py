@@ -52,7 +52,7 @@ def classify_request(path):
             path.endswith((".hwpx", ".docx", ".xlsx"))
             or path.endswith("/gov.hwp")
         )
-    ) or path == "/office/download/setup":
+    ) or path in ("/office/download/setup", "/office/download/welfarego-links.oxt"):
         return "download"
     return "page"
 

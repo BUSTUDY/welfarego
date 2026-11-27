@@ -15,7 +15,7 @@ FORBIDDEN = re.compile(
 class WelfareAppTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        welfare_app.app.config.update(TESTING=True, SITE_BASE="https://welfarego.co.kr")
+        welfare_app.app.config.update(TESTING=True, SITE_BASE="https://welfarego.co.kr", ADSENSE_PUB_ID="")
         cls.client = welfare_app.app.test_client()
 
     def test_all_sitemap_pages_are_standalone_and_clean(self):
@@ -92,6 +92,37 @@ class WelfareAppTests(unittest.TestCase):
             "welfarego.co.kr/grants",
         ):
             self.assertNotIn(removed, llms)
+
+    def test_adsense_env_switch_and_cookie_disclosure(self):
+        # 1) 잘못된 형식의 게시자 ID는 무시되어 410 유지
+        welfare_app.app.config["ADSENSE_PUB_ID"] = "<script>bad</script>"
+        try:
+            self.assertEqual(self.client.get("/ads.txt").status_code, 410)
+            self.assertNotIn("adsbygoogle", self.client.get("/").get_data(as_text=True))
+
+            # 2) 정상 게시자 ID 설정 시 /ads.txt, 메타태그·스크립트, 개인정보 쿠키 고지 자동 활성화
+            welfare_app.app.config["ADSENSE_PUB_ID"] = "pub-1234567890123456"
+            welfare_app.app.config["ADSENSE_SLOT_BOTTOM"] = "9876543210"
+
+            ads = self.client.get("/ads.txt")
+            self.assertEqual(ads.status_code, 200)
+            self.assertEqual(
+                ads.get_data(as_text=True),
+                "google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0\n",
+            )
+
+            tools_html = self.client.get("/tools").get_data(as_text=True)
+            self.assertIn('content="ca-pub-1234567890123456"', tools_html)
+            self.assertIn("adsbygoogle.js?client=ca-pub-1234567890123456", tools_html)
+            self.assertIn('data-ad-slot="9876543210"', tools_html)
+            self.assertIn('class="ad-slot-box no-print"', tools_html)
+
+            about_html = self.client.get("/about").get_data(as_text=True)
+            self.assertIn("2. 개인정보 보호 및 쿠키·광고 운영 안내", about_html)
+            self.assertIn("adssettings.google.com", about_html)
+        finally:
+            welfare_app.app.config["ADSENSE_PUB_ID"] = ""
+            welfare_app.app.config.pop("ADSENSE_SLOT_BOTTOM", None)
 
 
 if __name__ == "__main__":

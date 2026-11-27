@@ -8,14 +8,55 @@ welfarego.co.kr 주·야간보호시설 실무 안내 포털 웹 앱.
 """
 
 import os
+import re
 from datetime import datetime, timedelta, timezone
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, Response, current_app, jsonify, send_from_directory
 
-from daycare import daycare_bp
 from rate_limit import enforce_request_rate_limit
 
 KST = timezone(timedelta(hours=9))
+_PUB_ID_RE = re.compile(r"^(?:ca-)?pub-(\d{16})$")
+_SLOT_ID_RE = re.compile(r"^\d{6,20}$")
+
+
+def get_adsense_config():
+    """ADSENSE_PUB_ID 환경변수(또는 테스트 설정)가 유효할 때만 애드센스 설정을 활성화한다."""
+    raw_pub = (
+        current_app.config["ADSENSE_PUB_ID"]
+        if "ADSENSE_PUB_ID" in current_app.config
+        else os.environ.get("ADSENSE_PUB_ID", "")
+    ).strip()
+    m = _PUB_ID_RE.match(raw_pub)
+    if not m:
+        return {
+            "enabled": False,
+            "pub_id": "",
+            "client_id": "",
+            "slot_top": "",
+            "slot_bottom": "",
+        }
+    digits = m.group(1)
+    raw_top = (
+        current_app.config["ADSENSE_SLOT_TOP"]
+        if "ADSENSE_SLOT_TOP" in current_app.config
+        else os.environ.get("ADSENSE_SLOT_TOP", "")
+    ).strip()
+    raw_bottom = (
+        current_app.config["ADSENSE_SLOT_BOTTOM"]
+        if "ADSENSE_SLOT_BOTTOM" in current_app.config
+        else os.environ.get("ADSENSE_SLOT_BOTTOM", "")
+    ).strip()
+    return {
+        "enabled": True,
+        "pub_id": f"pub-{digits}",
+        "client_id": f"ca-pub-{digits}",
+        "slot_top": raw_top if _SLOT_ID_RE.match(raw_top) else "",
+        "slot_bottom": raw_bottom if _SLOT_ID_RE.match(raw_bottom) else "",
+    }
+
+
+from daycare import daycare_bp  # noqa: E402
 
 app = Flask(__name__)
 app.config["SITE_BASE"] = os.environ.get("WELFARE_SITE_BASE", "https://welfarego.co.kr").rstrip("/")
@@ -40,7 +81,11 @@ def llms_txt():
 
 @app.route("/ads.txt")
 def ads_txt():
-    # 이 도메인에서는 광고 판매자를 허용하지 않는다.
+    # ADSENSE_PUB_ID 설정 전에는 410(미허용), 설정 후에는 공식 Google ads.txt 레코드를 반환한다.
+    cfg = get_adsense_config()
+    if cfg["enabled"]:
+        body = f"google.com, {cfg['pub_id']}, DIRECT, f08c47fec0942fa0\n"
+        return Response(body, status=200, mimetype="text/plain; charset=utf-8")
     return "", 410
 
 

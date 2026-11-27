@@ -1,0 +1,1 @@
+Adds voluntary-click menu and toolbar shortcuts to Welfarego Daycare Standard Forms and 2026 Practical Calculators in the user's default web browser (MPL-2.0).
