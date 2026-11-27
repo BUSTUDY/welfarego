@@ -155,6 +155,12 @@ jobs:
           }
 
           $loDir = "C:\Program Files\LibreOffice"
+          $instLog = Join-Path $loDir "welfarego-install.log"
+          if (Test-Path $instLog) {
+            Write-Host "=== welfarego-install.log ===" -ForegroundColor Cyan
+            Get-Content -Path $instLog -Encoding UTF8 | Write-Host
+          }
+
           $xcd = Join-Path $loDir "share\registry\zz-welfarego-defaults.xcd"
           if (-not (Test-Path $xcd)) { throw "Missing zz-welfarego-defaults.xcd!" }
           $xcdText = Get-Content -Path $xcd -Raw -Encoding UTF8
@@ -167,6 +173,7 @@ jobs:
           if (-not (Test-Path $ico)) { throw "Missing portal-matched soffice.ico!" }
 
           $pubDesk = [Environment]::GetFolderPath("CommonDesktopDirectory")
+          if (-not $pubDesk) { $pubDesk = "C:\Users\Public\Desktop" }
           $wgLnk = Join-Path $pubDesk "Welfarego OFFICE.lnk"
           if (-not (Test-Path $wgLnk)) { throw "Missing Desktop shortcut: $wgLnk" }
           $strayDesk = Get-ChildItem -Path $pubDesk -Filter "LibreOffice*.lnk" -ErrorAction SilentlyContinue
@@ -174,13 +181,16 @@ jobs:
           Write-Host "[OK] Desktop shortcut is 'Welfarego OFFICE.lnk' with portal icon (no LibreOffice shortcut)" -ForegroundColor Green
 
           $commonProg = [Environment]::GetFolderPath("CommonPrograms")
+          if (-not $commonProg) { $commonProg = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs" }
           $wgMenu = Join-Path $commonProg "Welfarego OFFICE\Welfarego OFFICE.lnk"
           if (-not (Test-Path $wgMenu)) { throw "Missing Start Menu shortcut: $wgMenu" }
           $strayMenu = Get-ChildItem -Path $commonProg -Filter "LibreOffice*" -ErrorAction SilentlyContinue
           if ($strayMenu) { throw "Found stray LibreOffice Start Menu folder: $($strayMenu.FullName)" }
           Write-Host "[OK] Start Menu folder is 'Welfarego OFFICE' (no LibreOffice folder)" -ForegroundColor Green
 
-          $extOut = & (Join-Path $loDir "program\unopkg.com") list --shared | Out-String
+          $extListFile = Join-Path $env:TEMP "unopkg_list.txt"
+          Start-Process -FilePath (Join-Path $loDir "program\unopkg.com") -ArgumentList "list --shared" -RedirectStandardOutput $extListFile -WindowStyle Hidden -Wait
+          $extOut = Get-Content -Path $extListFile -Raw -Encoding UTF8
           Write-Host $extOut
           if ($extOut -notmatch "kr\.co\.welfarego\.office\.links") {
             throw "Shared extension kr.co.welfarego.office.links was not registered!"
@@ -189,16 +199,16 @@ jobs:
 
           $writerUi = Join-Path $loDir "share\config\soffice.cfg\modules\swriter\ui\notebookbar.ui"
           $uiText = Get-Content -Path $writerUi -Raw -Encoding UTF8
-          if ($uiText -notmatch "WelfaregoHomeAddons" -or $uiText -notmatch "실무포털·서식") {
+          if ($uiText -notmatch "WelfaregoHomeAddons" -or $uiText -notmatch "\uC2E4\uBB34\uD3EC\uD138") {
             throw "swriter notebookbar.ui customization missing!"
           }
-          Write-Host "[OK] swriter notebookbar.ui contains WelfaregoHomeAddons and '★ 실무포털·서식' tab!" -ForegroundColor Green
+          Write-Host "[OK] swriter notebookbar.ui contains WelfaregoHomeAddons and Practical Portal tab!" -ForegroundColor Green
 
           # Smoke-launch soffice --headless --convert-to pdf to prove configmgr & XML parse with 0 errors
           $sampleTxt = Join-Path $env:TEMP "wg_smoke.txt"
           $samplePdf = Join-Path $env:TEMP "wg_smoke.pdf"
           Set-Content -Path $sampleTxt -Value "Welfarego OFFICE Smoke Test" -Encoding UTF8
-          & (Join-Path $loDir "program\soffice.com") --headless --nologo --convert-to pdf --outdir $env:TEMP $sampleTxt
+          Start-Process -FilePath (Join-Path $loDir "program\soffice.com") -ArgumentList "--headless --nologo --convert-to pdf --outdir `"$env:TEMP`" `"$sampleTxt`"" -WindowStyle Hidden -Wait
           if (-not (Test-Path $samplePdf)) {
             throw "Headless Writer PDF conversion failed (possible invalid XML in xcd or notebookbar.ui)!"
           }
