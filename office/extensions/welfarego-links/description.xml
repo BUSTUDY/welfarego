@@ -4,9 +4,6 @@
   xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="kr.co.welfarego.office.links"/>
   <version value="26.2.7"/>
-  <dependencies>
-    <d:LibreOffice-minimal-version value="7.0" d:name="LibreOffice 7.0 or Welfarego OFFICE"/>
-  </dependencies>
   <display-name>
     <name lang="ko">웰페어고 주·야간보호 표준서식·실무계산기 바로가기</name>
     <name lang="en">Welfarego Standard Forms &amp; Practical Calculators</name>
