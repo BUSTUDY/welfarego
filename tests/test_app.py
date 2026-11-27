@@ -44,6 +44,16 @@ class WelfareAppTests(unittest.TestCase):
                 html = response.get_data(as_text=True)
                 self.assertIsNone(FORBIDDEN.search(html))
                 self.assertIn('rel="canonical" href="https://welfarego.co.kr' + unquote(path) + '"', html)
+                expected_og = (
+                    "https://welfarego.co.kr/static/og/welfarego-office-2026.png"
+                    if path == "/office"
+                    else "https://welfarego.co.kr/static/og/welfarego-2026.png"
+                )
+                self.assertIn(f'property="og:image" content="{expected_og}"', html)
+                self.assertIn('property="og:image:width" content="1200"', html)
+                self.assertIn('property="og:image:height" content="630"', html)
+                self.assertIn('name="twitter:card" content="summary_large_image"', html)
+                self.assertNotIn("/static/og/welfare.png", html)
                 ld_match = re.search(r'<script type="application/ld\+json" id="ld">(.*?)</script>', html, re.S)
                 self.assertIsNotNone(ld_match)
                 ld = json.loads(ld_match.group(1))
@@ -52,6 +62,21 @@ class WelfareAppTests(unittest.TestCase):
                     ld["@graph"][-1]["itemListElement"][-1]["item"],
                     "https://welfarego.co.kr" + unquote(path),
                 )
+
+        import struct
+
+        for og_path in (
+            "/static/og/welfarego-2026.png",
+            "/static/og/welfarego-office-2026.png",
+            "/static/og/welfare.png",
+        ):
+            with self.subTest(og_path=og_path):
+                img_resp = self.client.get(og_path)
+                self.assertEqual(img_resp.status_code, 200)
+                self.assertTrue(img_resp.data.startswith(b"\x89PNG\r\n\x1a\n"))
+                w, h = struct.unpack(">II", img_resp.data[16:24])
+                self.assertEqual((w, h), (1200, 630))
+                img_resp.close()
 
     def test_removed_legacy_welfare_routes_return_404(self):
         for path in ("/welfare", "/jobs", "/care", "/benefits", "/grants", "/saved", "/calculator", "/s/national-1"):
