@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       app_version:
-        description: "Welfarego OFFICE release version (e.g. 26.2.8)"
+        description: "Welfarego OFFICE release version (e.g. 26.2.9)"
         required: true
-        default: "26.2.8"
+        default: "26.2.9"
         type: string
       release_tag:
-        description: "GitHub Release tag to publish (e.g. v26.2.8)"
+        description: "GitHub Release tag to publish (e.g. v26.2.9)"
         required: true
-        default: "v26.2.8"
+        default: "v26.2.9"
         type: string
       lo_version:
         description: "Upstream LibreOffice Windows x64 MSI version (e.g. 26.2.7)"
@@ -92,7 +92,7 @@ jobs:
           }
           "LO_MSI_PATH=$msiPath" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-      - name: Compile one-click Setup .exe with Inno Setup 6
+      - name: Compile one-click Setup .exe & Source Archive with Inno Setup 6
         shell: pwsh
         run: |
           $appVer = "${{ inputs.app_version }}"
@@ -137,11 +137,18 @@ jobs:
           $exePath = Join-Path $distDir "WelfaregoOFFICE_${appVer}_Setup_x64.exe"
           if (-not (Test-Path $exePath)) { throw "Expected EXE not found at $exePath" }
 
-          Copy-Item -Path (Join-Path $officeRoot "extensions\welfarego-links.oxt") -Destination (Join-Path $distDir "Welfarego_Office_Shortcuts_${appVer}.oxt") -Force
+          $oxtOut = Join-Path $distDir "Welfarego_Office_Shortcuts_${appVer}.oxt"
+          Copy-Item -Path (Join-Path $officeRoot "extensions\welfarego-links.oxt") -Destination $oxtOut -Force
+
+          # Package complete Welfarego OFFICE corresponding source archive (MPL-2.0 §3.2 / LGPLv3 §4)
+          $srcZipPath = Join-Path $distDir "WelfaregoOFFICE_${appVer}_Source.zip"
+          python (Join-Path $officeRoot "scripts\package_source_zip.py") --version $appVer --output $srcZipPath
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path $srcZipPath)) { throw "Failed to build Source ZIP at $srcZipPath" }
 
           $hashFiles = @(
             $exePath,
-            (Join-Path $distDir "Welfarego_Office_Shortcuts_${appVer}.oxt")
+            $oxtOut,
+            $srcZipPath
           )
           $sums = foreach ($f in $hashFiles) {
             $h = (Get-FileHash -Path $f -Algorithm SHA256).Hash.ToLower()
@@ -167,6 +174,14 @@ jobs:
             Write-Host "=== welfarego-install.log ===" -ForegroundColor Cyan
             Get-Content -Path $instLog -Encoding UTF8 | Write-Host
           }
+
+          # Verify complete legal notice bundle inside C:\Program Files\LibreOffice\welfarego-legal
+          $legalDir = Join-Path $loDir "welfarego-legal"
+          foreach ($lf in @("LICENSE", "NOTICE", "PRIVACY.md", "SOURCE-OFFER.md", "THIRD-PARTY-LICENSES.md", "INSTALLER-LICENSE-KO.txt")) {
+            $lp = Join-Path $legalDir $lf
+            if (-not (Test-Path $lp)) { throw "Missing legal notice file in installed folder: $lp" }
+          }
+          Write-Host "[OK] All 6 legal notice files verified in $legalDir" -ForegroundColor Green
 
           $xcd = Join-Path $loDir "share\registry\zz-welfarego-defaults.xcd"
           $koXcd = Join-Path $loDir "share\registry\res\zz-welfarego-ko-labels.xcd"
@@ -273,17 +288,24 @@ jobs:
           files: |
             office/dist/WelfaregoOFFICE_${{ inputs.app_version }}_Setup_x64.exe
             office/dist/Welfarego_Office_Shortcuts_${{ inputs.app_version }}.oxt
+            office/dist/WelfaregoOFFICE_${{ inputs.app_version }}_Source.zip
             office/dist/SHA256SUMS.txt
           body: |
             ## Welfarego OFFICE ${{ inputs.app_version }} (Windows 64비트 통합 설치파일)
 
             - **원클릭 설치파일**: `WelfaregoOFFICE_${{ inputs.app_version }}_Setup_x64.exe`
+            - **수정·구성 소스코드 아카이브**: `WelfaregoOFFICE_${{ inputs.app_version }}_Source.zip`
+            - **실무 바로가기 확장기능**: `Welfarego_Office_Shortcuts_${{ inputs.app_version }}.oxt`
             - **v${{ inputs.app_version }} 주요 개선 사항**:
-              1. **100% 한국어 UI 완성**: 영문 초기 환영창 제거 및 리본·메뉴·시작센터의 미번역 영문 항목(`Insert`, `Layout`, `Field`, `Insert OLE Object` 등) 전면 한글화
-              2. **워드·엑셀·파워포인트 친숙 리본 탭 확장 + 전체 상단 메뉴바 병행 표시**:
-                 - Document: `파일 | 홈 | 삽입 | 디자인 | 레이아웃 | 참조 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
-                 - Spreadsheet: `파일 | 홈 | 삽입 | 페이지 레이아웃 | 수식 | 데이터 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
-                 - Presentation: `파일 | 홈 | 삽입 | 디자인 | 화면 전환 | 애니메이션 | 슬라이드 쇼 | 검토 | 보기 | ★ 실무포털·서식 | 도구`
-              3. **2026 WelfaregoModern 라이트 블루-화이트 테마** + Sukapura SVG 컬러 벡터 아이콘 기본 적용
-              4. **제어판 `Welfarego OFFICE ${{ inputs.app_version }}` 단독 표시** 및 사이트 동일 파란 집·하트 아이콘 적용
-            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0, LibreOffice ${{ inputs.lo_version }} 엔진 기반)
+              1. **오픈소스 법적 고지·소스코드 공개 완비 (MPL-2.0 §3.2 · LGPLv3 §4 준수)**:
+                 - 설치본(`C:\Program Files\LibreOffice\welfarego-legal\`) 내 6종 법적 문서(`LICENSE`, `NOTICE`, `SOURCE-OFFER.md`, `THIRD-PARTY-LICENSES.md`, `PRIVACY.md`, `INSTALLER-LICENSE-KO.txt`) 전부 동봉
+                 - 본 GitHub 릴리스 페이지에 `WelfaregoOFFICE_${{ inputs.app_version }}_Source.zip` 소스 아카이브 직접 첨부 및 SHA-256 체크섬 제공
+                 - 공식 LibreOffice `${{ inputs.lo_version }}` 기반 엔진(MPL-2.0 · LGPLv3/Apache-2.0 포함) 및 상위 원본 소스 링크 정확히 명기
+              2. **100% 한국어 모던 리본 UI + 워드·엑셀·파워포인트 친숙 리본 탭 & 상단 전체 메뉴바 병행 표시**
+              3. **2026 WelfaregoModern 라이트 블루-화이트 테마** + Sukapura SVG 컬러 벡터 아이콘 + 제어판 `Welfarego OFFICE ${{ inputs.app_version }}` 단독 표시
+
+            ### 오픈소스 라이선스 및 소스코드 출처 (MPL-2.0 / LGPLv3)
+            - **기반 엔진**: The Document Foundation 공식 오픈소스 LibreOffice `${{ inputs.lo_version }}` (MPL-2.0 및 포함된 LGPLv3·Apache-2.0·MIT 서드파티 구성요소)
+            - **웰페어고 수정·구성 소스**: 본 릴리스 첨부 `WelfaregoOFFICE_${{ inputs.app_version }}_Source.zip`, [GitHub 저장소](https://github.com/BUSTUDY/welfarego), 또는 https://welfarego.co.kr/office/download/mpl2-source.zip
+            - **상위 원본 LibreOffice `${{ inputs.lo_version }}` 소스**: https://download.documentfoundation.org/libreoffice/src/${{ inputs.lo_version }}/
+            - **상표 고지**: "LibreOffice" 및 "The Document Foundation"은 The Document Foundation(TDF)의 등록상표이며, Welfarego OFFICE는 독립적인 파생 배포판입니다.

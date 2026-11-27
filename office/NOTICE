@@ -1,12 +1,15 @@
 Welfarego OFFICE
 Copyright (c) 2026 Welfarego.
 
-Welfarego OFFICE is a commercial-friendly rebranded distribution derived from
-the open-source LibreOffice codebase (tag: libreoffice-26.2.7.3) and is
-distributed under the Mozilla Public License Version 2.0 (MPL-2.0).
+Welfarego OFFICE is an independent derivative distribution built on top of the
+official open-source LibreOffice 26.2.7 engine (MPL-2.0, together with its
+included LGPLv3/Apache-2.0/MIT third-party components) combined with original
+Welfarego branding, Korean Ribbon UI presets, and extensions under MPL-2.0.
 
-Source code for all modifications to MPL-2.0 covered files is available at:
-  https://github.com/BUSTUDY/welfarego
+Complete corresponding source code is publicly available at:
+  - Welfarego modifications & scripts: https://github.com/BUSTUDY/welfarego
+  - Direct source archive: https://welfarego.co.kr/office/download/mpl2-source.zip
+  - Upstream LibreOffice 26.2.7 source: https://download.documentfoundation.org/libreoffice/src/26.2.7/
 
 Trademark Notice:
 "LibreOffice" and "The Document Foundation" are registered trademarks of

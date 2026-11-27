@@ -1,6 +1,6 @@
 param(
     [string]$PayloadDir = $PSScriptRoot,
-    [string]$AppVersion = "26.2.8",
+    [string]$AppVersion = "26.2.9",
     [string]$CreateDesktopShortcut = "1"
 )
 

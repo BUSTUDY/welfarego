@@ -1,19 +1,19 @@
 # Third-Party Open Source Licenses
 
-Welfarego OFFICE is built on top of the open-source LibreOffice codebase (MPL-2.0 subset) and includes third-party open-source components. During the Windows MSI build, LibreOffice's built-in license generator (`readlicense_oo`) compiles the complete, exact `LICENSE.html` / `LICENSE` file for every compiled library and embeds it inside the installed program directory.
+Welfarego OFFICE distributes its Windows one-click installer (`WelfaregoOFFICE-Bundle.iss`) by packaging the official **LibreOffice 26.2.7 Windows x64 MSI** published by The Document Foundation (licensed primarily under **MPL-2.0**, together with its included **LGPLv3 / Apache-2.0 / MIT / BSD** third-party libraries) alongside original Welfarego branding, Korean Ribbon UI presets, and voluntary-click shortcut extensions under **MPL-2.0**.
 
-Below is a summary of the primary upstream licenses used in a Welfarego OFFICE `--enable-mpl-subset` build.
+Inside every installed copy of Welfarego OFFICE, LibreOffice's official generated license file (`C:\Program Files\LibreOffice\LICENSE.html` and `CREDITS.fodt`) lists the complete, exact license text for every compiled upstream library, and `C:\Program Files\LibreOffice\welfarego-legal\` stores Welfarego's `LICENSE`, `NOTICE`, `SOURCE-OFFER.md`, `THIRD-PARTY-LICENSES.md`, `PRIVACY.md`, and `INSTALLER-LICENSE-KO.txt`.
 
 ## Core Office Engine & UI
 
 | Component | License | Upstream Project |
 | --- | --- | --- |
-| **LibreOffice Core (MPL-2.0 Subset)** (`libreoffice-26.2.7.3`) | Mozilla Public License 2.0 (MPL-2.0) | https://github.com/LibreOffice/core |
+| **LibreOffice 26.2.7 Core Engine** (`libreoffice-26.2.7.3`) | Mozilla Public License 2.0 (MPL-2.0) + included LGPLv3/Apache-2.0 components | https://download.documentfoundation.org/libreoffice/src/26.2.7/ |
 | **Sukapura SVG Icon Theme** (Default icon theme) | Mozilla Public License 2.0 (MPL-2.0) | Rizal Muttaqin / LibreOffice |
 | **Colibre SVG Icon Theme** (Fallback icon theme) | Creative Commons CC0 1.0 Universal | Andreas Kainz / LibreOffice |
 | **Apache OpenOffice Derived Portions** | Apache License 2.0 | https://openoffice.apache.org/ |
 
-## Major Bundled Open-Source Libraries (MPL-2.0 Compatible)
+## Major Bundled Open-Source Libraries (Upstream LibreOffice 26.2.7)
 
 | Component | License | Purpose |
 | --- | --- | --- |
@@ -28,22 +28,13 @@ Below is a summary of the primary upstream licenses used in a Welfarego OFFICE `
 | **Boost** | Boost Software License 1.0 | C++ utility libraries |
 | **Python (internal CPython)** | PSF License 2.0 | Built-in scripting & document automation |
 | **FreeType / Cairo / Pixman** | FreeType License / MPL-1.1 / MIT | Font rasterization & vector graphics |
-| **Hunspell** | MPL-1.1 / GPL / LGPL (used under MPL) | Spell checking |
+| **Hunspell** | MPL-1.1 / GPL / LGPL | Spell checking |
 | **NSS / NSPR** | MPL-2.0 | Certificate & security services |
-| **CoinMP** | EPL-1.0 / CPL-1.0 (if enabled) | Calc optimization solver |
+| **Upstream LGPLv3 / Optional Components** (e.g., `lpsolve`, `postgresql-sdbc`, `lotuswordpro`, `report-builder`, `mariadb-sdbc`, `gpgmepp`, `poppler`, additional icon themes) | LGPLv3 / GPLv2 (unmodified upstream MSI binaries; full source available at https://download.documentfoundation.org/libreoffice/src/26.2.7/) | Included unmodified in official TDF LibreOffice 26.2.7 MSI |
 
-## Components Intentionally Excluded for Commercial Cleanliness
+## Optional Pure MPL-2.0 Subset Source-Build Profile
 
-Because Welfarego OFFICE enables `--enable-mpl-subset` in [`config/windows-x64.autogen.input`](../config/windows-x64.autogen.input), the following GPL/LGPL-only upstream components are **excluded from compilation**:
-
-- `breeze`, `elementary`, `karasa_jaga` icon themes (GPLv2/GPLv3/LGPLv3)
-- `poppler` internal PDF-to-Draw vector importer (GPLv2)
-- `lpsolve` Calc linear solver (LGPL)
-- `postgresql-sdbc` driver (LGPL)
-- `lotuswordpro` legacy filter (LGPL)
-- `report-builder` Java extension (LGPL)
-- `mariadb-sdbc` driver (LGPL)
-- `gpgmepp` (LGPL)
+For organizations wishing to compile a pure MPL-2.0 subset MSI from source without GPL/LGPL-only upstream modules, this repository also provides [`config/windows-x64.autogen.input`](../config/windows-x64.autogen.input) (`--enable-mpl-subset`), which excludes `breeze`/`elementary`/`karasa_jaga`, `poppler`, `lpsolve`, `postgresql-sdbc`, `lotuswordpro`, `report-builder`, `mariadb-sdbc`, and `gpgmepp`.
 
 ## Original Welfarego Assets
 

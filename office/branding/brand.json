@@ -3,7 +3,7 @@
   "product_name_no_spaces": "WelfaregoOFFICE",
   "short_name": "Welfarego",
   "vendor": "Welfarego",
-  "package_version": "26.2.8",
+  "package_version": "26.2.9",
   "upstream_engine_version": "26.2.7",
   "upstream_tag": "libreoffice-26.2.7.3",
   "upstream_repo": "https://github.com/LibreOffice/core.git",
