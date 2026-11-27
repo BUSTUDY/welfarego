@@ -1819,6 +1819,20 @@
       URL.revokeObjectURL(url);
     }
 
+    function deepClone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    function nowSavedStamp() {
+      const d = new Date();
+      const pad2 = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    function makeHistId() {
+      return `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    }
+
     /* ----- Subtab Navigation ----- */
     function switchToolTab(tab) {
       document.querySelectorAll('.tool-tab-panel').forEach(p => { p.hidden = true; });
@@ -1872,11 +1886,16 @@
       try {
         const saved = JSON.parse(localStorage.getItem(WORKTIME_STORAGE_KEY) || 'null');
         if (saved && Array.isArray(saved.rows) && saved.rows.length) {
-          return { month: Number(saved.month) || initMonth, rows: saved.rows };
+          return {
+            month: Number(saved.month) || initMonth,
+            rows: saved.rows,
+            history: Array.isArray(saved.history) ? saved.history : [],
+          };
         }
       } catch (_) {}
-      return { month: initMonth, rows: defaultWtRows(mObj.std_hours) };
+      return { month: initMonth, rows: defaultWtRows(mObj.std_hours), history: [] };
     })();
+    let wtEditingId = null;
 
     function saveWtState() {
       try { localStorage.setItem(WORKTIME_STORAGE_KEY, JSON.stringify(wtState)); } catch (_) {}
@@ -2116,7 +2135,126 @@
       });
     });
 
+    function renderWtEditBanner() {
+      const banner = document.getElementById('wtEditBanner');
+      if (!banner) return;
+      const item = wtEditingId ? wtState.history.find(h => h.id === wtEditingId) : null;
+      if (!item) {
+        wtEditingId = null;
+        banner.hidden = true;
+        banner.innerHTML = '';
+        return;
+      }
+      banner.hidden = false;
+      banner.innerHTML = `
+        <span><strong>저장된 근무표 수정 중:</strong> ${esc(item.title)} (${esc(item.savedAt)} 저장)</span>
+        <span style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-xs btn-primary" id="btnWtUpdateEdit">수정 내용 저장</button>
+          <button type="button" class="btn btn-xs" id="btnWtCancelEdit">수정 종료</button>
+        </span>
+      `;
+    }
+
+    function renderWtHistory() {
+      const listEl = document.getElementById('wtHistoryList');
+      const cntEl = document.getElementById('wtHistoryCount');
+      if (cntEl) cntEl.textContent = wtState.history.length ? `(${wtState.history.length}건)` : '';
+      if (!listEl) return;
+      if (!wtState.history.length) {
+        listEl.innerHTML = `<div class="tool-history-empty">저장된 근무표가 없습니다. [현재 근무표 저장]을 누르면 월별·날짜별로 보관하여 언제든 불러와 수정할 수 있습니다.</div>`;
+        return;
+      }
+      listEl.innerHTML = wtState.history.map((h, idx) => `
+        <div class="rec-saved-item${h.id === wtEditingId ? ' is-editing' : ''}">
+          <div class="rec-saved-meta">
+            <span>${esc(h.savedAt)} · <b>${esc(h.title)}</b> (${h.rows.length}명)</span>
+            <span style="display:flex;gap:4px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-xs btn-primary" data-wt-load="${idx}">불러와 수정</button>
+              <button type="button" class="btn btn-xs" data-wt-del-hist="${idx}">삭제</button>
+            </span>
+          </div>
+          <div class="tool-history-sub">${esc(h.rows.slice(0, 6).map(r => r.name || '미입력').join(', '))}${h.rows.length > 6 ? ` 외 ${h.rows.length - 6}명` : ''}</div>
+        </div>
+      `).join('');
+    }
+
+    function saveWtHistory(asUpdate) {
+      const mObj = getMonthObj(wtState.month);
+      const entry = {
+        id: asUpdate && wtEditingId ? wtEditingId : makeHistId(),
+        savedAt: nowSavedStamp(),
+        month: Number(wtState.month),
+        title: `2026년 ${mObj.month}월 근무표`,
+        rows: deepClone(wtState.rows),
+      };
+      if (asUpdate && wtEditingId) {
+        const idx = wtState.history.findIndex(h => h.id === wtEditingId);
+        if (idx >= 0) wtState.history[idx] = entry;
+        else wtState.history.unshift(entry);
+        wtEditingId = null;
+        showToast(`${entry.title} 수정 내용을 저장했습니다.`);
+      } else {
+        wtState.history.unshift(entry);
+        wtState.history = wtState.history.slice(0, 50);
+        showToast(`${entry.title}(${entry.rows.length}명)을 보관함에 저장했습니다.`);
+      }
+      saveWtState();
+      renderWtEditBanner();
+      renderWtHistory();
+    }
+
+    ['btnWtSaveHistory', 'btnWtSaveHistory2'].forEach(id => {
+      document.getElementById(id)?.addEventListener('click', () => saveWtHistory(false));
+    });
+
+    document.getElementById('wtEditBanner')?.addEventListener('click', e => {
+      if (e.target.closest('#btnWtUpdateEdit')) saveWtHistory(true);
+      else if (e.target.closest('#btnWtCancelEdit')) {
+        wtEditingId = null;
+        renderWtEditBanner();
+        renderWtHistory();
+      }
+    });
+
+    document.getElementById('wtHistoryList')?.addEventListener('click', e => {
+      const ld = e.target.closest('[data-wt-load]');
+      if (ld) {
+        const item = wtState.history[Number(ld.getAttribute('data-wt-load'))];
+        if (!item) return;
+        wtState.month = Number(item.month);
+        wtState.rows = deepClone(item.rows);
+        wtEditingId = item.id;
+        saveWtState();
+        renderWtTable();
+        renderWtEditBanner();
+        renderWtHistory();
+        document.getElementById('wtPrintArea')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast(`${item.savedAt}에 저장한 "${item.title}"를 불러왔습니다. 수정 후 [수정 내용 저장]을 누르세요.`);
+        return;
+      }
+      const dl = e.target.closest('[data-wt-del-hist]');
+      if (dl) {
+        const idx = Number(dl.getAttribute('data-wt-del-hist'));
+        const removed = wtState.history.splice(idx, 1)[0];
+        if (removed && removed.id === wtEditingId) wtEditingId = null;
+        saveWtState();
+        renderWtEditBanner();
+        renderWtHistory();
+      }
+    });
+
+    document.getElementById('btnWtClearHistory')?.addEventListener('click', () => {
+      wtState.history = [];
+      wtEditingId = null;
+      saveWtState();
+      renderWtEditBanner();
+      renderWtHistory();
+      showToast('근무표 보관함을 비웠습니다.');
+    });
+
     renderWtTable();
+    renderWtEditBanner();
+    renderWtHistory();
 
     /* =========================================================
        TOOL 2: 상태변화 · 프로그램 · 상담 육하원칙 문구 생성기
@@ -2174,9 +2312,19 @@
       };
     })();
 
+    let recEditingIdx = null;
+
+    function inferRecMode(note) {
+      if (note && note.mode && REC_SCHEMAS[note.mode]) return note.mode;
+      const t = String(note?.type || '');
+      if (t.includes('기능회복') || t.includes('프로그램')) return 'program';
+      if (t.includes('상담')) return 'counsel';
+      return 'status';
+    }
+
     function saveRecNotes() {
       try {
-        localStorage.setItem(RECORD_STORAGE_KEY, JSON.stringify({ notes: recState.notes.slice(0, 30) }));
+        localStorage.setItem(RECORD_STORAGE_KEY, JSON.stringify({ notes: recState.notes.slice(0, 100) }));
       } catch (_) {}
     }
 
@@ -2268,18 +2416,39 @@
       composeRecordText();
     }
 
+    function renderRecEditBanner() {
+      const banner = document.getElementById('recEditBanner');
+      if (!banner) return;
+      const item = recEditingIdx !== null ? recState.notes[recEditingIdx] : null;
+      if (!item) {
+        recEditingIdx = null;
+        banner.hidden = true;
+        banner.innerHTML = '';
+        return;
+      }
+      banner.hidden = false;
+      banner.innerHTML = `
+        <span><strong>저장된 기록 수정 중:</strong> ${esc(item.date)} · ${esc(item.elder)} (${esc(item.type)})</span>
+        <span style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-xs btn-primary" id="btnRecUpdateNote">수정 내용 저장</button>
+          <button type="button" class="btn btn-xs" id="btnRecCancelEdit">수정 종료</button>
+        </span>
+      `;
+    }
+
     function renderRecSaved() {
       const listEl = document.getElementById('recSavedList');
       if (!listEl) return;
       if (!recState.notes.length) {
-        listEl.innerHTML = `<div style="font-size:0.8rem;color:var(--gov-slate-500);padding:8px 2px;">저장된 문구가 없습니다. [내 보관함에 저장]을 누르면 이 브라우저에 최대 30건까지 보관됩니다.</div>`;
+        listEl.innerHTML = `<div style="font-size:0.8rem;color:var(--gov-slate-500);padding:8px 2px;">저장된 문구가 없습니다. [내 보관함에 저장]을 누르면 이 브라우저에 최대 100건까지 보관되며 언제든 불러와 수정할 수 있습니다.</div>`;
         return;
       }
       listEl.innerHTML = recState.notes.map((n, idx) => `
-        <div class="rec-saved-item">
+        <div class="rec-saved-item${idx === recEditingIdx ? ' is-editing' : ''}">
           <div class="rec-saved-meta">
-            <span>${esc(n.date)} · ${esc(n.type)} · ${esc(n.elder)}</span>
-            <span style="display:flex;gap:4px;">
+            <span>${esc(n.date)} · ${esc(n.type)} · ${esc(n.elder)}${n.writer ? ` · ${esc(n.writer)}` : ''}</span>
+            <span style="display:flex;gap:4px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-xs btn-primary" data-rec-edit-saved="${idx}">불러와 수정</button>
               <button type="button" class="btn btn-xs btn-soft" data-rec-copy-saved="${idx}">복사</button>
               <button type="button" class="btn btn-xs" data-rec-del-saved="${idx}">삭제</button>
             </span>
@@ -2353,16 +2522,59 @@
       const txt = (document.getElementById('recResultText')?.value || '').trim();
       if (!txt) return;
       recState.notes.unshift({
+        mode: recState.mode,
         date: document.getElementById('recDate')?.value || DATA.todayIso,
         type: REC_SCHEMAS[recState.mode].label,
         elder: (document.getElementById('recElderName')?.value || '').trim() || '어르신',
         writer: (document.getElementById('recWriter')?.value || '').trim(),
         text: txt,
       });
-      recState.notes = recState.notes.slice(0, 30);
+      recState.notes = recState.notes.slice(0, 100);
+      if (recEditingIdx !== null) recEditingIdx += 1;
       saveRecNotes();
+      renderRecEditBanner();
       renderRecSaved();
-      showToast('내 브라우저 보관함에 기록을 저장했습니다.');
+      showToast('내 브라우저 보관함에 새 기록으로 저장했습니다.');
+    });
+
+    document.getElementById('recEditBanner')?.addEventListener('click', e => {
+      if (e.target.closest('#btnRecUpdateNote')) {
+        if (recEditingIdx === null || !recState.notes[recEditingIdx]) return;
+        const txt = (document.getElementById('recResultText')?.value || '').trim();
+        if (!txt) { showToast('저장할 기록 문안이 비어 있습니다.'); return; }
+        recState.notes[recEditingIdx] = {
+          mode: recState.mode,
+          date: document.getElementById('recDate')?.value || DATA.todayIso,
+          type: REC_SCHEMAS[recState.mode].label,
+          elder: (document.getElementById('recElderName')?.value || '').trim() || '어르신',
+          writer: (document.getElementById('recWriter')?.value || '').trim(),
+          text: txt,
+        };
+        recEditingIdx = null;
+        saveRecNotes();
+        renderRecEditBanner();
+        renderRecSaved();
+        showToast('보관함 기록의 수정 내용을 저장했습니다.');
+      } else if (e.target.closest('#btnRecCancelEdit')) {
+        recEditingIdx = null;
+        renderRecEditBanner();
+        renderRecSaved();
+      }
+    });
+
+    document.getElementById('btnRecPrint')?.addEventListener('click', () => {
+      const txt = (document.getElementById('recResultText')?.value || '').trim();
+      if (!txt) { showToast('인쇄할 기록 문안이 없습니다. 관찰 항목을 선택해 문안을 만들어 주세요.'); return; }
+      printToolSection('print-tool-record', () => {
+        const label = REC_SCHEMAS[recState.mode].label;
+        const elder = (document.getElementById('recElderName')?.value || '').trim() || '어르신';
+        const writer = (document.getElementById('recWriter')?.value || '').trim() || '-';
+        const date = document.getElementById('recDate')?.value || DATA.todayIso;
+        document.getElementById('recPrintTitle').textContent = `주·야간보호 ${label} 기록지`;
+        document.getElementById('recPrintMeta').textContent =
+          `기관명: ${getPrintOrgHeader()} | 기록일자: ${date} | 수급자: ${elder} | 작성자: ${writer}`;
+        document.getElementById('recPrintBody').textContent = txt;
+      });
     });
 
     document.getElementById('btnRecResetChips')?.addEventListener('click', () => {
@@ -2372,6 +2584,33 @@
     });
 
     document.getElementById('recSavedList')?.addEventListener('click', e => {
+      const ed = e.target.closest('[data-rec-edit-saved]');
+      if (ed) {
+        const idx = Number(ed.getAttribute('data-rec-edit-saved'));
+        const item = recState.notes[idx];
+        if (!item) return;
+        const mode = inferRecMode(item);
+        recState.mode = mode;
+        document.querySelectorAll('#recModeBar [data-recmode]').forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-recmode') === mode);
+        });
+        renderRecChips();
+        const dateEl = document.getElementById('recDate');
+        const elderEl = document.getElementById('recElderName');
+        const writerEl = document.getElementById('recWriter');
+        const area = document.getElementById('recResultText');
+        if (dateEl && item.date) dateEl.value = item.date;
+        if (elderEl) elderEl.value = item.elder || '';
+        if (writerEl) writerEl.value = item.writer || '';
+        if (area) area.value = item.text || '';
+        auditRecordText();
+        recEditingIdx = idx;
+        renderRecEditBanner();
+        renderRecSaved();
+        area?.focus();
+        showToast(`${item.date} (${item.elder}) 기록을 불러왔습니다. 수정 후 [수정 내용 저장]을 누르세요.`);
+        return;
+      }
       const cp = e.target.closest('[data-rec-copy-saved]');
       if (cp) {
         const item = recState.notes[Number(cp.getAttribute('data-rec-copy-saved'))];
@@ -2380,15 +2619,21 @@
       }
       const dl = e.target.closest('[data-rec-del-saved]');
       if (dl) {
-        recState.notes.splice(Number(dl.getAttribute('data-rec-del-saved')), 1);
+        const idx = Number(dl.getAttribute('data-rec-del-saved'));
+        recState.notes.splice(idx, 1);
+        if (recEditingIdx === idx) recEditingIdx = null;
+        else if (recEditingIdx !== null && idx < recEditingIdx) recEditingIdx -= 1;
         saveRecNotes();
+        renderRecEditBanner();
         renderRecSaved();
       }
     });
 
     document.getElementById('btnRecClearSaved')?.addEventListener('click', () => {
       recState.notes = [];
+      recEditingIdx = null;
       saveRecNotes();
+      renderRecEditBanner();
       renderRecSaved();
       showToast('보관함을 비웠습니다.');
     });
@@ -2452,7 +2697,10 @@
       const m = DATA.defaultMonth || 5;
       try {
         const saved = JSON.parse(localStorage.getItem(CALENDAR_STORAGE_KEY) || 'null');
-        if (saved && typeof saved === 'object' && saved.daysByMonth) return saved;
+        if (saved && typeof saved === 'object' && saved.daysByMonth) {
+          if (!Array.isArray(saved.history)) saved.history = [];
+          return saved;
+        }
       } catch (_) {}
       return {
         month: m,
@@ -2465,8 +2713,10 @@
         forceExtra: 'personal',
         memo: '매월 5일 전월 실이용 정산 청구서가 발송됩니다. 결석 예정 시 전날까지 센터로 연락 부탁드립니다.',
         daysByMonth: { [m]: buildPresetDays(m, 'weekdays') },
+        history: [],
       };
     })();
+    let calEditingId = null;
 
     function saveCalState() {
       try { localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(calState)); } catch (_) {}
@@ -2480,15 +2730,18 @@
     }
 
     // Sync initial form controls from calState
-    document.getElementById('calMonth').value = String(calState.month);
-    document.getElementById('calClientName').value = calState.clientName || '';
-    document.getElementById('calRoomType').value = calState.room || 'general';
-    document.getElementById('calGrade').value = calState.grade || 'g3';
-    document.getElementById('calBand').value = String(calState.band ?? 2);
-    document.getElementById('calCopay').value = String(calState.copay ?? '0.15');
-    document.getElementById('calMealDaily').value = String(calState.meal ?? 4500);
-    document.getElementById('calForceExtra').value = calState.forceExtra || 'personal';
-    document.getElementById('calMemo').value = calState.memo || '';
+    function syncCalInputs() {
+      document.getElementById('calMonth').value = String(calState.month);
+      document.getElementById('calClientName').value = calState.clientName || '';
+      document.getElementById('calRoomType').value = calState.room || 'general';
+      document.getElementById('calGrade').value = calState.grade || 'g3';
+      document.getElementById('calBand').value = String(calState.band ?? 2);
+      document.getElementById('calCopay').value = String(calState.copay ?? '0.15');
+      document.getElementById('calMealDaily').value = String(calState.meal ?? 4500);
+      document.getElementById('calForceExtra').value = calState.forceExtra || 'personal';
+      document.getElementById('calMemo').value = calState.memo || '';
+    }
+    syncCalInputs();
 
     function renderCalendarAndBilling() {
       const m = Number(calState.month);
@@ -2693,7 +2946,154 @@
       });
     });
 
+    function countCalDays(daysMap) {
+      const vals = Object.values(daysMap || {});
+      return {
+        use: vals.filter(v => v === 'use').length,
+        unused: vals.filter(v => v === 'unused').length,
+      };
+    }
+
+    function renderCalEditBanner() {
+      const banner = document.getElementById('calEditBanner');
+      if (!banner) return;
+      const item = calEditingId ? calState.history.find(h => h.id === calEditingId) : null;
+      if (!item) {
+        calEditingId = null;
+        banner.hidden = true;
+        banner.innerHTML = '';
+        return;
+      }
+      banner.hidden = false;
+      banner.innerHTML = `
+        <span><strong>저장된 이용달력 수정 중:</strong> 2026년 ${item.month}월 · ${esc(item.clientName || '어르신')} (${esc(item.savedAt)} 저장)</span>
+        <span style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-xs btn-primary" id="btnCalUpdateEdit">수정 내용 저장</button>
+          <button type="button" class="btn btn-xs" id="btnCalCancelEdit">수정 종료</button>
+        </span>
+      `;
+    }
+
+    function renderCalHistory() {
+      const listEl = document.getElementById('calHistoryList');
+      const cntEl = document.getElementById('calHistoryCount');
+      if (cntEl) cntEl.textContent = calState.history.length ? `(${calState.history.length}건)` : '';
+      if (!listEl) return;
+      if (!calState.history.length) {
+        listEl.innerHTML = `<div class="tool-history-empty">저장된 이용달력이 없습니다. [현재 달력 저장]을 누르면 어르신별·월별로 보관하여 언제든 불러와 수정·인쇄할 수 있습니다.</div>`;
+        return;
+      }
+      listEl.innerHTML = calState.history.map((h, idx) => {
+        const c = countCalDays(h.days);
+        const roomTxt = h.room === 'dementia' ? '치매전담실' : '일반';
+        return `
+          <div class="rec-saved-item${h.id === calEditingId ? ' is-editing' : ''}">
+            <div class="rec-saved-meta">
+              <span>${esc(h.savedAt)} · <b>2026년 ${h.month}월 · ${esc(h.clientName || '어르신')}</b> (${roomTxt})</span>
+              <span style="display:flex;gap:4px;flex-wrap:wrap;">
+                <button type="button" class="btn btn-xs btn-primary" data-cal-load="${idx}">불러와 수정</button>
+                <button type="button" class="btn btn-xs" data-cal-del-hist="${idx}">삭제</button>
+              </span>
+            </div>
+            <div class="tool-history-sub">정상 이용 ${c.use}일 · 미이용(50%) ${c.unused}일${h.memo ? ` · ${esc(h.memo.slice(0, 48))}${h.memo.length > 48 ? '…' : ''}` : ''}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveCalHistory(asUpdate) {
+      const m = Number(calState.month);
+      const entry = {
+        id: asUpdate && calEditingId ? calEditingId : makeHistId(),
+        savedAt: nowSavedStamp(),
+        month: m,
+        clientName: (calState.clientName || '').trim() || '어르신',
+        room: calState.room || 'general',
+        grade: calState.grade || 'g3',
+        band: Number(calState.band ?? 2),
+        copay: String(calState.copay ?? '0.15'),
+        meal: Number(calState.meal ?? 4500),
+        forceExtra: calState.forceExtra || 'personal',
+        memo: calState.memo || '',
+        days: deepClone(ensureMonthSchedule(m)),
+      };
+      if (asUpdate && calEditingId) {
+        const idx = calState.history.findIndex(h => h.id === calEditingId);
+        if (idx >= 0) calState.history[idx] = entry;
+        else calState.history.unshift(entry);
+        calEditingId = null;
+        showToast(`2026년 ${m}월 ${entry.clientName} 달력 수정 내용을 저장했습니다.`);
+      } else {
+        calState.history.unshift(entry);
+        calState.history = calState.history.slice(0, 100);
+        showToast(`2026년 ${m}월 ${entry.clientName} 달력을 보관함에 저장했습니다.`);
+      }
+      saveCalState();
+      renderCalEditBanner();
+      renderCalHistory();
+    }
+
+    ['btnCalSaveHistory', 'btnCalSaveHistory2'].forEach(id => {
+      document.getElementById(id)?.addEventListener('click', () => saveCalHistory(false));
+    });
+
+    document.getElementById('calEditBanner')?.addEventListener('click', e => {
+      if (e.target.closest('#btnCalUpdateEdit')) saveCalHistory(true);
+      else if (e.target.closest('#btnCalCancelEdit')) {
+        calEditingId = null;
+        renderCalEditBanner();
+        renderCalHistory();
+      }
+    });
+
+    document.getElementById('calHistoryList')?.addEventListener('click', e => {
+      const ld = e.target.closest('[data-cal-load]');
+      if (ld) {
+        const item = calState.history[Number(ld.getAttribute('data-cal-load'))];
+        if (!item) return;
+        calState.month = Number(item.month);
+        calState.clientName = item.clientName || '';
+        calState.room = item.room || 'general';
+        calState.grade = item.grade || 'g3';
+        calState.band = Number(item.band ?? 2);
+        calState.copay = String(item.copay ?? '0.15');
+        calState.meal = Number(item.meal ?? 4500);
+        calState.forceExtra = item.forceExtra || 'personal';
+        calState.memo = item.memo || '';
+        calState.daysByMonth[calState.month] = deepClone(item.days || {});
+        calEditingId = item.id;
+        saveCalState();
+        syncCalInputs();
+        renderCalendarAndBilling();
+        renderCalEditBanner();
+        renderCalHistory();
+        document.getElementById('calPrintArea')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast(`2026년 ${item.month}월 ${item.clientName} 달력을 불러왔습니다. 수정 후 [수정 내용 저장]을 누르세요.`);
+        return;
+      }
+      const dl = e.target.closest('[data-cal-del-hist]');
+      if (dl) {
+        const idx = Number(dl.getAttribute('data-cal-del-hist'));
+        const removed = calState.history.splice(idx, 1)[0];
+        if (removed && removed.id === calEditingId) calEditingId = null;
+        saveCalState();
+        renderCalEditBanner();
+        renderCalHistory();
+      }
+    });
+
+    document.getElementById('btnCalClearHistory')?.addEventListener('click', () => {
+      calState.history = [];
+      calEditingId = null;
+      saveCalState();
+      renderCalEditBanner();
+      renderCalHistory();
+      showToast('이용달력 보관함을 비웠습니다.');
+    });
+
     renderCalendarAndBilling();
+    renderCalEditBanner();
+    renderCalHistory();
 
     /* =========================================================
        TOOL 4: 차량 송영(등·하원) 노선 · 일일 승하차 배차표 작성기
@@ -2736,11 +3136,17 @@
       try {
         const saved = JSON.parse(localStorage.getItem(SHUTTLE_STORAGE_KEY) || 'null');
         if (saved && Array.isArray(saved.vehicles) && saved.vehicles.length === 3) {
-          return { activeVeh: Number(saved.activeVeh) || 0, date: saved.date || DATA.todayIso, vehicles: saved.vehicles };
+          return {
+            activeVeh: Number(saved.activeVeh) || 0,
+            date: saved.date || DATA.todayIso,
+            vehicles: saved.vehicles,
+            history: Array.isArray(saved.history) ? saved.history : [],
+          };
         }
       } catch (_) {}
-      return { activeVeh: 0, date: DATA.todayIso, vehicles: defaultShuttleVehicles() };
+      return { activeVeh: 0, date: DATA.todayIso, vehicles: defaultShuttleVehicles(), history: [] };
     })();
+    let shEditingId = null;
 
     function saveShState() {
       try { localStorage.setItem(SHUTTLE_STORAGE_KEY, JSON.stringify(shState)); } catch (_) {}
@@ -2848,6 +3254,9 @@
     document.getElementById('shDate')?.addEventListener('change', e => {
       shState.date = e.target.value;
       saveShState();
+      if (shState.history.some(h => h.date === shState.date)) {
+        showToast(`${shState.date}에 저장된 송영일지가 있습니다. 아래 보관함에서 [불러와 수정]을 누르세요.`);
+      }
     });
     ['shCarNo:carNo', 'shDriver:driver', 'shEscort:escort'].forEach(pair => {
       const [id, prop] = pair.split(':');
@@ -2932,7 +3341,134 @@
       });
     });
 
+    function shVehicleCounts(vehicles) {
+      return (vehicles || []).map((v, i) => {
+        const cnt = (v.stops || []).filter(st => (st.elder || '').trim() || (st.place || '').trim()).length;
+        return `${i + 1}호차 ${cnt}명`;
+      }).join(' · ');
+    }
+
+    function renderShEditBanner() {
+      const banner = document.getElementById('shEditBanner');
+      if (!banner) return;
+      const item = shEditingId ? shState.history.find(h => h.id === shEditingId) : null;
+      if (!item) {
+        shEditingId = null;
+        banner.hidden = true;
+        banner.innerHTML = '';
+        return;
+      }
+      banner.hidden = false;
+      banner.innerHTML = `
+        <span><strong>저장된 송영일지 수정 중:</strong> ${esc(item.date)} 운행일지 (${esc(item.savedAt)} 저장)</span>
+        <span style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-xs btn-primary" id="btnShUpdateEdit">수정 내용 저장</button>
+          <button type="button" class="btn btn-xs" id="btnShCancelEdit">수정 종료</button>
+        </span>
+      `;
+    }
+
+    function renderShHistory() {
+      const listEl = document.getElementById('shHistoryList');
+      const cntEl = document.getElementById('shHistoryCount');
+      if (cntEl) cntEl.textContent = shState.history.length ? `(${shState.history.length}건)` : '';
+      if (!listEl) return;
+      if (!shState.history.length) {
+        listEl.innerHTML = `<div class="tool-history-empty">저장된 날짜별 송영일지가 없습니다. [현재 날짜 일지 저장]을 누르면 1~3호차 전체를 날짜별로 보관하여 언제든 불러와 수정할 수 있습니다.</div>`;
+        return;
+      }
+      listEl.innerHTML = shState.history.map((h, idx) => `
+        <div class="rec-saved-item${h.id === shEditingId ? ' is-editing' : ''}">
+          <div class="rec-saved-meta">
+            <span><b>${esc(h.date)} 운행일지</b> · 저장 ${esc(h.savedAt)}</span>
+            <span style="display:flex;gap:4px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-xs btn-primary" data-sh-load="${idx}">불러와 수정</button>
+              <button type="button" class="btn btn-xs" data-sh-del-hist="${idx}">삭제</button>
+            </span>
+          </div>
+          <div class="tool-history-sub">${esc(shVehicleCounts(h.vehicles))}</div>
+        </div>
+      `).join('');
+    }
+
+    function saveShHistory(asUpdate) {
+      const dateStr = shState.date || DATA.todayIso;
+      const entry = {
+        id: asUpdate && shEditingId ? shEditingId : makeHistId(),
+        savedAt: nowSavedStamp(),
+        date: dateStr,
+        activeVeh: Number(shState.activeVeh) || 0,
+        vehicles: deepClone(shState.vehicles),
+      };
+      if (asUpdate && shEditingId) {
+        const idx = shState.history.findIndex(h => h.id === shEditingId);
+        if (idx >= 0) shState.history[idx] = entry;
+        else shState.history.unshift(entry);
+        shEditingId = null;
+        showToast(`${dateStr} 송영일지 수정 내용을 저장했습니다.`);
+      } else {
+        shState.history.unshift(entry);
+        shState.history = shState.history.slice(0, 100);
+        showToast(`${dateStr} 송영일지(1~3호차 전체)를 보관함에 저장했습니다.`);
+      }
+      saveShState();
+      renderShEditBanner();
+      renderShHistory();
+    }
+
+    ['btnShSaveHistory', 'btnShSaveHistory2'].forEach(id => {
+      document.getElementById(id)?.addEventListener('click', () => saveShHistory(false));
+    });
+
+    document.getElementById('shEditBanner')?.addEventListener('click', e => {
+      if (e.target.closest('#btnShUpdateEdit')) saveShHistory(true);
+      else if (e.target.closest('#btnShCancelEdit')) {
+        shEditingId = null;
+        renderShEditBanner();
+        renderShHistory();
+      }
+    });
+
+    document.getElementById('shHistoryList')?.addEventListener('click', e => {
+      const ld = e.target.closest('[data-sh-load]');
+      if (ld) {
+        const item = shState.history[Number(ld.getAttribute('data-sh-load'))];
+        if (!item) return;
+        shState.date = item.date || DATA.todayIso;
+        shState.activeVeh = Number(item.activeVeh) || 0;
+        shState.vehicles = deepClone(item.vehicles);
+        shEditingId = item.id;
+        saveShState();
+        renderShVehicle();
+        renderShEditBanner();
+        renderShHistory();
+        document.getElementById('shPrintArea')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast(`${item.date} 송영일지를 불러왔습니다. 수정 후 [수정 내용 저장]을 누르세요.`);
+        return;
+      }
+      const dl = e.target.closest('[data-sh-del-hist]');
+      if (dl) {
+        const idx = Number(dl.getAttribute('data-sh-del-hist'));
+        const removed = shState.history.splice(idx, 1)[0];
+        if (removed && removed.id === shEditingId) shEditingId = null;
+        saveShState();
+        renderShEditBanner();
+        renderShHistory();
+      }
+    });
+
+    document.getElementById('btnShClearHistory')?.addEventListener('click', () => {
+      shState.history = [];
+      shEditingId = null;
+      saveShState();
+      renderShEditBanner();
+      renderShHistory();
+      showToast('송영일지 보관함을 비웠습니다.');
+    });
+
     renderShVehicle();
+    renderShEditBanner();
+    renderShHistory();
 
     function applyToolsHash() {
       const h = (location.hash || '').replace('#', '');
