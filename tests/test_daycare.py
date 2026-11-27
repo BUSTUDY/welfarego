@@ -213,6 +213,44 @@ class DaycareAndOfficeTests(unittest.TestCase):
             welfare_app.app.config.pop("RATELIMIT_IN_TESTS", None)
             reset_rate_limits()
 
+    def test_practical_tools_hub_and_2026_work_hours(self):
+        from daycare_data import HOLIDAYS_2026_MAP, MONTHLY_WORK_HOURS_2026
+
+        self.assertEqual(len(MONTHLY_WORK_HOURS_2026), 12)
+        expected_hours = {
+            1: 168,
+            2: 136,
+            3: 168,
+            4: 176,
+            5: 144,
+            6: 168,
+            7: 176,
+            8: 160,
+            9: 160,
+            10: 160,
+            11: 168,
+            12: 176,
+        }
+        for row in MONTHLY_WORK_HOURS_2026:
+            m = row["month"]
+            self.assertEqual(row["std_hours"], expected_hours[m])
+            self.assertEqual(row["std_hours"], row["work_days"] * 8)
+            self.assertEqual(row["helper_half_hours"], row["std_hours"] // 2)
+
+        # 2026 제헌절 공휴일 복원(+30% 수가 가산 대상) vs 5.1 노동절(기준시간 제외·공휴일 수가 가산 미적용)
+        self.assertTrue(HOLIDAYS_2026_MAP["2026-07-17"]["fee_addon_30"])
+        self.assertFalse(HOLIDAYS_2026_MAP["2026-05-01"]["fee_addon_30"])
+        self.assertTrue(HOLIDAYS_2026_MAP["2026-06-03"]["fee_addon_30"])
+
+        tools = self.client.get("/tools")
+        self.assertEqual(tools.status_code, 200)
+        html = tools.get_data(as_text=True)
+        for panel_id in ("tooltab-worktime", "tooltab-record", "tooltab-calendar", "tooltab-shuttle"):
+            self.assertIn(f'id="{panel_id}"', html)
+        self.assertIn("현재 기기 브라우저에만 저장", html)
+        self.assertIn("제헌절 공휴일 복원", html)
+        self.assertIn("dc-tools-data", html)
+
 
 if __name__ == "__main__":
     unittest.main()

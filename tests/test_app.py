@@ -29,6 +29,7 @@ class WelfareAppTests(unittest.TestCase):
                 "https://welfarego.co.kr/",
                 "https://welfarego.co.kr/evaluation",
                 "https://welfarego.co.kr/operations",
+                "https://welfarego.co.kr/tools",
                 "https://welfarego.co.kr/forms",
                 "https://welfarego.co.kr/office",
                 "https://welfarego.co.kr/about",
@@ -82,7 +83,7 @@ class WelfareAppTests(unittest.TestCase):
         llms_resp = self.client.get("/llms.txt")
         llms = llms_resp.get_data(as_text=True)
         llms_resp.close()
-        for required in ("/evaluation", "/operations", "/forms", "/office"):
+        for required in ("/evaluation", "/operations", "/tools", "/forms", "/office"):
             self.assertIn(required, llms)
         for removed in (
             "welfarego.co.kr/welfare",

@@ -1,0 +1,446 @@
+{% extends 'daycare/base.html' %}
+{% block title %}주·야간보호 실무 자동화 도구 · 월 기준근무시간·상태변화문구·이용달력·송영배차 | 웰페어고{% endblock %}
+{% block description %}2026년 월별 기준근무시간·근무표 인력인정 계산기(제헌절 공휴일 복원 반영), 공단 정기평가 대비 상태변화·상담 육하원칙 문구 생성기, 달력형 월간 이용일정·미이용일(50%)·보호자 본인부담금 안내문 출력기, 차량 송영 배차표를 서버 저장 없이 무료로 이용하세요.{% endblock %}
+{% block og_title %}2026 주·야간보호 현장 실무 자동화 도구 4종 | 웰페어고{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"2026년 7월 장기요양기관 월 기준근무시간은 몇 시간인가요?","acceptedAnswer":{"@type":"Answer","text":"2026년부터 7월 17일 제헌절이 관공서 공휴일로 복원됨에 따라 2026년 7월 평일 근무가능일수는 22일이며, 월 기준근무시간은 176시간(보조원 50% 특례 기준 88시간)입니다."}},{"@type":"Question","name":"주·야간보호 미이용일 급여비용(50%) 산정 요건과 상한은 무엇인가요?","acceptedAnswer":{"@type":"Answer","text":"고시 제32조제3항에 따라 월 15일 이상 이용 계약을 체결하고 전월 말일까지 급여계약통보서를 적기 통보한 수급자가 토요일·공휴일을 제외한 평일에 수급자 사정으로 미이용한 경우, 월 최대 5일까지 계약 급여비용의 50%(일반실 라-3, 치매전담실 사-3 단가의 50% 한도)를 산정할 수 있습니다."}},{"@type":"Question","name":"실무 자동화 도구에 입력한 직원 근무시간이나 배차 내용은 서버에 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 모든 입력 데이터는 서버로 일절 전송되지 않으며 현재 사용 중인 PC·태블릿 웹브라우저(localStorage)에만 저장되므로 개인정보 유출 우려 없이 안전하게 사용할 수 있습니다."}}]}</script>
+{% endblock %}
+
+{% block content %}
+<div class="stack-md" id="dcToolsApp">
+  <div class="gov-breadcrumb no-print"><a href="/">포털 메인</a><span>&rsaquo;</span><strong>주·야간보호 실무 자동화 도구</strong></div>
+
+  <section class="gov-page-banner no-print">
+    <div>
+      <div class="tag-row" style="margin-bottom:5px;">
+        <span class="tag tag-solid">2026 최신 고시 · 평가지표 기준</span>
+        <span class="tag tag-ok">내 PC 브라우저 자동저장 · 서버 미전송</span>
+        <span class="tag tag-navy">A4 인쇄 · 엑셀(CSV) 호환</span>
+      </div>
+      <h1>주·야간보호 현장 실무 자동화 도구</h1>
+      <p>엑셀 수식 오류나 단순 기록 감점 걱정 없이 브라우저에서 바로 근무시간 인력인정, 육하원칙 상태변화·상담 기록, 보호자 교부용 월간 본인부담금 달력 안내문, 일일 송영 배차표를 작성하세요.</p>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <a class="btn btn-soft" href="/operations#staffing">가산 시뮬레이터 &rsaquo;</a>
+      <a class="btn btn-soft" href="/forms">표준서식 20종 &rsaquo;</a>
+    </div>
+  </section>
+
+  <!-- 인쇄물 공통 기관명 연동 바 -->
+  <div class="tools-privacy-bar no-print">
+    <div class="tools-privacy-note">
+      <strong>개인정보 안심 설계</strong>
+      <span>입력하시는 근무시간·기록·일정·배차 정보는 서버로 전송되지 않고 <b>현재 기기 브라우저에만 저장</b>됩니다. (성명은 이니셜·별칭 사용 가능)</span>
+    </div>
+    <div class="tools-org-inputs">
+      <label class="sr-only" for="toolsOrgName">인쇄용 기관명</label>
+      <input id="toolsOrgName" type="text" class="gov-input" maxlength="60" placeholder="인쇄용 기관명 (예: 행복주·야간보호센터)">
+      <label class="sr-only" for="toolsOrgTel">기관 연락처</label>
+      <input id="toolsOrgTel" type="text" class="gov-input" maxlength="40" placeholder="연락처 (예: 02-1234-5678)">
+    </div>
+  </div>
+
+  <!-- 4대 도구 탭 -->
+  <nav class="gov-subtabs scrollbar-thin no-print" role="tablist" aria-label="실무 자동화 도구 메뉴" id="toolsNav">
+    <button type="button" data-tooltab="worktime" class="gov-subtab-btn active" role="tab" aria-selected="true">① 월 기준근무시간 · 인력인정</button>
+    <button type="button" data-tooltab="record" class="gov-subtab-btn" role="tab" aria-selected="false">② 상태변화 · 상담 문구 생성기</button>
+    <button type="button" data-tooltab="calendar" class="gov-subtab-btn" role="tab" aria-selected="false">③ 월간 이용달력 · 부담금 안내문</button>
+    <button type="button" data-tooltab="shuttle" class="gov-subtab-btn" role="tab" aria-selected="false">④ 차량 송영 노선 · 승하차 배차표</button>
+  </nav>
+
+  <!-- =========================================================
+       TAB 1: 2026 월 기준근무시간 & 근무표 인력인정 계산기
+       ========================================================= -->
+  <section id="tooltab-worktime" class="tool-tab-panel stack-md">
+    <div class="gov-card no-print">
+      <div class="gov-card-head">
+        <div>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-solid">고시 제49조제1항</span>
+            <span class="tag tag-warn">2026.7.17. 제헌절 공휴일 복원 반영</span>
+          </div>
+          <h2>2026년 1월 ~ 12월 월 기준근무시간 조견표 (클릭 시 아래 계산기에 자동 적용)</h2>
+          <p class="gov-card-sub">산정식: 평일(월~금) 중 관공서 공휴일·대체공휴일·노동절(5.1)을 제외한 근무가능일수 × 8시간. 보조원(운전원)은 기준시간의 50% 이상 근무 시 1명 인정(고시 제51조제5항).</p>
+        </div>
+      </div>
+
+      <div class="work-month-grid" id="wtMonthGrid" role="group" aria-label="2026년 월별 기준근무시간 선택">
+        {% for m in monthly_work_hours %}
+        <button type="button" class="wt-month-card{{ ' active' if m.month == default_month else '' }}" data-wt-month="{{ m.month }}">
+          <div class="wt-m-top">
+            <strong>2026년 {{ m.month }}월</strong>
+            {% if m.badge %}<span class="wt-m-badge">{{ m.badge }}</span>{% endif %}
+          </div>
+          <div class="wt-m-hrs"><em>{{ m.std_hours }}</em>시간 <small>({{ m.work_days }}일)</small></div>
+          <div class="wt-m-sub">보조원 50%: {{ m.helper_half_hours }}h · {{ m.note }}</div>
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="gov-card" id="wtPrintArea">
+      <div class="print-only-header">
+        <h1 id="wtPrintTitle">2026년 월별 종사자 근무시간 및 인력배치 인정 산정표</h1>
+        <p id="wtPrintMeta"></p>
+      </div>
+
+      <div class="gov-card-head no-print">
+        <div>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-navy">고시 제51조제1~5항 자동 판정</span>
+            <span class="tag tag-ok">감액기준(0.5+ 인정) vs 가산기준(소수점 절사) 동시 비교</span>
+          </div>
+          <h2>직원별 월 근무시간 합산 &amp; 법정·가산 인력인정 자동 계산기</h2>
+          <p class="gov-card-sub">상근 직원(기준시간 이상 = 1명)과 기준시간 미만 직원(시간제·중도입퇴사 등 동일 직종 합산)을 자동 구분하여 감액 방지 인정인원과 추가배치 가산 인정인원을 각각 산출합니다.</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm btn-soft" id="btnWtResetSample">예시 불러오기</button>
+          <button type="button" class="btn btn-sm btn-primary" id="btnWtPrint">산정표 A4 인쇄</button>
+        </div>
+      </div>
+
+      <div class="wt-ctrl-bar no-print">
+        <div class="field" style="min-width:190px;">
+          <label for="wtMonthSelect">산정 대상 월 선택</label>
+          <select id="wtMonthSelect" class="gov-select">
+            {% for m in monthly_work_hours %}
+            <option value="{{ m.month }}"{% if m.month == default_month %} selected{% endif %}>2026년 {{ m.month }}월 (기준 {{ m.std_hours }}시간 / {{ m.work_days }}일)</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div id="wtMonthHolidayInfo" class="wt-holiday-pill"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;">
+          <button type="button" class="btn btn-sm btn-primary" id="btnWtAddRow">+ 직원 행 추가</button>
+          <button type="button" class="btn btn-sm" id="btnWtSendToSim" title="가산 인정 인원을 운영매뉴얼 가산 시뮬레이터에 자동 입력합니다">가산 시뮬레이터로 인원 보내기 &rsaquo;</button>
+        </div>
+      </div>
+
+      <div class="gov-table-wrap" style="margin-top:12px;">
+        <table class="gov-table wt-staff-table">
+          <thead>
+            <tr>
+              <th style="width:44px;">번호</th>
+              <th style="min-width:120px;">성명·호칭</th>
+              <th style="min-width:155px;">신고 직종</th>
+              <th style="min-width:105px;">실근무시간(h)<br><small style="font-weight:500;">휴게시간 제외</small></th>
+              <th style="min-width:105px;">유급휴가·교육(h)<br><small style="font-weight:500;">연차·보수교육 등</small></th>
+              <th class="num" style="min-width:92px;">인정 합계</th>
+              <th style="min-width:170px;">개별 판정 · 장기근속(120h)</th>
+              <th class="no-print" style="width:58px;">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="wtStaffTbody"></tbody>
+        </table>
+      </div>
+
+      <div id="wtSummaryOutput" style="margin-top:16px;" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       TAB 2: 공단 평가 대비 상태변화·상담 육하원칙 문구 생성기
+       ========================================================= -->
+  <section id="tooltab-record" class="tool-tab-panel stack-md" hidden>
+    <div class="gov-card">
+      <div class="gov-card-head">
+        <div>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-solid">평가지표 34 (결과평가·주1회 상태변화 · 7점)</span>
+            <span class="tag tag-navy">평가지표 17 (보호자 상담 · 2점) · 지표 27 (기능회복 · 3점)</span>
+          </div>
+          <h2>공단 평가 대비 ‘상태변화 · 프로그램 · 상담 기록’ 육하원칙 문구 생성기</h2>
+          <p class="gov-card-sub">평가 현장에서 가장 흔한 감점 사유인 <b>‘잘 지내심’, ‘특이사항 없음’, ‘무난함’</b> 같은 단답형 기록을 방지하고, 관찰 항목 클릭만으로 구체적인 육하원칙 서술 문장을 조합합니다.</p>
+        </div>
+      </div>
+
+      <div class="chip-bar" id="recModeBar" style="margin-top:0;padding-top:0;border-top:0;margin-bottom:14px;">
+        <button type="button" class="chip-btn active" data-recmode="status">① 주간 상태변화 기록 (지표 34 · 주 1회 필수)</button>
+        <button type="button" class="chip-btn" data-recmode="program">② 기능회복·인지활동 반응 기록 (지표 27·34)</button>
+        <button type="button" class="chip-btn" data-recmode="counsel">③ 분기별 보호자 양방향 상담·급여반영 (지표 17)</button>
+      </div>
+
+      <div class="calc-split">
+        <div class="stack-sm" style="background:var(--gov-surface);padding:16px;border:1px solid var(--gov-border);border-radius:6px;">
+          <div class="grid-3">
+            <div class="field">
+              <label for="recDate">기록 일자</label>
+              <input id="recDate" type="date" value="{{ today.isoformat() }}" class="gov-input">
+            </div>
+            <div class="field">
+              <label for="recElderName">수급자 호칭 (선택)</label>
+              <input id="recElderName" type="text" maxlength="30" value="○○○ 어르신" class="gov-input" placeholder="예: 김○○ 어르신">
+            </div>
+            <div class="field">
+              <label for="recWriter">작성 제공직원 직종·성명</label>
+              <input id="recWriter" type="text" maxlength="40" value="요양보호사 김돌봄" class="gov-input" placeholder="예: 요양보호사 홍길동">
+            </div>
+          </div>
+
+          <div id="recChipGroups" class="stack-sm" style="margin-top:6px;"></div>
+        </div>
+
+        <div class="calc-out" style="justify-content:flex-start;">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <strong style="font-size:0.9rem;color:var(--gov-navy-dark);">문장 구성 스타일 선택 (복붙 획일화 방지)</strong>
+            <div class="opt-group" id="recStyleBar">
+              <button type="button" class="chip-btn active" data-recstyle="0">표준 서술형</button>
+              <button type="button" class="chip-btn" data-recstyle="1">항목 구분형</button>
+              <button type="button" class="chip-btn" data-recstyle="2">조치·경과 중심형</button>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:4px;">
+            <label for="recResultText">생성된 육하원칙 기록 문안 (자유롭게 수정 후 복사하세요)</label>
+            <textarea id="recResultText" rows="8" class="gov-textarea"></textarea>
+          </div>
+
+          <div id="recAuditFeedback"></div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <button type="button" class="btn btn-primary" id="btnRecCopy">클립보드 원클릭 복사</button>
+            <button type="button" class="btn btn-soft" id="btnRecSaveNote">내 보관함에 저장</button>
+            <button type="button" class="btn" id="btnRecResetChips">선택 초기화</button>
+          </div>
+
+          <div class="rec-saved-box">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+              <strong style="font-size:0.84rem;color:var(--gov-navy-dark);">최근 작성 보관함 (이 브라우저에만 저장)</strong>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="btn btn-xs btn-soft" id="btnRecExportCsv">엑셀(CSV) 저장</button>
+                <button type="button" class="btn btn-xs" id="btnRecClearSaved">전체 비우기</button>
+              </div>
+            </div>
+            <div id="recSavedList" class="rec-saved-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       TAB 3: 2026 달력형 월간 이용일정 · 미이용일(50%) · 본인부담금 안내문
+       ========================================================= -->
+  <section id="tooltab-calendar" class="tool-tab-panel stack-md" hidden>
+    <div class="gov-card" id="calPrintArea">
+      <div class="print-only-header">
+        <h1 id="calPrintTitle">2026년 월간 주·야간보호 이용일정 및 예상 본인부담금 안내문</h1>
+        <p id="calPrintMeta"></p>
+      </div>
+
+      <div class="gov-card-head no-print">
+        <div>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-solid">고시 제13조 · 제31조 · 제32조제3항 · 제33조</span>
+            <span class="tag tag-ok">토·공휴일 +30% · 미이용일 50%(라-3/사-3 상한) 자동 반영</span>
+          </div>
+          <h2>2026 달력형 월간 이용일정 · 미이용일(50% 특례) · 보호자 안내문 출력기</h2>
+          <p class="gov-card-sub">달력 날짜를 클릭할 때마다 <b>[휴무 → 정상 이용 → 평일 미이용(50% 특례)]</b> 순으로 전환되며, 보호자에게 배부할 월간 예상 본인부담금 안내문을 A4 1장으로 바로 인쇄할 수 있습니다.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btnCalPrint">보호자 안내문 A4 인쇄</button>
+      </div>
+
+      <div class="grid-4 no-print" style="background:var(--gov-surface);padding:14px;border:1px solid var(--gov-border);border-radius:6px;margin-bottom:14px;">
+        <div class="field">
+          <label for="calMonth">이용 연월 (2026년)</label>
+          <select id="calMonth" class="gov-select">
+            {% for m in monthly_work_hours %}
+            <option value="{{ m.month }}"{% if m.month == default_month %} selected{% endif %}>2026년 {{ m.month }}월</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="calClientName">수급자 안내 호칭</label>
+          <input id="calClientName" type="text" maxlength="30" value="김○○ 어르신" class="gov-input" placeholder="예: 김○○ 어르신">
+        </div>
+        <div class="field">
+          <label for="calRoomType">시설 구분</label>
+          <select id="calRoomType" class="gov-select">
+            <option value="general">일반 주·야간보호 (라-1~라-5)</option>
+            <option value="dementia">치매전담실 (사-1~사-5)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calGrade">장기요양등급</label>
+          <select id="calGrade" class="gov-select">
+            <option value="g1">1등급 (2,512,900원)</option>
+            <option value="g2">2등급 (2,331,200원)</option>
+            <option value="g3" selected>3등급 (1,528,200원)</option>
+            <option value="g4">4등급 (1,409,700원)</option>
+            <option value="g5">5등급 (1,208,900원)</option>
+            <option value="gc">인지지원등급 (676,320원)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calBand">계약 1일 이용시간 구간</label>
+          <select id="calBand" class="gov-select">
+            <option value="0">3시간 이상 ~ 6시간 미만</option>
+            <option value="1">6시간 이상 ~ 8시간 미만</option>
+            <option value="2" selected>8시간 이상 ~ 10시간 미만 (표준)</option>
+            <option value="3">10시간 이상 ~ 13시간 이하</option>
+            <option value="4">13시간 초과</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calCopay">수급자 본인부담률</label>
+          <select id="calCopay" class="gov-select">
+            <option value="0.15" selected>일반 수급자 (15%)</option>
+            <option value="0.09">감경 40% 대상 (9%)</option>
+            <option value="0.06">감경 60% 대상 (6%)</option>
+            <option value="0">기초생활 의료급여 (0%)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="calMealDaily">1일 식사·간식 비급여 (원)</label>
+          <input id="calMealDaily" type="number" min="0" max="30000" step="500" value="4500" class="gov-input">
+        </div>
+        <div class="field">
+          <label for="calForceExtra" title="고시 제13조제7항 단서: 천재지변·입원 등 부득이한 사유로 미이용 시 월 5일 범위 내에서 월 15일 추가산정 일수에 포함 가능">미이용 사유 구분</label>
+          <select id="calForceExtra" class="gov-select">
+            <option value="personal" selected>일반 개인사정 결석</option>
+            <option value="hospital">입원·천재지변 (15일 한도산입)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cal-preset-bar no-print">
+        <span style="font-size:0.8rem;font-weight:700;color:var(--gov-slate-700);">빠른 일정 채우기:</span>
+        <button type="button" class="btn btn-xs btn-soft" data-cal-preset="weekdays">공휴일 제외 평일 전체</button>
+        <button type="button" class="btn btn-xs btn-soft" data-cal-preset="mwf">주 3회 (월·수·금)</button>
+        <button type="button" class="btn btn-xs btn-soft" data-cal-preset="tts">주 3회 (화·목·토)</button>
+        <button type="button" class="btn btn-xs btn-soft" data-cal-preset="mon_sat">월~토 주 6일</button>
+        <button type="button" class="btn btn-xs" data-cal-preset="clear">달력 비우기</button>
+        <span class="cal-legend">
+          <i class="lg-box lg-use"></i>평일이용
+          <i class="lg-box lg-hol"></i>토·공휴일(+30%)
+          <i class="lg-box lg-un"></i>평일 미이용(50%)
+        </span>
+      </div>
+
+      <div class="cal-split-layout">
+        <div>
+          <div class="month-cal-wrap">
+            <div class="month-cal-dow" aria-hidden="true">
+              <span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span>
+            </div>
+            <div id="calGridCells" class="month-cal-grid" role="grid" aria-label="2026년 월간 이용일정 달력"></div>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="calMemo">보호자 안내문 하단 메모 · 납부 계좌 안내 (인쇄물에 함께 출력됩니다)</label>
+            <input id="calMemo" type="text" maxlength="120" class="gov-input" value="매월 5일 전월 실이용 정산 청구서가 발송됩니다. 결석 예정 시 전날까지 센터로 연락 부탁드립니다.">
+          </div>
+        </div>
+
+        <div id="calBillingOutput" class="calc-out" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       TAB 4: 차량 송영(등·하원) 노선 · 일일 승하차 배차표 작성기
+       ========================================================= -->
+  <section id="tooltab-shuttle" class="tool-tab-panel stack-md" hidden>
+    <div class="gov-card" id="shPrintArea">
+      <div class="print-only-header">
+        <h1 id="shPrintTitle">주·야간보호 일일 차량 송영운행 및 안전점검 일지</h1>
+        <p id="shPrintMeta"></p>
+      </div>
+
+      <div class="gov-card-head no-print">
+        <div>
+          <div class="tag-row" style="margin-bottom:5px;">
+            <span class="tag tag-solid">평가지표 28 (이동서비스 제공 · 2점)</span>
+            <span class="tag tag-navy">고시 제32조제2항 탑승~하차 급여시간 자동계산</span>
+          </div>
+          <h2>차량 송영(등·하원) 노선 · 일일 승하차 배차표 작성기</h2>
+          <p class="gov-card-sub">호차별 운전원·동승자를 지정하고 등원 탑승시각과 하원 하차시각을 입력하면 <b>급여제공 인정시간(라-1~라-5)</b>을 자동 판정하여 시간 미달 청구 오류를 사전에 차단합니다.</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm btn-soft" id="btnShExportCsv">엑셀(CSV) 다운로드</button>
+          <button type="button" class="btn btn-sm btn-primary" id="btnShPrint">운행일지 A4 인쇄</button>
+        </div>
+      </div>
+
+      <div class="chip-bar no-print" id="shVehicleTabs" style="margin-top:0;padding-top:0;border-top:0;margin-bottom:12px;">
+        <button type="button" class="chip-btn active" data-sh-veh="0">1호차 배차표</button>
+        <button type="button" class="chip-btn" data-sh-veh="1">2호차 배차표</button>
+        <button type="button" class="chip-btn" data-sh-veh="2">3호차 배차표</button>
+        <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-xs btn-soft" id="btnShSortTime">등원시각 순 정렬</button>
+          <button type="button" class="btn btn-xs btn-primary" id="btnShAddStop">+ 탑승 어르신 추가</button>
+        </div>
+      </div>
+
+      <div class="grid-4" style="background:var(--gov-surface);padding:12px 14px;border:1px solid var(--gov-border);border-radius:6px;margin-bottom:12px;">
+        <div class="field">
+          <label for="shDate">운행 일자</label>
+          <input id="shDate" type="date" value="{{ today.isoformat() }}" class="gov-input">
+        </div>
+        <div class="field">
+          <label for="shCarNo">신고 차량번호 (호차)</label>
+          <input id="shCarNo" type="text" maxlength="30" class="gov-input" placeholder="예: 1호차 (12가 3456)">
+        </div>
+        <div class="field">
+          <label for="shDriver">운전원 성명</label>
+          <input id="shDriver" type="text" maxlength="30" class="gov-input" placeholder="예: 강운전">
+        </div>
+        <div class="field">
+          <label for="shEscort">동승 보호직원 성명 (원칙)</label>
+          <input id="shEscort" type="text" maxlength="30" class="gov-input" placeholder="예: 김돌봄 요양보호사">
+        </div>
+      </div>
+
+      <!-- 평가지표 28 필수 4대 이동서비스 안전수칙 & 차량 안전점검 -->
+      <div class="sh-safety-box">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--gov-navy-dark);margin-bottom:6px;">[평가지표 28 필수] 4대 이동서비스 안전수칙 및 운행 전·후 점검 확인</div>
+        <div class="sh-safety-checks" id="shSafetyChecks">
+          <label><input type="checkbox" data-sh-chk="rule1" checked> ① 운전자 외 동승자 배치 및 승·하차 밀착 부축</label>
+          <label><input type="checkbox" data-sh-chk="rule2" checked> ② 전 좌석 안전띠 착용 및 휠체어 고정장치 체결 확인</label>
+          <label><input type="checkbox" data-sh-chk="rule3" checked> ③ 보호자(동거가족) 직접 인계 및 부재 시 안전 확인</label>
+          <label><input type="checkbox" data-sh-chk="rule4" checked> ④ 운행 종료 후 차량 맨 뒷좌석 잔류 어르신 최종 확인(슬리핑차일드 체크)</label>
+          <label><input type="checkbox" data-sh-chk="veh" checked> ⑤ 타이어·제동·등화·소화기·비상구급함·실내 청결 이상 없음</label>
+        </div>
+      </div>
+
+      <div class="gov-table-wrap" style="margin-top:12px;">
+        <table class="gov-table sh-stop-table">
+          <thead>
+            <tr>
+              <th style="width:38px;">순번</th>
+              <th style="min-width:86px;">수급자 호칭</th>
+              <th style="min-width:124px;">승·하차 장소</th>
+              <th style="min-width:104px;">등원 탑승</th>
+              <th style="min-width:104px;">센터 도착</th>
+              <th style="min-width:104px;">하원 출발</th>
+              <th style="min-width:104px;">하원 하차</th>
+              <th style="min-width:122px;">총 산입시간·구간</th>
+              <th style="min-width:96px;">보행보조</th>
+              <th style="min-width:112px;">인계·특이사항</th>
+              <th class="no-print" style="width:48px;">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="shStopTbody"></tbody>
+        </table>
+      </div>
+
+      <div id="shSummaryBar" style="margin-top:12px;"></div>
+
+      <div class="print-sign-box">
+        <div>운전원 확인: ________________ (서명)</div>
+        <div>동승자 확인: ________________ (서명)</div>
+        <div>시설장 결재: ________________ (서명)</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script id="dc-tools-data" type="application/json">{{ {
+  "defaultMonth": default_month,
+  "todayIso": today.isoformat(),
+  "workHours": monthly_work_hours,
+  "holidaysMap": holidays_map,
+  "limits": monthly_limits,
+  "general": general_fees,
+  "dementia": dementia_fees
+} | tojson }}</script>
+{% endblock %}

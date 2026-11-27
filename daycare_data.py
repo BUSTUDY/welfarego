@@ -82,6 +82,158 @@ LONG_TERM_ALLOWANCE_2026 = [
     {"tenure": "84개월 이상", "amount": "월 180,000원", "badge": "최고구간", "detail": "7년 이상 장기 재직 핵심 숙련 종사자"},
 ]
 
+# 2026년 월별 기준근무시간 및 공휴일 현황 (고시 제49조제1항 · 관공서의 공휴일에 관한 규정 · 근로자의 날 반영)
+# - 월 기준근무시간: 평일(월~금) 중 관공서 공휴일·대체공휴일·근로자의 날(노동절)을 제외한 근무가능일수 × 8시간
+# - 급여비용 공휴일 가산(+30%, 고시 제33조): 일요일 및 관공서 공휴일·대체공휴일 적용 (5.1 노동절은 기준근무시간에서는 제외되나 관공서 공휴일이 아니므로 주·야간보호 공휴일 수가 가산 미적용)
+MONTHLY_WORK_HOURS_2026 = [
+    {
+        "month": 1,
+        "work_days": 21,
+        "std_hours": 168,
+        "helper_half_hours": 84,
+        "holidays": [
+            {"date": "2026-01-01", "name": "신정", "dow": "목", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "1.1.(목) 신정 1일 제외",
+    },
+    {
+        "month": 2,
+        "work_days": 17,
+        "std_hours": 136,
+        "helper_half_hours": 68,
+        "holidays": [
+            {"date": "2026-02-16", "name": "설날 연휴", "dow": "월", "fee_addon_30": True},
+            {"date": "2026-02-17", "name": "설날", "dow": "화", "fee_addon_30": True},
+            {"date": "2026-02-18", "name": "설날 연휴", "dow": "수", "fee_addon_30": True},
+        ],
+        "badge": "최소시간",
+        "note": "설 연휴(월~수) 3일 제외 · 연중 기준시간 최소 월(장기근속 120h 주의)",
+    },
+    {
+        "month": 3,
+        "work_days": 21,
+        "std_hours": 168,
+        "helper_half_hours": 84,
+        "holidays": [
+            {"date": "2026-03-01", "name": "삼일절", "dow": "일", "fee_addon_30": True},
+            {"date": "2026-03-02", "name": "대체공휴일(삼일절)", "dow": "월", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "3.2.(월) 삼일절 대체공휴일 제외",
+    },
+    {
+        "month": 4,
+        "work_days": 22,
+        "std_hours": 176,
+        "helper_half_hours": 88,
+        "holidays": [],
+        "badge": "",
+        "note": "평일 공휴일 없음 (평일 22일 전체)",
+    },
+    {
+        "month": 5,
+        "work_days": 18,
+        "std_hours": 144,
+        "helper_half_hours": 72,
+        "holidays": [
+            {"date": "2026-05-01", "name": "노동절(근로자의날)", "dow": "금", "fee_addon_30": False},
+            {"date": "2026-05-05", "name": "어린이날", "dow": "화", "fee_addon_30": True},
+            {"date": "2026-05-24", "name": "부처님오신날", "dow": "일", "fee_addon_30": True},
+            {"date": "2026-05-25", "name": "대체공휴일(부처님오신날)", "dow": "월", "fee_addon_30": True},
+        ],
+        "badge": "5.1 주의",
+        "note": "5.1 노동절(기준시간 제외·공휴일수가 미적용), 5.5 어린이날, 5.25 대체공휴일 제외",
+    },
+    {
+        "month": 6,
+        "work_days": 21,
+        "std_hours": 168,
+        "helper_half_hours": 84,
+        "holidays": [
+            {"date": "2026-06-03", "name": "제9회 지방선거일", "dow": "수", "fee_addon_30": True},
+            {"date": "2026-06-06", "name": "현충일", "dow": "토", "fee_addon_30": True},
+        ],
+        "badge": "지방선거",
+        "note": "6.3.(수) 전국동시지방선거 제외 · 6.6.(토) 현충일은 대체공휴일 미발생",
+    },
+    {
+        "month": 7,
+        "work_days": 22,
+        "std_hours": 176,
+        "helper_half_hours": 88,
+        "holidays": [
+            {"date": "2026-07-17", "name": "제헌절", "dow": "금", "fee_addon_30": True},
+        ],
+        "badge": "2026 공휴일복원",
+        "note": "2026년부터 7.17.(금) 제헌절 공휴일 복원! (184시간 아님 · 176시간 적용)",
+    },
+    {
+        "month": 8,
+        "work_days": 20,
+        "std_hours": 160,
+        "helper_half_hours": 80,
+        "holidays": [
+            {"date": "2026-08-15", "name": "광복절", "dow": "토", "fee_addon_30": True},
+            {"date": "2026-08-17", "name": "대체공휴일(광복절)", "dow": "월", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "8.17.(월) 광복절 대체공휴일 제외",
+    },
+    {
+        "month": 9,
+        "work_days": 20,
+        "std_hours": 160,
+        "helper_half_hours": 80,
+        "holidays": [
+            {"date": "2026-09-24", "name": "추석 연휴", "dow": "목", "fee_addon_30": True},
+            {"date": "2026-09-25", "name": "추석", "dow": "금", "fee_addon_30": True},
+            {"date": "2026-09-26", "name": "추석 연휴", "dow": "토", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "9.24.(목)~9.25.(금) 추석 연휴 2일 제외 (토요일 연휴는 대체공휴일 미발생)",
+    },
+    {
+        "month": 10,
+        "work_days": 20,
+        "std_hours": 160,
+        "helper_half_hours": 80,
+        "holidays": [
+            {"date": "2026-10-03", "name": "개천절", "dow": "토", "fee_addon_30": True},
+            {"date": "2026-10-05", "name": "대체공휴일(개천절)", "dow": "월", "fee_addon_30": True},
+            {"date": "2026-10-09", "name": "한글날", "dow": "금", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "10.5.(월) 개천절 대체공휴일 · 10.9.(금) 한글날 2일 제외",
+    },
+    {
+        "month": 11,
+        "work_days": 21,
+        "std_hours": 168,
+        "helper_half_hours": 84,
+        "holidays": [],
+        "badge": "",
+        "note": "평일 공휴일 없음 (평일 21일 전체)",
+    },
+    {
+        "month": 12,
+        "work_days": 22,
+        "std_hours": 176,
+        "helper_half_hours": 88,
+        "holidays": [
+            {"date": "2026-12-25", "name": "기독탄신일", "dow": "금", "fee_addon_30": True},
+        ],
+        "badge": "",
+        "note": "12.25.(금) 성탄절 1일 제외",
+    },
+]
+
+HOLIDAYS_2026_MAP = {
+    h["date"]: {"name": h["name"], "fee_addon_30": h["fee_addon_30"]}
+    for m in MONTHLY_WORK_HOURS_2026
+    for h in m["holidays"]
+}
+
 # 종사자 법정의무교육 및 공단 정기평가 필수교육 총괄 매트릭스
 TRAINING_MATRIX_2026 = [
     {"name": "노인인권 및 학대예방 교육", "target": "설치·운영자(시설장) 및 전 직원", "law_cycle": "매년 4시간 이상 (노인복지법)", "eval_cycle": "반기별 1회 이상 (지표19·2점)", "note": "대표자 겸 시설장 누락 주의! 신규직원은 입사 반기 내 이수"},
