@@ -22,4 +22,7 @@
   <icon>
     <default xlink:href="icons/ext_icon_42.png"/>
   </icon>
+  <update-information>
+    <src xlink:href="https://welfarego.co.kr/office/update.xml"/>
+  </update-information>
 </description>

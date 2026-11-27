@@ -1,0 +1,159 @@
+name: Build Welfarego OFFICE Bundle EXE
+
+on:
+  workflow_dispatch:
+    inputs:
+      lo_version:
+        description: "Official LibreOffice Windows x64 stable version (e.g. 26.2.7)"
+        required: true
+        default: "26.2.7"
+        type: string
+      release_tag:
+        description: "GitHub Release tag to publish"
+        required: true
+        default: "v26.2.7"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-bundle-exe:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - name: Checkout welfarego
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Pillow & verify compliance + rebuild .oxt
+        run: |
+          python -m pip install --upgrade pillow
+          python office/scripts/build_extension.py
+          python office/scripts/verify_compliance.py
+
+      - name: Download official LibreOffice Windows x64 MSI & verify SHA256
+        shell: pwsh
+        run: |
+          $ver = "${{ inputs.lo_version }}"
+          $distDir = Join-Path $PWD "office\dist"
+          New-Item -ItemType Directory -Force -Path $distDir | Out-Null
+
+          $msiName = "LibreOffice_${ver}_Win_x86-64.msi"
+          $msiPath = Join-Path $distDir $msiName
+          $shaPath = Join-Path $distDir "${msiName}.sha256"
+
+          $baseUrls = @(
+            "https://download.documentfoundation.org/libreoffice/stable/${ver}/win/x86_64",
+            "https://downloadarchive.documentfoundation.org/libreoffice/old/${ver}.2/win/x86_64",
+            "https://downloadarchive.documentfoundation.org/libreoffice/old/${ver}.3/win/x86_64"
+          )
+
+          $downloaded = $false
+          foreach ($base in $baseUrls) {
+            try {
+              Write-Host "Trying $base/$msiName ..." -ForegroundColor Cyan
+              & curl.exe -fsSL --retry 3 -o $msiPath "$base/$msiName"
+              if ($LASTEXITCODE -eq 0 -and (Test-Path $msiPath) -and (Get-Item $msiPath).Length -gt 100MB) {
+                $downloaded = $true
+                & curl.exe -fsSL --retry 2 -o $shaPath "$base/${msiName}.sha256"
+                break
+              }
+            } catch {
+              Write-Host "Mirror attempt failed: $_" -ForegroundColor Yellow
+            }
+          }
+
+          if (-not $downloaded) {
+            throw "Failed to download $msiName from official Document Foundation mirrors."
+          }
+
+          $actualHash = (Get-FileHash -Path $msiPath -Algorithm SHA256).Hash.ToLower()
+          Write-Host "Downloaded $msiName ($([math]::Round((Get-Item $msiPath).Length / 1MB, 1)) MB), SHA256=$actualHash"
+          if (Test-Path $shaPath) {
+            $expectedLine = (Get-Content -Path $shaPath -Raw).Trim()
+            if ($expectedLine -match "([0-9a-fA-F]{64})") {
+              $expectedHash = $Matches[1].ToLower()
+              if ($actualHash -ne $expectedHash) {
+                throw "SHA256 mismatch! expected=$expectedHash actual=$actualHash"
+              }
+              Write-Host "[OK] Official SHA256 verified." -ForegroundColor Green
+            }
+          }
+          "LO_MSI_PATH=$msiPath" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Compile one-click Setup .exe with Inno Setup 6
+        shell: pwsh
+        run: |
+          $ver = "${{ inputs.lo_version }}"
+          $officeRoot = Join-Path $PWD "office"
+          $distDir = Join-Path $officeRoot "dist"
+          $issFile = Join-Path $officeRoot "installer\WelfaregoOFFICE-Bundle.iss"
+
+          $isccCandidates = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "${env:ProgramFiles}\Inno Setup 6\ISCC.exe",
+            "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          )
+          $iscc = $isccCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $iscc) {
+            choco install innosetup -y --no-progress
+            $iscc = $isccCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          }
+          if (-not $iscc) { throw "ISCC.exe not found." }
+
+          # Ensure UTF-8 BOM for Korean Inno Setup resources
+          $koreanIsl = Join-Path $officeRoot "installer\Korean.isl"
+          $islText = Get-Content -Path $koreanIsl -Raw -Encoding UTF8
+          [System.IO.File]::WriteAllText($koreanIsl, $islText, (New-Object System.Text.UTF8Encoding($true)))
+
+          $licKo = Join-Path $officeRoot "legal\INSTALLER-LICENSE-KO.txt"
+          $licText = (Get-Content -Path $licKo -Raw -Encoding UTF8) -replace "`r?`n", "`r`n"
+          [System.IO.File]::WriteAllText($licKo, $licText, (New-Object System.Text.UTF8Encoding($true)))
+
+          & $iscc `
+            "/DAppVersion=$ver" `
+            "/DMsiFile=$env:LO_MSI_PATH" `
+            "/DOutputDirPath=$distDir" `
+            "/DDryRun=0" `
+            $issFile
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed with code $LASTEXITCODE" }
+
+          $exePath = Join-Path $distDir "WelfaregoOFFICE_${ver}_Setup_x64.exe"
+          if (-not (Test-Path $exePath)) { throw "Expected EXE not found at $exePath" }
+
+          Copy-Item -Path (Join-Path $officeRoot "extensions\welfarego-links.oxt") -Destination (Join-Path $distDir "Welfarego_Office_Shortcuts_${ver}.oxt") -Force
+
+          $hashFiles = @(
+            $exePath,
+            (Join-Path $distDir "Welfarego_Office_Shortcuts_${ver}.oxt")
+          )
+          $sums = foreach ($f in $hashFiles) {
+            $h = (Get-FileHash -Path $f -Algorithm SHA256).Hash.ToLower()
+            "$h  $(Split-Path $f -Leaf)"
+          }
+          Set-Content -Path (Join-Path $distDir "SHA256SUMS.txt") -Value $sums -Encoding UTF8
+          Get-ChildItem $distDir | Format-Table Name, Length
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: "Welfarego OFFICE ${{ inputs.lo_version }} (Windows x64 통합 설치파일)"
+          files: |
+            office/dist/WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe
+            office/dist/Welfarego_Office_Shortcuts_${{ inputs.lo_version }}.oxt
+            office/dist/SHA256SUMS.txt
+          body: |
+            ## Welfarego OFFICE ${{ inputs.lo_version }} (Windows 64비트 통합 설치파일)
+
+            - **원클릭 설치파일**: `WelfaregoOFFICE_${{ inputs.lo_version }}_Setup_x64.exe`
+            - **포함 구성**:
+              1. LibreOffice ${{ inputs.lo_version }} 공식 Windows 64비트 한국어 엔진 (MPL-2.0)
+              2. 모던 탭형 리본 메뉴(`Tabbed`) + Sukapura SVG 벡터 아이콘 기본 프리셋 (`welfarego-defaults.xcd`)
+              3. `[실무포털·서식]` 자발적 클릭 바로가기 확장기능 (`welfarego-links.oxt`, 공식 업데이트 알림 `update.xml` 연동)
+            - **라이선스**: Mozilla Public License 2.0 (MPL-2.0) — 사회복지시설·주야간보호센터 평생 무료 사용 가능

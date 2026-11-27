@@ -415,6 +415,26 @@ def download_office_links_oxt():
     )
 
 
+@daycare_bp.route("/office/update.xml")
+def office_extension_update_xml():
+    site = current_app.config["SITE_BASE"].rstrip("/")
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<description xmlns="http://openoffice.org/extensions/update/2006"\n'
+        '  xmlns:xlink="http://www.w3.org/1999/xlink">\n'
+        '  <identifier value="kr.co.welfarego.office.links"/>\n'
+        '  <version value="26.2.7"/>\n'
+        '  <update-download>\n'
+        f'    <src xlink:href="{site}/office/download/welfarego-links.oxt"/>\n'
+        '  </update-download>\n'
+        '  <release-notes>\n'
+        f'    <src xlink:href="{site}/office" lang="ko"/>\n'
+        '  </release-notes>\n'
+        '</description>\n'
+    )
+    return Response(xml, mimetype="application/xml; charset=utf-8")
+
+
 @daycare_bp.route("/go/<target>")
 def office_shortcut_redirect(target):
     dest = OFFICE_SHORTCUT_TARGETS.get(target)
