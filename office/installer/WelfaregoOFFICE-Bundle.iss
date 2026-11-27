@@ -1,8 +1,9 @@
 ; Welfarego OFFICE Bundle — Windows x64 One-Click Setup (.exe) Inno Setup 6 Script
 ; Packages the official LibreOffice Windows x64 MSI (MPL-2.0) together with:
 ;   1. Portal-matched Welfarego OFFICE branding & #2151C8 house+heart icons
-;   2. Modern Tabbed Ribbon UI (notebookbar.ui) + Sukapura SVG default preset
-;   3. Welfarego Practical Shortcuts on Home tab & [★ 실무포털·서식] Ribbon tab (voluntary-click only)
+;   2. Dedicated Control Panel uninstaller ("Welfarego OFFICE", hiding inner MSI)
+;   3. Modern Tabbed Ribbon UI (notebookbar.ui) + Sukapura SVG default preset
+;   4. Welfarego Practical Shortcuts on Home tab & [★ 실무포털·서식] Ribbon tab (voluntary-click only)
 
 #ifndef AppVersion
   #define AppVersion "26.2.7"
@@ -44,8 +45,11 @@ Compression=lzma2/fast
 SolidCompression=no
 OutputDir={#OutputDirPath}
 OutputBaseFilename=WelfaregoOFFICE_{#AppVersion}_Setup_x64
-Uninstallable=no
-CreateUninstallRegKey=no
+Uninstallable=yes
+CreateUninstallRegKey=yes
+UninstallFilesDir={autopf}\LibreOffice\welfarego-uninst
+UninstallDisplayName=Welfarego OFFICE {#AppVersion}
+UninstallDisplayIcon={autopf}\LibreOffice\welfarego-brand\icons\soffice.ico
 VersionInfoVersion={#AppVersion}.0
 VersionInfoCompany=Welfarego
 VersionInfoProductName=Welfarego OFFICE
@@ -76,6 +80,7 @@ Name: "msoassoc"; Description: "{cm:TaskMsoAssoc}"; Flags: unchecked
 [Files]
 Source: "{#MsiFile}"; DestDir: "{tmp}"; DestName: "LibreOffice_Win_x86-64.msi"; Flags: deleteafterinstall nocompression
 Source: "configure-installed-office.ps1"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
+Source: "uninstall-welfarego-office.ps1"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\config\welfarego-defaults.xcd"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\extensions\welfarego-links.oxt"; DestDir: "{tmp}\wg-payload"; Flags: deleteafterinstall
 Source: "..\branding\icons\*.ico"; DestDir: "{tmp}\wg-payload\icons"; Flags: deleteafterinstall
@@ -95,7 +100,12 @@ Source: "..\legal\PRIVACY.md"; DestDir: "{tmp}\wg-payload\legal"; Flags: deletea
 Filename: "taskkill.exe"; Parameters: "/F /IM soffice.bin /IM soffice.exe /T"; Flags: runhidden waituntilterminated; StatusMsg: "{cm:InstallingMsi}"
 Filename: "msiexec.exe"; Parameters: "/i ""{tmp}\LibreOffice_Win_x86-64.msi"" {code:GetMsiUiFlag} /norestart ALLUSERS=1 CREATEDESKTOPLINK=0 UI_LANGS=ko,en_US {code:GetMsiProperties}"; StatusMsg: "{cm:InstallingMsi}"; Flags: waituntilterminated
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{tmp}\wg-payload\configure-installed-office.ps1"" -PayloadDir ""{tmp}\wg-payload"" -AppVersion ""{#AppVersion}"" -CreateDesktopShortcut ""{code:GetDesktopFlag}"""; StatusMsg: "{cm:InstallingExt}"; Flags: runhidden waituntilterminated
-Filename: "{autopf}\LibreOffice\program\soffice.exe"; Description: "{cm:LaunchApp}"; Flags: nowait postinstall skipifsilent
+Filename: "{autopf}\LibreOffice\program\soffice.exe"; Description: "{cm:LaunchApp}"; Flags: nowait postinstall skipifsilent runasoriginaluser
+#endif
+
+[UninstallRun]
+#if DryRun == "0"
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{autopf}\LibreOffice\welfarego-uninst\uninstall-welfarego-office.ps1"""; Flags: runhidden waituntilterminated; RunOnceId: "UninstallCoreMsi"
 #endif
 
 [Code]

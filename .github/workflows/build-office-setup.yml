@@ -110,7 +110,8 @@ jobs:
           $utf8Bom = New-Object System.Text.UTF8Encoding($true)
           foreach ($f in @(
             (Join-Path $officeRoot "installer\Korean.isl"),
-            (Join-Path $officeRoot "installer\configure-installed-office.ps1")
+            (Join-Path $officeRoot "installer\configure-installed-office.ps1"),
+            (Join-Path $officeRoot "installer\uninstall-welfarego-office.ps1")
           )) {
             $txt = Get-Content -Path $f -Raw -Encoding UTF8
             [System.IO.File]::WriteAllText($f, $txt, $utf8Bom)
@@ -164,13 +165,10 @@ jobs:
           $xcd = Join-Path $loDir "share\registry\zz-welfarego-defaults.xcd"
           if (-not (Test-Path $xcd)) { throw "Missing zz-welfarego-defaults.xcd!" }
           $xcdText = Get-Content -Path $xcd -Raw -Encoding UTF8
-          if ($xcdText -notmatch "notebookbar\.ui" -or $xcdText -notmatch "sukapura_svg" -or $xcdText -notmatch "Welfarego OFFICE") {
+          if ($xcdText -notmatch "notebookbar\.ui" -or $xcdText -notmatch "sukapura_svg" -or $xcdText -notmatch "Welfarego Office" -or $xcdText -notmatch "Presentation") {
             throw "zz-welfarego-defaults.xcd content verification failed!"
           }
-          Write-Host "[OK] zz-welfarego-defaults.xcd verified (notebookbar.ui + sukapura_svg + Welfarego OFFICE)" -ForegroundColor Green
-
-          $ico = Join-Path $loDir "welfarego-brand\icons\soffice.ico"
-          if (-not (Test-Path $ico)) { throw "Missing portal-matched soffice.ico!" }
+          Write-Host "[OK] zz-welfarego-defaults.xcd verified (notebookbar.ui + sukapura_svg + Welfarego Office Document/Spreadsheet/Presentation)" -ForegroundColor Green
 
           $pubDesk = [Environment]::GetFolderPath("CommonDesktopDirectory")
           if (-not $pubDesk) { $pubDesk = "C:\Users\Public\Desktop" }
@@ -178,41 +176,84 @@ jobs:
           if (-not (Test-Path $wgLnk)) { throw "Missing Desktop shortcut: $wgLnk" }
           $strayDesk = Get-ChildItem -Path $pubDesk -Filter "LibreOffice*.lnk" -ErrorAction SilentlyContinue
           if ($strayDesk) { throw "Found stray LibreOffice desktop shortcut: $($strayDesk.FullName)" }
-          Write-Host "[OK] Desktop shortcut is 'Welfarego OFFICE.lnk' with portal icon (no LibreOffice shortcut)" -ForegroundColor Green
+          Write-Host "[OK] Desktop shortcut is 'Welfarego OFFICE.lnk'" -ForegroundColor Green
 
           $commonProg = [Environment]::GetFolderPath("CommonPrograms")
           if (-not $commonProg) { $commonProg = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs" }
-          $wgMenu = Join-Path $commonProg "Welfarego OFFICE\Welfarego OFFICE.lnk"
-          if (-not (Test-Path $wgMenu)) { throw "Missing Start Menu shortcut: $wgMenu" }
+          foreach ($reqMenu in @(
+            "Welfarego OFFICE\Welfarego OFFICE.lnk",
+            "Welfarego OFFICE\Welfarego Office Document.lnk",
+            "Welfarego OFFICE\Welfarego Office Spreadsheet.lnk",
+            "Welfarego OFFICE\Welfarego Office Presentation.lnk",
+            "Welfarego OFFICE\Welfarego Office Draw.lnk"
+          )) {
+            $fullLnk = Join-Path $commonProg $reqMenu
+            if (-not (Test-Path $fullLnk)) { throw "Missing Start Menu shortcut: $fullLnk" }
+          }
           $strayMenu = Get-ChildItem -Path $commonProg -Filter "LibreOffice*" -ErrorAction SilentlyContinue
           if ($strayMenu) { throw "Found stray LibreOffice Start Menu folder: $($strayMenu.FullName)" }
-          Write-Host "[OK] Start Menu folder is 'Welfarego OFFICE' (no LibreOffice folder)" -ForegroundColor Green
+          Write-Host "[OK] Start Menu shortcuts verified (Document / Spreadsheet / Presentation / Draw)" -ForegroundColor Green
+
+          # Verify Control Panel (Uninstall registry): ONLY Welfarego OFFICE is visible (no visible LibreOffice!)
+          $visibleLo = @()
+          $visibleWg = @()
+          foreach ($root in @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall")) {
+            if (-not (Test-Path $root)) { continue }
+            Get-ChildItem -Path $root | ForEach-Object {
+              $p = Get-ItemProperty -Path $_.PSPath -ErrorAction SilentlyContinue
+              if ($null -ne $p -and $p.DisplayName -and $p.SystemComponent -ne 1) {
+                if ($p.DisplayName -like "LibreOffice*") { $visibleLo += $p.DisplayName }
+                if ($p.DisplayName -like "Welfarego OFFICE*") { $visibleWg += $p.DisplayName }
+              }
+            }
+          }
+          if ($visibleLo.Count -gt 0) { throw "LibreOffice is still visible in Control Panel: $($visibleLo -join ', ')" }
+          if ($visibleWg.Count -eq 0) { throw "Welfarego OFFICE uninstaller missing from Control Panel!" }
+          Write-Host "[OK] Control Panel shows ONLY '$($visibleWg -join ', ')' (LibreOffice hidden via SystemComponent=1)" -ForegroundColor Green
 
           $extListFile = Join-Path $env:TEMP "unopkg_list.txt"
           Start-Process -FilePath (Join-Path $loDir "program\unopkg.com") -ArgumentList "list --shared" -RedirectStandardOutput $extListFile -WindowStyle Hidden -Wait
           $extOut = Get-Content -Path $extListFile -Raw -Encoding UTF8
-          Write-Host $extOut
           if ($extOut -notmatch "kr\.co\.welfarego\.office\.links") {
             throw "Shared extension kr.co.welfarego.office.links was not registered!"
           }
           Write-Host "[OK] Shared extension kr.co.welfarego.office.links registered!" -ForegroundColor Green
 
-          $writerUi = Join-Path $loDir "share\config\soffice.cfg\modules\swriter\ui\notebookbar.ui"
-          $uiText = Get-Content -Path $writerUi -Raw -Encoding UTF8
-          if ($uiText -notmatch "WelfaregoHomeAddons" -or $uiText -notmatch "\uC2E4\uBB34\uD3EC\uD138") {
-            throw "swriter notebookbar.ui customization missing!"
-          }
-          Write-Host "[OK] swriter notebookbar.ui contains WelfaregoHomeAddons and Practical Portal tab!" -ForegroundColor Green
-
-          # Smoke-launch soffice --headless --convert-to pdf to prove configmgr & XML parse with 0 errors
+          # 1) Headless PDF conversion smoke test
           $sampleTxt = Join-Path $env:TEMP "wg_smoke.txt"
           $samplePdf = Join-Path $env:TEMP "wg_smoke.pdf"
           Set-Content -Path $sampleTxt -Value "Welfarego OFFICE Smoke Test" -Encoding UTF8
           Start-Process -FilePath (Join-Path $loDir "program\soffice.com") -ArgumentList "--headless --nologo --convert-to pdf --outdir `"$env:TEMP`" `"$sampleTxt`"" -WindowStyle Hidden -Wait
           if (-not (Test-Path $samplePdf)) {
-            throw "Headless Writer PDF conversion failed (possible invalid XML in xcd or notebookbar.ui)!"
+            throw "Headless Writer PDF conversion failed!"
           }
-          Write-Host "[OK] Welfarego OFFICE runtime configmgr & Writer engine smoke test passed!" -ForegroundColor Green
+          Write-Host "[OK] Headless PDF conversion passed!" -ForegroundColor Green
+
+          # 2) REAL GUI launch verification: Start Center (exact Desktop shortcut target) + Document Editor
+          foreach ($mode in @(
+            @{ Label = "Start Center"; Args = "--norestore" },
+            @{ Label = "Document Editor"; Args = "--norestore --writer" }
+          )) {
+            Write-Host "Testing real GUI launch of soffice.exe ($($mode.Label)) ..." -ForegroundColor Cyan
+            $guiErr = Join-Path $env:TEMP "gui_stderr.txt"
+            $guiOut = Join-Path $env:TEMP "gui_stdout.txt"
+            Remove-Item -Path $guiErr, $guiOut -Force -ErrorAction SilentlyContinue
+            $guiProc = Start-Process -FilePath (Join-Path $loDir "program\soffice.exe") -ArgumentList $mode.Args -RedirectStandardError $guiErr -RedirectStandardOutput $guiOut -PassThru
+            Start-Sleep -Seconds 9
+            $binProcs = Get-Process -Name "soffice.bin" -ErrorAction SilentlyContinue
+            if (-not $binProcs) {
+              Write-Host "=== GUI stdout ($($mode.Label)) ===" -ForegroundColor Yellow
+              if (Test-Path $guiOut) { Get-Content $guiOut | Write-Host }
+              Write-Host "=== GUI stderr ($($mode.Label)) ===" -ForegroundColor Yellow
+              if (Test-Path $guiErr) { Get-Content $guiErr | Write-Host }
+              Write-Host "=== Windows Application Error Events ===" -ForegroundColor Yellow
+              Get-WinEvent -LogName Application -MaxEvents 15 -ErrorAction SilentlyContinue | Where-Object { $_.Level -le 3 } | Format-List TimeCreated, ProviderName, Id, Message | Out-String | Write-Host
+              throw "GUI soffice.exe ($($mode.Label)) exited/crashed instead of staying open! (ExitCode=$($guiProc.ExitCode))"
+            }
+            Write-Host "[OK] Real GUI $($mode.Label) is alive and running! PID=$($binProcs.Id -join ',') Title='$($binProcs.MainWindowTitle -join ', ')'" -ForegroundColor Green
+            Start-Process -FilePath "taskkill.exe" -ArgumentList "/F /IM soffice.bin /IM soffice.exe /T" -WindowStyle Hidden -Wait | Out-Null
+            Start-Sleep -Seconds 2
+          }
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2

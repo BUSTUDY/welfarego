@@ -357,7 +357,7 @@ def generate_splash(width: int, height: int, is_highres: bool = False) -> Image.
         sub_y = title_y + int((50 if is_highres else 36) * scale)
         d.text(
             (text_x, sub_y),
-            "Modern Ribbon Suite  •  Writer  •  Calc  •  Impress  •  Draw",
+            "Document  •  Spreadsheet  •  Presentation  •  Draw",
             font=sub_font,
             fill=(219, 234, 254, 235),
         )

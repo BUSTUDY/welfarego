@@ -9,15 +9,47 @@
   <dependency file="registry_ko" optional="true"/>
   <dependency file="registry_en-US" optional="true"/>
 
-  <!-- 1. 창 제목·시작센터 제품명을 Welfarego OFFICE로 표시 (MPL-2.0 출처 명시) -->
+  <!-- 1. 제품명 및 각 앱 영문 명칭 (Welfarego Office Document / Spreadsheet / Presentation / Draw) -->
   <oor:component-data oor:name="Setup" oor:package="org.openoffice">
     <node oor:name="Product">
       <prop oor:name="ooName" oor:op="fuse" oor:type="xs:string">
-        <value>Welfarego OFFICE</value>
+        <value>Welfarego Office</value>
       </prop>
       <prop oor:name="ooVendor" oor:op="fuse" oor:type="xs:string">
         <value>Welfarego (Derived from LibreOffice / MPL-2.0)</value>
       </prop>
+    </node>
+    <node oor:name="Office">
+      <node oor:name="Factories">
+        <node oor:name="com.sun.star.text.TextDocument" oor:op="fuse">
+          <prop oor:name="ooSetupFactoryUIName" oor:op="fuse" oor:type="xs:string">
+            <value>Document</value>
+            <value xml:lang="en-US">Document</value>
+            <value xml:lang="ko">Document</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="fuse">
+          <prop oor:name="ooSetupFactoryUIName" oor:op="fuse" oor:type="xs:string">
+            <value>Spreadsheet</value>
+            <value xml:lang="en-US">Spreadsheet</value>
+            <value xml:lang="ko">Spreadsheet</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="fuse">
+          <prop oor:name="ooSetupFactoryUIName" oor:op="fuse" oor:type="xs:string">
+            <value>Presentation</value>
+            <value xml:lang="en-US">Presentation</value>
+            <value xml:lang="ko">Presentation</value>
+          </prop>
+        </node>
+        <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="fuse">
+          <prop oor:name="ooSetupFactoryUIName" oor:op="fuse" oor:type="xs:string">
+            <value>Draw</value>
+            <value xml:lang="en-US">Draw</value>
+            <value xml:lang="ko">Draw</value>
+          </prop>
+        </node>
+      </node>
     </node>
   </oor:component-data>
 
